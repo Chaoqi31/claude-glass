@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Claude Glass</title>
+<meta name="description" content="One painter, many hands: paintings by Claude, made in code.">
+<meta name="theme-color" content="#242321">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chaoqi31.github.io/claude-glass/">
+<meta property="og:title" content="The Claude Glass">
+<meta property="og:description" content="One painter, many hands: paintings by Claude, made in code.">
+<meta property="og:image" content="https://chaoqi31.github.io/claude-glass/site/thumbs/_wall.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="site/icon.png">
+<link rel="apple-touch-icon" href="site/icon.png">
+<link rel="stylesheet" href="site/museum.css?v=9cf2ccdf">
+<script src="site/museum.js?v=45ba0180" defer></script>
+</head>
+<body>
+<a class="sign" href="#plan"></a>
+<header class="entrance" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<div class="glass"><a class="mirror" href="plates/saint_remy.jpg" aria-label="Open the work in the glass"><img class="on" src="site/thumbs/saint_remy.jpg" alt=""></a></div>
+<h1>The Claude Glass</h1>
+<p><em>One painter, many hands: paintings by Claude, made in code.</em></p>
+<p class="tally">35 paintings · 18,710 lines of Python · no image models, no photographs</p>
+<p class="reflected">In the glass <cite>Olive Trees below the Alpilles</cite></p>
+</header>
+<section class="intro" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<div class="text">
+<p>In the eighteenth century, painters and travellers carried a small, dark, slightly convex mirror called a Claude glass. They turned their backs on the view and studied it in the glass instead, where it came back framed, quieter, and a little golden, like a painting by Claude Lorrain.</p>
+<p>A language model looks at the world the same way: with its back to it, in the reflection people left behind. This museum is what one model painted in that glass, one hand trying the manners of the painters it learned from: Turner's light, Van Gogh's olive groves, Hiroshige's rain, the poured and scraped colour of the twentieth century.</p>
+<p>Every work here is a program. There are no image models, no photographs, no scans and no tracing. Each piece is a Python file that lays down bristles, pigment and paper one mark at a time, and its source hangs beside it; on the website you can turn a painting over and read the program on its back. Each is made <em>after</em> a painter or a tradition; none is a copy of a painting.</p>
+<p>The works are by Claude (Opus 5.5). The museum was founded by <a href="https://github.com/Chaoqi31">Chaoqi</a>.</p>
+<p><a href="plates/_timeline.mp4">The film</a> shows every work, oldest first.</p>
+</div>
+<video class="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1280" height="720" controls preload="none"></video>
+<nav class="plan" id="plan" aria-label="Rooms">
+<ol>
+<li><a href="#open-air"><span class="door" style="--door:#2a2622"><img src="site/thumbs/hampstead.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">I</span><span class="name">Open Air</span><span class="count">14 works</span></a></li>
+<li><a href="#the-garden"><span class="door" style="--door:#1f2b25"><img src="site/thumbs/irises.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">II</span><span class="name">The Garden</span><span class="count">6 works</span></a></li>
+<li><a href="#paper-and-water"><span class="door" style="--door:#212835"><img src="site/thumbs/corfu.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">III</span><span class="name">Paper and Water</span><span class="count">4 works</span></a></li>
+<li><a href="#the-workshop"><span class="door" style="--door:#33201d"><img src="site/thumbs/rose_window.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">IV</span><span class="name">The Workshop</span><span class="count">5 works</span></a></li>
+<li><a href="#colour-itself"><span class="door" style="--door:#f1eee8"><img src="site/thumbs/stockholm.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">V</span><span class="name">Colour Itself</span><span class="count">6 works</span></a></li>
+</ol>
+</nav>
+</section>
+<main>
+<section class="room" id="open-air" data-room="I · Open Air" data-wall="#2a2622" data-ink="#ece6d8" data-dim="#a19b8e">
+<header><h2><span class="numeral">I</span> Open Air</h2><p>Weather, water and light, painted out of doors</p></header>
+<div class="row left" style="--sum:1.2536">
+<figure class="work" style="--a:1.2536">
+<a class="plate" href="plates/hampstead.jpg" data-slug="hampstead" data-lines="500" data-w="2620" data-h="2090"><img src="site/thumbs/hampstead.jpg" width="1400" height="1117" alt="Summer Cloud, Hampstead" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Summer Cloud, Hampstead</cite>, 2026</h3>
+<p>Oil on paper laid down on board, painted out of doors over a red-brown ground, the lights laid on thick with a stiff brush and the palette knife</p>
+<p>After John Constable, the cloud studies at Hampstead, 1821–22</p>
+<p class="note">A summer cumulus towering over the trees of the Heath, painted in under an hour on a sheet of paper. The lights are thick; where the paint is thin, the red-brown ground shows through.</p>
+<p class="source"><a href="works/hampstead.py">works/hampstead.py</a> · 500 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.3333">
+<figure class="work" style="--a:1.3333">
+<a class="plate" href="plates/turner.jpg" data-slug="turner" data-lines="495" data-w="2720" data-h="2040"><img src="site/thumbs/turner.jpg" width="1400" height="1050" alt="Dunstanburgh, Sunrise" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Dunstanburgh, Sunrise</cite>, 2026</h3>
+<p>Oil on canvas, thin veils rubbed and brushed over a white ground, wiped and scraped back, the light laid with the knife</p>
+<p>After J. M. W. Turner, the late paintings, 1835–45: Norham Castle, Sunrise; Snow Storm – Steam-Boat off a Harbour&#x27;s Mouth</p>
+<p class="note">A sun over the sea, a squall coming in and a castle on its headland, all going into the light. Only the light is thick.</p>
+<p class="source"><a href="works/turner.py">works/turner.py</a> · 495 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:2.7646">
+<figure class="work" style="--a:1.4500">
+<a class="plate" href="plates/magpie.jpg" data-slug="magpie" data-lines="859" data-w="2900" data-h="2000"><img src="site/thumbs/magpie.jpg" width="1400" height="966" alt="The Gate in the Snow" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Gate in the Snow</cite>, 2026</h3>
+<p>Oil on canvas, thick paint laid wet into wet and then over dry, the last strokes dragged across the crust</p>
+<p>After Claude Monet, The Magpie, Étretat, 1868–69</p>
+<p class="note">A lane through a wattle fence in fresh snow under a low winter sun, a magpie on the gatepost. Every shadow falls where the sun throws it, in blue and violet; the lit snow is cream and pale gold.</p>
+<p class="source"><a href="works/magpie.py">works/magpie.py</a> · 859 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:1.3146">
+<a class="plate" href="plates/impression.jpg" data-slug="impression" data-lines="513" data-w="2800" data-h="2130"><img src="site/thumbs/impression.jpg" width="1400" height="1065" alt="The Outer Harbour, Sunrise" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Outer Harbour, Sunrise</cite>, 2026</h3>
+<p>Oil on canvas, thin paint scrubbed and laid wet into wet over a light ground in one sitting, the sun and its reflection in thicker paint</p>
+<p>After Claude Monet, Impression, Sunrise, Le Havre, 1872</p>
+<p class="note">The outer harbour at dawn, its masts, cranes and chimneys going into the mist, three boats out on the water. All of it thin and quick, in one sitting; only the orange sun and its reflection are thick.</p>
+<p class="source"><a href="works/impression.py">works/impression.py</a> · 513 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:1.3333">
+<figure class="work" style="--a:1.3333">
+<a class="plate" href="plates/port_marly.jpg" data-slug="port_marly" data-lines="814" data-w="2800" data-h="2100"><img src="site/thumbs/port_marly.jpg" width="1400" height="1050" alt="The Inn in the Flood, Port-Marly" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Inn in the Flood, Port-Marly</cite>, 2026</h3>
+<p>Oil on canvas, light open strokes laid wet into wet over a pale ground, the clouds in thicker paint, the water in long level strokes with the reflections broken into them</p>
+<p>After Alfred Sisley, The Flood at Port-Marly, 1876</p>
+<p class="note">A village street on the Seine under a spring flood: an inn standing in the water, a row of young trees rising out of it, and over them a wide sky of blue and white cloud, held again in the still water.</p>
+<p class="source"><a href="works/port_marly.py">works/port_marly.py</a> · 814 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.3333">
+<figure class="work" style="--a:1.3333">
+<a class="plate" href="plates/etretat.jpg" data-slug="etretat" data-lines="499" data-w="2800" data-h="2100"><img src="site/thumbs/etretat.jpg" width="1400" height="1050" alt="The Porte d&#x27;Aval, Late Afternoon" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Porte d&#x27;Aval, Late Afternoon</cite>, 2026</h3>
+<p>Oil on canvas, the chalk built up over several sittings in dense strokes laid every way, the sea in short broken touches, the lights and the foam in thick paint</p>
+<p>After Claude Monet, the cliffs at Étretat, 1883–86</p>
+<p class="note">The arch of the Porte d&#x27;Aval and the Needle beyond it at the end of an afternoon, the chalk warm in the sun and lilac in shadow, the sea breaking white at its foot.</p>
+<p class="source"><a href="works/etretat.py">works/etretat.py</a> · 499 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:2.5105">
+<figure class="work" style="--a:1.2605">
+<a class="plate" href="plates/saint_remy.jpg" data-slug="saint_remy" data-lines="501" data-w="3000" data-h="2380"><img src="site/thumbs/saint_remy.jpg" width="1400" height="1111" alt="Olive Trees below the Alpilles" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Olive Trees below the Alpilles</cite>, 2026</h3>
+<p>Oil on canvas, in thick strokes from a loaded brush</p>
+<p>After Vincent van Gogh, the olive groves at Saint-Rémy, 1889</p>
+<p class="note">Every stroke follows the thing it describes and carries two or three colours, unmixed. The yellows have browned and the pinks have faded, as they have on his canvases.</p>
+<p class="source"><a href="works/saint_remy.py">works/saint_remy.py</a> · 501 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:1.2500">
+<a class="plate" href="plates/starry.jpg" data-slug="starry" data-lines="558" data-w="3000" data-h="2400"><img src="site/thumbs/starry.jpg" width="1400" height="1120" alt="The Village under the Night Wind" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Village under the Night Wind</cite>, 2026</h3>
+<p>Oil on canvas, in thick strokes from a loaded brush</p>
+<p>After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90: The Starry Night; Road with Cypress and Star</p>
+<p class="note">The wind rolls over the village in currents, round the moon and every star in rings, and a cypress goes up into it like a flame. The yellows have browned a little, as his have.</p>
+<p class="source"><a href="works/starry.py">works/starry.py</a> · 558 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:2.0430">
+<figure class="work" style="--a:2.0430">
+<a class="plate" href="plates/auvers.jpg" data-slug="auvers" data-lines="436" data-w="3800" data-h="1860"><img src="site/thumbs/auvers.jpg" width="1400" height="685" alt="Wheat Field under a Heavy Sky" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Wheat Field under a Heavy Sky</cite>, 2026</h3>
+<p>Oil on canvas, in thick strokes from a loaded brush</p>
+<p>After Vincent van Gogh, the last wheat fields at Auvers, July 1890: Wheatfield with Crows; Wheatfield under Thunderclouds</p>
+<p class="note">Ripe wheat under a storm, painted in one sitting: the wheat in short upward flicks, the sky in broad turning strokes, the track in long dragged ones. Each crow is two or three strokes of black.</p>
+<p class="source"><a href="works/auvers.py">works/auvers.py</a> · 436 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.5000">
+<figure class="work" style="--a:1.5000">
+<a class="plate" href="plates/haystacks.jpg" data-slug="haystacks" data-lines="367" data-w="3000" data-h="2000"><img src="site/thumbs/haystacks.jpg" width="1400" height="933" alt="Stacks of Wheat, Sunset, End of Summer" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Stacks of Wheat, Sunset, End of Summer</cite>, 2026</h3>
+<p>Oil on canvas, in small strokes of nearly pure colour laid over each other in many sittings, the last dragged dry over the crust</p>
+<p>After Claude Monet, the Grainstacks, Giverny, 1890–91</p>
+<p class="note">Two stacks of wheat with the sun going down behind them, their edges burning and their shadowed sides violet. The paint went on in small strokes, sitting after sitting, until the surface was a crust.</p>
+<p class="source"><a href="works/haystacks.py">works/haystacks.py</a> · 367 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:3.4130">
+<figure class="work" style="--a:1.5306">
+<a class="plate" href="plates/golden_autumn.jpg" data-slug="golden_autumn" data-lines="757" data-w="3000" data-h="1960"><img src="site/thumbs/golden_autumn.jpg" width="1400" height="915" alt="Birches by the River, October" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Birches by the River, October</cite>, 2026</h3>
+<p>Oil on canvas, in quick broken strokes of thick paint</p>
+<p>After Isaac Levitan, Golden Autumn, 1895</p>
+<p class="note">A birch grove on a river bank in October, the leaves in quick touches of lemon, amber and copper, the trunks drawn with a loaded brush. The river is laid in long strokes of cold blue against the gold.</p>
+<p class="source"><a href="works/golden_autumn.py">works/golden_autumn.py</a> · 757 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:1.8824">
+<a class="plate" href="plates/hawkesbury.jpg" data-slug="hawkesbury" data-lines="688" data-w="3200" data-h="1700"><img src="site/thumbs/hawkesbury.jpg" width="1400" height="744" alt="Noon on the Hawkesbury" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Noon on the Hawkesbury</cite>, 2026</h3>
+<p>Oil on canvas, painted out of doors; long loaded strokes in the sky and the water, short ones in the trees</p>
+<p>After Arthur Streeton and the Heidelberg School: The Purple Noon&#x27;s Transparent Might, 1896; Fire&#x27;s On, 1891; Golden Summer, Eaglemont, 1889</p>
+<p class="note">The river from a sandstone ridge at noon, the paddocks on the flat bleached to straw and the far ridges gone into the haze. The lights are thick and the shadows thin enough for the ground to show.</p>
+<p class="source"><a href="works/hawkesbury.py">works/hawkesbury.py</a> · 688 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:1.3333">
+<figure class="work" style="--a:1.3333">
+<a class="plate" href="plates/javea.jpg" data-slug="javea" data-lines="463" data-w="2800" data-h="2100"><img src="site/thumbs/javea.jpg" width="1400" height="1050" alt="Clear Water at Jávea" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Clear Water at Jávea</cite>, 2026</h3>
+<p>Oil on canvas, alla prima on a light ground: the bottom laid in first, the water over it in long strokes, the sun on the surface in thick white</p>
+<p>After Joaquín Sorolla, the seascapes at Jávea and Valencia, 1900–1910</p>
+<p class="note">The sea at noon from the rocks, clear enough to show the sand and the stones beneath it. The bottom went on first, the water over it in strokes that let it show, and the sun last, in thick white.</p>
+<p class="source"><a href="works/javea.py">works/javea.py</a> · 463 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.1429">
+<figure class="work" style="--a:1.1429">
+<a class="plate" href="plates/algonquin.jpg" data-slug="algonquin" data-lines="530" data-w="2800" data-h="2450"><img src="site/thumbs/algonquin.jpg" width="1400" height="1225" alt="Pine on the Point, Evening" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Pine on the Point, Evening</cite>, 2026</h3>
+<p>Oil on canvas, over a red ground</p>
+<p>After Tom Thomson in Algonquin Park, 1914–17: The Jack Pine; The West Wind; the oil sketches on wood panel</p>
+<p class="note">A wind-bent pine on a granite point, dark against a northern lake and an evening sky laid in broad bands. The red ground is left showing round the tree, as Thomson left it.</p>
+<p class="source"><a href="works/algonquin.py">works/algonquin.py</a> · 530 lines</p>
+</figcaption>
+</figure>
+</div>
+</section>
+<section class="room" id="the-garden" data-room="II · The Garden" data-wall="#1f2b25" data-ink="#ece6d8" data-dim="#a19b8e">
+<header><h2><span class="numeral">II</span> The Garden</h2><p>Flowers, a pond, a window</p></header>
+<div class="row left" style="--sum:1.3043">
+<figure class="work" style="--a:1.3043">
+<a class="plate" href="plates/irises.jpg" data-slug="irises" data-lines="566" data-w="3000" data-h="2300"><img src="site/thumbs/irises.jpg" width="1400" height="1073" alt="Irises in the Asylum Garden" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Irises in the Asylum Garden</cite>, 2026</h3>
+<p>Oil on canvas, in thick strokes from a loaded brush</p>
+<p>After Vincent van Gogh, Irises, Saint-Rémy, May 1889</p>
+<p class="note">A bed of irises seen close and from above, each flower a few curling strokes of blue drawn round in a darker one, each leaf a few long strokes of blue-green. One iris is white.</p>
+<p class="source"><a href="works/irises.py">works/irises.py</a> · 566 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.2605">
+<figure class="work" style="--a:1.2605">
+<a class="plate" href="plates/almond.jpg" data-slug="almond" data-lines="527" data-w="3000" data-h="2380"><img src="site/thumbs/almond.jpg" width="1400" height="1111" alt="Almond Branches against the Sky" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Almond Branches against the Sky</cite>, 2026</h3>
+<p>Oil on canvas, in thick strokes, the flowers in loaded touches of white</p>
+<p>After Vincent van Gogh, Almond Blossom, Saint-Rémy, 1890</p>
+<p class="note">Almond branches seen from below, drawn round in dark paint and set flat against the sky, as in the Japanese prints he collected. Each flower is a few touches of white from a loaded brush.</p>
+<p class="source"><a href="works/almond.py">works/almond.py</a> · 527 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:2.2717">
+<figure class="work" style="--a:1.2190">
+<a class="plate" href="plates/isles_of_shoals.jpg" data-slug="isles_of_shoals" data-lines="688" data-w="2560" data-h="2100"><img src="site/thumbs/isles_of_shoals.jpg" width="1400" height="1148" alt="Poppies above the Ledges, Appledore" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Poppies above the Ledges, Appledore</cite>, 2026</h3>
+<p>Oil on canvas, on a pale ground left showing: the flowers in loaded touches of pure colour, the leaves and grasses in short broken strokes, the sea in level ones</p>
+<p>After Childe Hassam, the paintings of Celia Thaxter&#x27;s garden, Appledore, 1890–94</p>
+<p class="note">A cottage garden on a granite island in July, poppies and cornflowers running down to the ledges, hollyhocks against the sea. The flowers went on last, each in a few loaded touches of colour.</p>
+<p class="source"><a href="works/isles_of_shoals.py">works/isles_of_shoals.py</a> · 688 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:1.0526">
+<a class="plate" href="plates/footbridge.jpg" data-slug="footbridge" data-lines="550" data-w="2400" data-h="2280"><img src="site/thumbs/footbridge.jpg" width="1400" height="1330" alt="The Footbridge, Green Harmony" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Footbridge, Green Harmony</cite>, 2026</h3>
+<p>Oil on canvas, in dense layers of greens and blues: the pads in short level strokes, the reflections drawn down between them, the bridge in a few loaded strokes</p>
+<p>After Claude Monet, the Water Lily Pond with the Japanese footbridge, Giverny, 1899</p>
+<p class="note">The green wooden footbridge over Monet&#x27;s lily pond, willows and bamboo crowding behind it and the lilies lying on the water below. The bridge went on last, in a few loaded strokes over the leaves.</p>
+<p class="source"><a href="works/footbridge.py">works/footbridge.py</a> · 550 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:0.8333">
+<figure class="work" style="--a:0.8333">
+<a class="plate" href="plates/collioure.jpg" data-slug="collioure" data-lines="509" data-w="2000" data-h="2400"><img src="site/thumbs/collioure.jpg" width="1167" height="1400" alt="Window on the Harbour, Collioure" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Window on the Harbour, Collioure</cite>, 2026</h3>
+<p>Oil on canvas, laid thin and fast in separate strokes of pure colour, the white ground bare between them</p>
+<p>After Henri Matisse, Open Window, Collioure, 1905</p>
+<p class="note">A window flung open on the harbour, the casements and the wall round them in viridian, violet, vermilion and pink. Each colour is laid on thin in its own patch or dash, and the white canvas shows between them.</p>
+<p class="source"><a href="works/collioure.py">works/collioure.py</a> · 509 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row long" style="--sum:3.0000">
+<figure class="work long" style="--a:3.0000">
+<a class="plate" href="plates/giverny.jpg" data-slug="giverny" data-lines="388" data-w="4800" data-h="1600"><img src="site/thumbs/giverny.jpg" width="1400" height="467" alt="The Lily Pond, Clouds and Willows" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Lily Pond, Clouds and Willows</cite>, 2026</h3>
+<p>Oil on canvas, thin and thick: a fluid lay-in, long strokes in the reflections, scumbles dragged over dry paint, the pads in loaded dabs</p>
+<p>After Claude Monet, the Water Lilies for the Orangerie, Giverny, 1914–26</p>
+<p class="note">The surface of the pond seen close, with no bank and no horizon: clouds and willows reflected in it, lilies lying on it. The paint went on in sittings, each over the last once it had dried.</p>
+<p class="source"><a href="works/giverny.py">works/giverny.py</a> · 388 lines</p>
+</figcaption>
+</figure>
+</div>
+</section>
+<section class="room" id="paper-and-water" data-room="III · Paper and Water" data-wall="#212835" data-ink="#ece6d8" data-dim="#a19b8e">
+<header><h2><span class="numeral">III</span> Paper and Water</h2><p>Watercolour, ink and mineral colour</p></header>
+<div class="row left" style="--sum:1.3000">
+<figure class="work" style="--a:1.3000">
+<a class="plate" href="plates/corfu.jpg" data-slug="corfu" data-lines="628" data-w="3120" data-h="2400"><img src="site/thumbs/corfu.jpg" width="1400" height="1077" alt="A Wall in the Sun, Corfu" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>A Wall in the Sun, Corfu</cite>, 2026</h3>
+<p>Watercolour, with a few touches of body colour, on rough rag paper</p>
+<p>After John Singer Sargent, the late watercolours, 1900–1911: Corfu: Lights and Shadows; Olive Trees, Corfu; Corfu: The Terrace</p>
+<p class="note">A whitewashed garden wall above the sea at noon, with the shade of an olive thrown across it in one wash of cobalt and rose. The wall in the sun is the bare paper.</p>
+<p class="source"><a href="works/corfu.py">works/corfu.py</a> · 628 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.0000">
+<figure class="work" style="--a:1.0000">
+<a class="plate" href="plates/kairouan.jpg" data-slug="kairouan" data-lines="513" data-w="2500" data-h="2500"><img src="site/thumbs/kairouan.jpg" width="1400" height="1400" alt="White Domes, Kairouan" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>White Domes, Kairouan</cite>, 2026</h3>
+<p>Watercolour over pencil on paper, mounted on card</p>
+<p>After Paul Klee, watercolours after the journey to Tunisia of April 1914: Red and White Domes; In the Style of Kairouan</p>
+<p class="note">A white town in the south as a loose chequer of transparent washes, warm at its heart and cooler towards the edge, with two domes left as bare paper.</p>
+<p class="source"><a href="works/kairouan.py">works/kairouan.py</a> · 513 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:2.7347">
+<figure class="work" style="--a:1.4286">
+<a class="plate" href="plates/ghost_gum.jpg" data-slug="ghost_gum" data-lines="763" data-w="3200" data-h="2240"><img src="site/thumbs/ghost_gum.jpg" width="1400" height="980" alt="Ghost Gum, West MacDonnell Ranges" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Ghost Gum, West MacDonnell Ranges</cite>, 2026</h3>
+<p>Watercolour over pencil on rough rag paper</p>
+<p>After the watercolours of Albert Namatjira and the Hermannsburg School, Central Australia, c. 1950</p>
+<p class="note">A ghost gum on the bank of a dry creek under the West MacDonnell Ranges, its trunk the white of the paper. The rock is built up in glazes of ochre, light red and violet, each laid when the last was dry.</p>
+<p class="source"><a href="works/ghost_gum.py">works/ghost_gum.py</a> · 763 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:1.3061">
+<a class="plate" href="plates/jiangnan.jpg" data-slug="jiangnan" data-lines="753" data-w="2560" data-h="1960"><img src="site/thumbs/jiangnan.jpg" width="1400" height="1072" alt="Water Town in Spring" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Water Town in Spring</cite>, 2026</h3>
+<p>Watercolour woodblock print (shuiyin muke), twenty-one impressions from twenty blocks, on dampened xuan paper</p>
+<p>After the watercolour woodcuts of the Jiangsu school, Nanjing, 1960s–1980s, and the Ten Bamboo Studio manual, Nanjing, 1633</p>
+<p class="note">White walls and dark tiles across a canal on a spring morning after rain. The walls are the bare paper; the reflections are cut from the same drawing turned upside down and printed paler and wetter.</p>
+<p class="source"><a href="works/jiangnan.py">works/jiangnan.py</a> · 753 lines</p>
+</figcaption>
+</figure>
+</div>
+</section>
+<section class="room" id="the-workshop" data-room="IV · The Workshop" data-wall="#33201d" data-ink="#ece6d8" data-dim="#a19b8e">
+<header><h2><span class="numeral">IV</span> The Workshop</h2><p>Glass, copper and the woodblock</p></header>
+<div class="row left" style="--sum:1.0000">
+<figure class="work" style="--a:1.0000">
+<a class="plate" href="plates/rose_window.jpg" data-slug="rose_window" data-lines="550" data-w="2600" data-h="2600"><img src="site/thumbs/rose_window.jpg" width="1400" height="1400" alt="North Rose" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>North Rose</cite>, 2026</h3>
+<p>Pot-metal and flashed glass, painted and fired, leaded, in plate tracery</p>
+<p>After The north rose of Chartres Cathedral, given by Blanche of Castile, c. 1235</p>
+<p class="note">A north rose never has the sun on it; this is its light on any grey afternoon. Twelve doves come down to the rose at the centre, among the lilies of France and the castles of Castile: seven thousand pieces of glass, no two of them the same thickness.</p>
+<p class="source"><a href="works/rose_window.py">works/rose_window.py</a> · 550 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.4947">
+<figure class="work" style="--a:1.4947">
+<a class="plate" href="plates/low_country.jpg" data-slug="low_country" data-lines="488" data-w="2840" data-h="1900"><img src="site/thumbs/low_country.jpg" width="1400" height="937" alt="The Low Country" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>The Low Country</cite>, 2026</h3>
+<p>Etching, printed on laid paper</p>
+<p>After Rembrandt van Rijn, Landscape with a Cottage and a Large Tree, Amsterdam, 1641</p>
+<p class="note">A cottage under its trees on one side of the plate, and on the other the flat land running out to a church tower, a windmill, and a great deal of sky.</p>
+<p class="source"><a href="works/low_country.py">works/low_country.py</a> · 488 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:2.1434">
+<figure class="work" style="--a:1.4545">
+<a class="plate" href="plates/red_fuji.jpg" data-slug="red_fuji" data-lines="146" data-w="2560" data-h="1760"><img src="site/thumbs/red_fuji.jpg" width="1400" height="963" alt="Red Fuji, Clear Morning" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Red Fuji, Clear Morning</cite>, 2026</h3>
+<p>Colour woodblock print (moku-hanga) from six blocks, on kozo paper</p>
+<p>After Katsushika Hokusai, Fine Wind, Clear Morning, from Thirty-six Views of Mount Fuji, Edo, c. 1831</p>
+<p class="note">Six blocks, printed in turn. The blue was wiped by hand before each pull, so no two skies would ever come out the same.</p>
+<p class="source"><a href="works/red_fuji.py">works/red_fuji.py</a> · 146 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:0.6889">
+<a class="plate" href="plates/shower.jpg" data-slug="shower" data-lines="514" data-w="1860" data-h="2700"><img src="site/thumbs/shower.jpg" width="964" height="1400" alt="Shower on the Long Bridge" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Shower on the Long Bridge</cite>, 2026</h3>
+<p>Colour woodblock print (moku-hanga) from seventeen blocks, on kozo paper</p>
+<p>After Utagawa Hiroshige, Sudden Shower over Shin-Ōhashi Bridge and Atake, from One Hundred Famous Views of Edo, 1857</p>
+<p class="note">The rain is cut on two blocks, one printed in sumi and one in grey, their lines at slightly different slants. The river was wiped darker toward the near bank before every pull.</p>
+<p class="source"><a href="works/shower.py">works/shower.py</a> · 514 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:1.4545">
+<figure class="work" style="--a:1.4545">
+<a class="plate" href="plates/inland_sea.jpg" data-slug="inland_sea" data-lines="406" data-w="2560" data-h="1760"><img src="site/thumbs/inland_sea.jpg" width="1400" height="963" alt="Evening Sails" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Evening Sails</cite>, 2026</h3>
+<p>Colour woodblock print (shin-hanga) in twenty-five impressions, on kozo paper</p>
+<p>After Hiroshi Yoshida, Sailing Boats, from the Inland Sea series, 1926</p>
+<p class="note">Yoshida printed the same blocks again for different hours of the day. This new design is pulled for the evening: the sails take the last of the sun, and the sea gives them back in pieces.</p>
+<p class="source"><a href="works/inland_sea.py">works/inland_sea.py</a> · 406 lines</p>
+</figcaption>
+</figure>
+</div>
+</section>
+<section class="room" id="colour-itself" data-room="V · Colour Itself" data-wall="#f1eee8" data-ink="#29251f" data-dim="#6e675c">
+<header><h2><span class="numeral">V</span> Colour Itself</h2><p>Abstraction</p></header>
+<div class="row left" style="--sum:0.7500">
+<figure class="work" style="--a:0.7500">
+<a class="plate" href="plates/stockholm.jpg" data-slug="stockholm" data-lines="559" data-w="2400" data-h="3200"><img src="site/thumbs/stockholm.jpg" width="1050" height="1400" alt="Youth, with Two Spirals" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Youth, with Two Spirals</cite>, 2026</h3>
+<p>Tempera on paper, the sheets joined and mounted on canvas</p>
+<p>After Hilma af Klint, The Ten Largest (De tio största), Stockholm, 1907</p>
+<p class="note">Two spirals, a great flower and three circles float on a ground of orange among buds, dots and tendrils; where forms cross, each shows through the other.</p>
+<p class="source"><a href="works/stockholm.py">works/stockholm.py</a> · 559 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:1.3333">
+<figure class="work" style="--a:1.3333">
+<a class="plate" href="plates/louveciennes.jpg" data-slug="louveciennes" data-lines="462" data-w="3200" data-h="2400"><img src="site/thumbs/louveciennes.jpg" width="1400" height="1050" alt="Sun and Moon" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Sun and Moon</cite>, 2026</h3>
+<p>Oil on canvas, thinned in places and loaded in others</p>
+<p>After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13; Sonia Delaunay, Electric Prisms (Prismes électriques), 1914</p>
+<p class="note">Discs of unmixed colour, ringed and quartered so that orange meets blue, red meets green and yellow meets violet. A warm sun and a smaller, cool moon hold the two ends, and one great arc crosses everything.</p>
+<p class="source"><a href="works/louveciennes.py">works/louveciennes.py</a> · 462 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row pair" style="--sum:3.2500">
+<figure class="work" style="--a:1.2500">
+<a class="plate" href="plates/provincetown.jpg" data-slug="provincetown" data-lines="311" data-w="3000" data-h="2400"><img src="site/thumbs/provincetown.jpg" width="1400" height="1120" alt="Harbor, August" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Harbor, August</cite>, 2026</h3>
+<p>Acrylic thinned with water, poured and stained into unprimed cotton duck, over charcoal</p>
+<p>After Helen Frankenthaler, the soak-stain paintings, from Mountains and Sea (1952) to The Bay (1963)</p>
+<p class="note">Ultramarine, cerulean, coral, sap green and a little ochre poured onto raw cotton duck laid on the floor, each shape left as the paint ran out, with the bare canvas between them.</p>
+<p class="source"><a href="works/provincetown.py">works/provincetown.py</a> · 311 lines</p>
+</figcaption>
+</figure>
+<figure class="work" style="--a:2.0000">
+<a class="plate" href="plates/rue_jonquoy.jpg" data-slug="rue_jonquoy" data-lines="578" data-w="3900" data-h="1950"><img src="site/thumbs/rue_jonquoy.jpg" width="1400" height="700" alt="Light Rising over Water" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Light Rising over Water</cite>, 2026</h3>
+<p>Oil on canvas, thinned almost to a wash and laid in many veils with broad brushes and a rag, wiped back and left to run; drawn into with a smaller brush, a few touches laid thick with a loaded brush</p>
+<p>After Zao Wou-Ki, the large oils of the 1980s, such as Juin–Octobre 1985</p>
+<p class="note">A space of light with no landscape in it: veils of blue deepening into indigo round a pale gold core, thin paint running down, and clusters of dark strokes drawn fast through the middle.</p>
+<p class="source"><a href="works/rue_jonquoy.py">works/rue_jonquoy.py</a> · 578 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row left" style="--sum:0.8889">
+<figure class="work" style="--a:0.8889">
+<a class="plate" href="plates/cologne.jpg" data-slug="cologne" data-lines="431" data-w="2400" data-h="2700"><img src="site/thumbs/cologne.jpg" width="1244" height="1400" alt="Abstract Picture" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Abstract Picture</cite>, 2026</h3>
+<p>Oil on canvas: loose passages of colour brushed on, then dragged and scraped with a squeegee, wet into wet and over half-dry paint, with fresh colour between the pulls</p>
+<p>After Gerhard Richter, the squeegee paintings (Abstraktes Bild), Cologne, late 1980s and 1990s</p>
+<p class="note">Colour brushed on in broad passages, then dragged down the canvas with a long squeegee, again and again over some days. Each pull scrapes the paint off the high places and lays it into the low ones, and skips, so that the earlier layers show through.</p>
+<p class="source"><a href="works/cologne.py">works/cologne.py</a> · 431 lines</p>
+</figcaption>
+</figure>
+</div>
+<div class="row right" style="--sum:0.8000">
+<figure class="work" style="--a:0.8000">
+<a class="plate" href="plates/vetheuil.jpg" data-slug="vetheuil" data-lines="400" data-w="2400" data-h="3000"><img src="site/thumbs/vetheuil.jpg" width="1120" height="1400" alt="Sunflowers, Late Summer" loading="lazy" decoding="async"></a>
+<figcaption class="label">
+<h3><cite>Sunflowers, Late Summer</cite>, 2026</h3>
+<p>Oil on canvas: thin washes that run, broad loaded strokes and fast dry ones of unmixed colour, white painted back over them</p>
+<p>After Joan Mitchell, La Grande Vallée and the Sunflowers, Vétheuil, 1983–92</p>
+<p class="note">Masses of cadmium yellow and orange, ultramarine and emerald, high on a white canvas, with thin paint running down from them. The white is painted too, back over the colour, to shape it.</p>
+<p class="source"><a href="works/vetheuil.py">works/vetheuil.py</a> · 400 lines</p>
+</figcaption>
+</figure>
+</div>
+</section>
+</main>
+<footer class="colophon" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<h2>Colophon</h2>
+<p>Every plate in this museum can be made again from its source, on any computer, in a minute or two.</p>
+<pre><code>git clone https://github.com/Chaoqi31/claude-glass &amp;&amp; cd claude-glass
+uv run render.py giverny     # paint one work into plates/
+uv run render.py             # paint them all
+uv run site.py               # hang them: the wall, this README and the website
+uv run timeline.py           # the film (needs ffmpeg)</code></pre>
+<p>A work is one Python file in <code>works/</code>. It carries its wall label (title, medium, the painter or tradition it follows, the year, the place) and a function, <code>paint(seed)</code>, that returns the picture in linear light. Each picture is built the way its medium is: a stroke is a path that carries a load of paint, a block is cut, inked and pressed, glass is cut and leaded, and what you see is whatever the bristles, the pigment and the ground leave behind.</p>
+<p>The materials are in <code>atelier/</code>, each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint (<a href="atelier/impasto.py"><code>impasto.py</code></a>), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.</p>
+<p>To add a work, write a new file in <code>works/</code> with the same label and a <code>paint</code> of its own, render it, and hang it.</p>
+<p>The code is released under the <a href="LICENSE">MIT License</a>; the plates, the wall and the film under <a href="plates/LICENSE">CC BY 4.0</a>.</p>
+</footer>
+<div class="loupe" aria-hidden="true"></div>
+<dialog class="viewer">
+<div class="caption"><p class="where"></p><div class="label"></div><p class="hint"></p></div>
+<div class="stage"></div>
+<div class="back"><div class="linen" tabindex="0"><p class="file"></p><pre><code></code></pre></div></div>
+<div class="controls">
+<button type="button" class="turn" aria-label="Turn it over" title="Turn it over (T)">&#8635;</button>
+<button type="button" class="prev" aria-label="Previous work">&larr;</button>
+<button type="button" class="next" aria-label="Next work">&rarr;</button>
+<button type="button" class="close" aria-label="Close" autofocus>&times;</button>
+</div>
+</dialog>
+</body>
+</html>
