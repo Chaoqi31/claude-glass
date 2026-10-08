@@ -1,15 +1,13 @@
 // The museum's moving parts: the glass at the door; walls that take on each room's colour as a visitor
-// walks in; a loupe over the paintings; and one <dialog> that shows every work (a plate zooms and pans, a
-// long painting unrolls from its left end) and turns it over, to the program on its back.
+// walks in; and one <dialog> that shows every work (a plate zooms and pans, a long painting unrolls from its
+// left end) and turns it over, to the program on its back.
 const root = document.documentElement;
 root.classList.add('js');
 const links = [...document.querySelectorAll('main a.plate')];
 const viewer = document.querySelector('.viewer');
 const stage = viewer.querySelector('.stage');
 const back = viewer.querySelector('.back');
-const loupe = document.querySelector('.loupe');
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
-const fine = matchMedia('(hover: hover) and (pointer: fine)');
 const pts = new Map(), sources = new Map();
 let i = 0, img, nw, nh, s = 1, fit = 1, x = 0, y = 0, g = 1, from, opener;
 
@@ -77,41 +75,8 @@ document.querySelector('.entrance').addEventListener('pointermove', e => {
   glass.style.setProperty('--ty', c((e.clientY - r.top) / r.height - .5));
 });
 
-// A loupe over the paintings, for the brushwork at the plate's own resolution; until the plate arrives the
-// thumbnail stands in, enlarged.
-let under = null, last;
-function peer(e) {
-  last = e;
-  const a = under, r = a.getBoundingClientRect(), R = loupe.offsetWidth / 2;
-  const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
-  if (u < 0 || u > 1 || v < 0 || v > 1) return lift();
-  const bw = Math.max(a.dataset.w / devicePixelRatio, 2.5 * r.width), bh = bw * a.dataset.h / a.dataset.w;
-  loupe.style.translate = `${e.clientX - R}px ${e.clientY - R}px`;
-  loupe.style.backgroundSize = `${bw}px ${bh}px`;
-  loupe.style.backgroundPosition = `${R - u * bw}px ${R - v * bh}px`;
-}
-function lift() {
-  under?.classList.remove('peering');
-  under = null;
-  loupe.classList.remove('on');
-}
-for (const a of links) {
-  a.addEventListener('pointerenter', e => {
-    if (e.pointerType !== 'mouse' || !fine.matches) return;
-    under = a;
-    loupe.style.backgroundImage = `url("${a.href}"), url("${a.querySelector('img').src}")`;
-    peer(e);
-    loupe.classList.add('on');
-    a.classList.add('peering');
-  });
-  a.addEventListener('pointermove', e => under === a && peer(e));
-  a.addEventListener('pointerleave', lift);
-}
-addEventListener('scroll', () => under && peer(last), {passive: true});
-
 // The viewer.
 function open(n, by) {
-  lift();
   from = n;
   opener = by;
   viewer.showModal();

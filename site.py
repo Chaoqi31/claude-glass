@@ -19,30 +19,16 @@ from PIL import Image, ImageDraw
 
 from atelier import plate
 from atelier.plate import BACKDROP
-from render import ROOT, SCROLL, hanging
+from render import ROOMS, ROOT, SCROLL, hanging, rooms, tally
 
 SITE = ROOT / "site"
 URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it; social cards need absolute links
 ACCENT = "#c8402e"  # vermilion: the museum's one accent
 HERO = "saint_remy"  # the work in the glass as the doors open
 ICON = "rose_window"  # a round window, cut out for the browser tab
-ROOMS = {  # the order a visitor walks them in: what hangs in each, and the colour of its walls
-    "Open Air": ("Weather, water and light, painted out of doors", "#2a2622"),
-    "The Garden": ("Flowers, a pond, a window", "#1f2b25"),
-    "Paper and Water": ("Watercolour, ink and mineral colour", "#212835"),
-    "The Workshop": ("Glass, copper and the woodblock", "#33201d"),
-    "Colour Itself": ("Abstraction", "#f1eee8"),
-}
 NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
 REGIONS = ["Africa", "West Asia", "South Asia", "East Asia", "Southeast Asia", "Europe", "Americas", "Oceania"]
 e = html.escape
-
-
-def rooms(mods):
-    """The rooms with something hung in them, in the order a visitor walks them."""
-    lost = {m.ROOM for m in mods.values()} - set(ROOMS)
-    assert not lost, f"no such room: {lost}"
-    return [r for r in ROOMS if any(m.ROOM == r for m in mods.values())]
 
 
 def walls(wall):
@@ -101,12 +87,6 @@ def label(slug, m):
         f"<sub>[`works/{slug}.py`](works/{slug}.py) · {lines} lines</sub>",
         "",
     ])
-
-
-def tally(slugs):
-    """What the collection comes to, in a line."""
-    lines = sum(len((ROOT / "works" / f"{s}.py").read_text().splitlines()) for s in slugs)
-    return f"{len(slugs)} paintings · {lines:,} lines of Python · no image models, no photographs"
 
 
 def readme(slugs):
@@ -230,14 +210,13 @@ def door(n, name, hung):
 
 
 def film():
-    """The timeline film, if it has been made; its poster is a moment into the first work, after the cold
-    open and the title."""
+    """The film, if it has been made; its poster is its last moment but one: the title over the glass at dawn."""
     if not (ROOT / "plates" / "_timeline.mp4").exists():
         return ""
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "15", "-i", str(ROOT / "plates" / "_timeline.mp4"),
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-4", "-i", str(ROOT / "plates" / "_timeline.mp4"),
                     "-frames:v", "1", "-q:v", "3", str(SITE / "thumbs" / "_timeline.jpg")], check=True)
-    return ('<video class="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1280" '
-            'height="720" controls preload="none"></video>')
+    return ('<video class="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" '
+            'height="1080" controls preload="none"></video>')
 
 
 def build(slugs):
@@ -305,7 +284,6 @@ def build(slugs):
 <footer class="colophon" {walls(BACKDROP)}>
 {nl.join(markdown("colophon.md"))}
 </footer>
-<div class="loupe" aria-hidden="true"></div>
 <dialog class="viewer">
 <div class="caption"><p class="where"></p><div class="label"></div><p class="hint"></p></div>
 <div class="stage"></div>
@@ -408,11 +386,10 @@ main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .room header p { margin: .5rem 0 0; color: var(--dim); font-style: italic; }
 .row { margin: 0 0 clamp(6rem, 18vh, 11rem); }
 .work { margin: 0; }
-.plate { display: block; cursor: zoom-in; }
+.plate { display: block; }
 .plate img { display: block; width: 100%; height: auto; box-shadow: 0 .9rem 1.6rem -.6rem rgb(0 0 0 / .45);
   transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
 .plate:hover img { transform: translateY(-3px); }
-.plate.peering { cursor: none; }
 .row.left .work, .row.right .work { display: grid; gap: 1.75rem 3.5rem; align-items: end; }
 .row.left .work { grid-template-columns: minmax(0, 1fr) 15rem; }
 .row.right .work { grid-template-columns: 15rem minmax(0, 1fr); }
@@ -435,13 +412,6 @@ figcaption.label { max-width: 32rem; }
 .label .note { margin-top: 1rem; color: var(--ink); }
 .label .source { margin-top: 1rem; font-size: .8rem; }
 .source a { font-family: var(--mono); }
-
-.loupe { position: fixed; top: 0; left: 0; z-index: 4; width: 15rem; height: 15rem; border-radius: 50%; pointer-events: none;
-  opacity: 0; scale: .85; background: #0b0a09 no-repeat;
-  box-shadow: 0 0 0 1px rgb(0 0 0 / .45), 0 0 0 3px rgb(236 230 216 / .85), 0 0 0 4px rgb(0 0 0 / .3),
-    0 1.25rem 2.5rem rgb(0 0 0 / .45), inset 0 0 1.25rem rgb(0 0 0 / .4);
-  transition: opacity .25s ease, scale .25s ease; }
-.loupe.on { opacity: 1; scale: 1; }
 
 .colophon { max-width: 33em; margin: 0 auto; padding: clamp(8rem, 24vh, 14rem) 1.25rem 6rem; color: var(--dim); }
 .colophon h2 { color: var(--ink); font-size: 1.2rem; font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: .16em; text-align: center; }
@@ -498,17 +468,15 @@ figcaption.label { max-width: 32rem; }
 """
 
 JS = r"""// The museum's moving parts: the glass at the door; walls that take on each room's colour as a visitor
-// walks in; a loupe over the paintings; and one <dialog> that shows every work (a plate zooms and pans, a
-// long painting unrolls from its left end) and turns it over, to the program on its back.
+// walks in; and one <dialog> that shows every work (a plate zooms and pans, a long painting unrolls from its
+// left end) and turns it over, to the program on its back.
 const root = document.documentElement;
 root.classList.add('js');
 const links = [...document.querySelectorAll('main a.plate')];
 const viewer = document.querySelector('.viewer');
 const stage = viewer.querySelector('.stage');
 const back = viewer.querySelector('.back');
-const loupe = document.querySelector('.loupe');
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
-const fine = matchMedia('(hover: hover) and (pointer: fine)');
 const pts = new Map(), sources = new Map();
 let i = 0, img, nw, nh, s = 1, fit = 1, x = 0, y = 0, g = 1, from, opener;
 
@@ -576,41 +544,8 @@ document.querySelector('.entrance').addEventListener('pointermove', e => {
   glass.style.setProperty('--ty', c((e.clientY - r.top) / r.height - .5));
 });
 
-// A loupe over the paintings, for the brushwork at the plate's own resolution; until the plate arrives the
-// thumbnail stands in, enlarged.
-let under = null, last;
-function peer(e) {
-  last = e;
-  const a = under, r = a.getBoundingClientRect(), R = loupe.offsetWidth / 2;
-  const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
-  if (u < 0 || u > 1 || v < 0 || v > 1) return lift();
-  const bw = Math.max(a.dataset.w / devicePixelRatio, 2.5 * r.width), bh = bw * a.dataset.h / a.dataset.w;
-  loupe.style.translate = `${e.clientX - R}px ${e.clientY - R}px`;
-  loupe.style.backgroundSize = `${bw}px ${bh}px`;
-  loupe.style.backgroundPosition = `${R - u * bw}px ${R - v * bh}px`;
-}
-function lift() {
-  under?.classList.remove('peering');
-  under = null;
-  loupe.classList.remove('on');
-}
-for (const a of links) {
-  a.addEventListener('pointerenter', e => {
-    if (e.pointerType !== 'mouse' || !fine.matches) return;
-    under = a;
-    loupe.style.backgroundImage = `url("${a.href}"), url("${a.querySelector('img').src}")`;
-    peer(e);
-    loupe.classList.add('on');
-    a.classList.add('peering');
-  });
-  a.addEventListener('pointermove', e => under === a && peer(e));
-  a.addEventListener('pointerleave', lift);
-}
-addEventListener('scroll', () => under && peer(last), {passive: true});
-
 // The viewer.
 function open(n, by) {
-  lift();
   from = n;
   opener = by;
   viewer.showModal();

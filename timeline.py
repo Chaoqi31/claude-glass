@@ -1,26 +1,21 @@
-"""The timeline film: every work in the collection, oldest first, as a slide projector throws it in a dark room.
+"""The film: the collection seen in a Claude glass, cut to a score that is composed and played in code.
 
-    uv run timeline.py      writes plates/_timeline.mp4 (1280 x 720, 24 fps, H.264)
+    uv run timeline.py      writes plates/_timeline.mp4 (1920 x 1080, 30 fps, H.264 with AAC)
 
-It opens cold, on the brushwork of a few works seen close, changed as fast as a hand can change slides; then
-the title, and the works in the order of the years they are painted after. The camera moves differently from
-one work to the next: it pushes in toward the busiest part of a work, or starts close on it and draws back to
-the whole, and it travels the length of a long or a tall painting. Most works dissolve into the next, as one
-projector fades up while a second fades down; now and then the gate goes dark while a slide is changed. Under
-the gate run a caption (date, place, title) and a timeline scaled by the log of the years before now, so that
-the old centuries are compressed. It ends on the whole collection, hung on one wall.
+A Claude glass is a small, dark, convex mirror; the museum is named for one. In the film the glass is a dark
+world whose rim catches the light. The paintings come up in its dark one after another, each of them whole and
+hung in the same place, every cut falling on a note of the score (score.py). One of them is painted there
+stroke by stroke. The cuts come quicker and quicker, the glass goes dark for the title, and the light comes up
+along its rim.
 
-numpy and PIL make the stills, the type and the light of the gate (atelier/projector.py, frozen for an average
-frame); ffmpeg does the per-frame work, one process per shot, and the frames come back through Python, which
-lays the dissolves, on their way to one encoder. The type is Iowan Old Style, the face the site is set in:
-/System/Library/Fonts/Supplemental/Iowan Old Style.ttc (macOS).
+The plates are shown as they are, in their own colours. numpy and PIL draw each frame and ffmpeg encodes the
+frames with the music. The type is Iowan Old Style, from macOS.
 """
 
 import importlib
+import io
 import math
-import re
 import subprocess
-import sys
 import tempfile
 import time
 from pathlib import Path
@@ -29,301 +24,269 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage
 
-from atelier import noise, plate, projector
-from atelier.color import lin, to_srgb
+import score
+from atelier import impasto, music, noise, plate
+from atelier.color import to_srgb
 from atelier.plate import BACKDROP
-from render import ROOT, SCROLL, hanging
+from render import ROOMS, ROOT, hanging
 
-W, H, FPS = 1280, 720, 24
-GW, GH = 736, 552                    # the gate: 4:3
-GX, GY = (W - GW) // 2, 40
-K = GH / 600                         # projector.py's lengths (softness, burn, weave) are px of a 600 px gate
-DARK = "#090807"                     # the room
-LINE = 676                           # the timeline
-FONT = "/System/Library/Fonts/Supplemental/Iowan Old Style.ttc"
-IVORY = (236, 230, 216)              # the site's --ivory
-SHOT = {"push": 4.4, "reveal": 5.2, "macro": 0.75}  # seconds on a work, by how the camera moves
-ZOOM = {"push": 1.12, "reveal": 2.6}  # how far the camera pushes in, or how close it starts before drawing back
-DRIFT = 0.15                          # how far off the middle a push-in may start
-FADE, BEAT, MIX = 0.4, 8, 16          # seconds a picture takes to come and go; frames of dark; frames of a dissolve
-OPEN = 9                              # works seen close before the title
-FLICKER = "0.009*(sin(1.93*n)+sin(5.21*n+1)+sin(11.7*n+2))"
-TICKS = [(-50000, "50,000 BCE"), (-10000, "10,000 BCE"), (-3000, "3000 BCE"), (-500, "500 BCE"), (1, "1 CE"),
-         (500, "500"), (1000, "1000"), (1500, "1500"), (1800, "1800"), (1900, "1900"), (2026, "2026")]
-LIGHT = ((np.arange(256) / 255) ** 2.2).astype(np.float32)  # an 8-bit frame as light, near enough
+W, H, FPS = 1920, 1080, 30
+STEP = round(score.STEP * FPS)            # frames in a sixteenth of the score
+assert abs(STEP - score.STEP * FPS) < 1e-9, "a sixteenth is a whole number of frames"
+BAR, TAIL = 16 * STEP, round(score.TAIL * FPS)
+BOX, MIDDLE = (0.86 * W, 0.78 * H), (W / 2, 0.45 * H)    # the most of the frame a painting fills, and its middle
+RADIUS, RIM = 1.3 * W, 0.84 * H                           # the curve of the glass, and where its rim tops out
+DARK = np.float32([10, 10, 11])           # the glass
+IVORY, DIM = (236, 230, 216), (150, 145, 136)
+SERIF = "/System/Library/Fonts/Supplemental/Iowan Old Style.ttc"
+PAINTED = "saint_remy"                    # the work seen being painted
+PAD = 16                                  # px of edge kept round every picture, for the filter reading near it
+WORDS = {"paint": ("Every painting", "is a program."), "quick": ("One painter,", "many hands.")}
 
-
-def when(m):
-    """A work's date as the caption gives it: 'c. 43,500 BCE', 'c. 1530', '1938'."""
-    if m.YEAR < 0:
-        return f"c. {-m.YEAR:,} BCE" if m.YEAR <= -10000 else f"c. {-m.YEAR} BCE"
-    exact = re.search(rf"(?<!c\. )(?<!–)\b{m.YEAR}\b", m.AFTER)  # only where the source names that year alone
-    return f"{'' if exact else 'c. '}{m.YEAR}{' CE' if m.YEAR < 1000 else ''}"
+LIGHT = ((np.arange(256) / 255) ** 2.2).astype(np.float32)   # a byte of the frame as light, near enough
+DARKEN = np.round(255 * np.linspace(0, 1, 4096) ** (1 / 2.2)).astype(np.float32)
+HAZE = LIGHT[[96, 150, 196]] * 0.75                        # the cold light over the glass
+WARM = LIGHT[[244, 128, 56]]                               # and the warm line along its rim
+Y, X = np.mgrid[0:H, 0:W].astype(np.float32) + 0.5
 
 
-def along(year, start):
-    """Where a year falls on the timeline: 0 at its start, 1 now, by the log of (a century and) the years
-    before now."""
-    t = lambda y: math.log(2126 - y)
-    return (t(start) - t(year)) / (t(start) - t(2026))
+def setting(lines, gap=0.5):
+    """Lines of type centred over one another, each (text, px, italic, tracking in ems, colour). -> RGBA"""
+    rows = []
+    for text, size, italic, track, colour in lines:
+        f = ImageFont.truetype(SERIF, size, index=2 if italic else 0)
+        steps = [f.getlength(ch) + track * size for ch in text] if track else [f.getlength(text)]
+        im = Image.new("L", (int(sum(steps) + 8), int(size * 1.45)))
+        d, x = ImageDraw.Draw(im), 4.0
+        for part, step in zip(text if track else [text], steps):  # tracked type is set a letter at a time
+            d.text((x, size * 1.1), part, font=f, fill=255, anchor="ls")
+            x += step
+        layer = Image.new("RGBA", im.size, colour)
+        layer.putalpha(im)
+        rows.append((layer, size))
+    out = Image.new("RGBA", (max(r.width for r, _ in rows), sum(r.height for r, _ in rows)
+                             + sum(int(s * gap) for _, s in rows[1:])))
+    y = 0
+    for i, (r, s) in enumerate(rows):
+        y += int(s * gap) if i else 0
+        out.alpha_composite(r, ((out.width - r.width) // 2, y))
+        y += r.height
+    return out
 
 
-def png(a, path):
-    """Linear light to a dithered sRGB PNG."""
-    s = to_srgb(a) * 255 + noise.rng(0).uniform(0, 1, a.shape)
-    Image.fromarray(np.clip(s, 0, 255).astype(np.uint8)).save(path)
+def overlay(canvas, im, y, alpha=1.0):
+    """Lay the RGBA image `im` on the frame, centred across, its top at y."""
+    if alpha <= 0.002:
+        return
+    a = np.asarray(im, np.float32)
+    x, y = (W - im.width) // 2, int(round(y))
+    region = canvas[y:y + im.height, x:x + im.width]
+    region += (a[..., :3] - region) * (a[..., 3:] / 255 * alpha)
 
 
-def gate():
-    """The light of the gate, fixed on the screen while the film moves through it: projector.project frozen
-    for an average frame, as a mask the picture is multiplied by and the room, lit only by the light
-    scattered round the gate, which is screened over it."""
-    d = projector.aperture(GH, GW, GX)[GX - GY:GX - GY + H]  # aperture() pads evenly; the gate sits high
-    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    yy, xx = yy + 0.5 - GY - GH / 2, xx + 0.5 - W / 2
-    ap = noise.smoothstep(5 * K, -5 * K, d)
-    hot = ((yy + 0.03 * GH) ** 2 + (xx - 0.04 * GW) ** 2) / ((GH / 2) ** 2 + (GW / 2) ** 2)
-    fall = (np.exp(-1.9 * hot) * (1 - 0.5 * np.exp(np.minimum(d, 0) / (90 * K)))
-            * (1 + 0.03 * noise.field(hot.shape, GW / 3, noise.rng(16))))
-    mask = ap[..., None] * projector.LAMP * fall[..., None] ** np.array([0.7, 1.0, 1.45], np.float32)
-    light = 0.25 * mask
-    halo = ndimage.gaussian_filter(light, (14 * K, 14 * K, 0), truncate=2.5) * (1 - ap[..., None])
-    veil = ndimage.gaussian_filter(ap, 28 * K, truncate=2.5)[..., None] * light.sum((0, 1)) / ap.sum()
-    return mask, lin(DARK) + 0.2 * halo + 0.03 * veil
+class Picture:
+    """A picture as the film sees it: w x h px, drawn from `img` at any resolution."""
+
+    def __init__(self, img, w=None, h=None):
+        self.w, self.h = w or img.width, h or img.height
+        self.s = img.width / self.w
+        a = np.asarray(img.convert("RGB"))
+        self.img = Image.fromarray(np.pad(a, ((PAD, PAD), (PAD, PAD), (0, 0)), mode="edge"))
 
 
-def words(lines):
-    """Ivory type on a clear frame, cropped to the ink: lines of (x, baseline, size, runs), runs of
-    (text, italic, alpha) set a little apart; x None centres the line. Returns the image and its place."""
-    a = Image.new("L", (W, H))
-    d = ImageDraw.Draw(a)
-    for x, y, size, runs in lines:
-        fonts = [ImageFont.truetype(FONT, size, index=2 if italic else 0) for _, italic, _ in runs]
-        widths = [d.textlength(t, font=f) for (t, _, _), f in zip(runs, fonts)]
-        if x is None:
-            x = (W - sum(widths) - 1.4 * size * (len(runs) - 1)) / 2
-        for (t, _, alpha), f, w in zip(runs, fonts, widths):
-            d.text((x, y), t, font=f, fill=round(255 * alpha), anchor="ls")
-            x += w + 1.4 * size
-    box = a.getbbox()
-    im = Image.new("RGBA", (box[2] - box[0], box[3] - box[1]), IVORY)
-    im.putalpha(a.crop(box))
-    return im, box[:2]
+def unmounted(name):
+    """A plate as the film shows it. A sheet mounted on the museum's dark wall comes off the wall, its shadow
+    with it, onto the dark of the glass; a painting to its edges is left as it is. -> PIL image"""
+    im = Image.open(ROOT / "plates" / f"{name}.jpg").convert("RGB")
+    a = np.asarray(im).astype(np.float32)
+    wall = np.float32(plate.to_srgb_255(BACKDROP))
+    if np.abs(a[[0, 0, -1, -1], [0, -1, 0, -1]] - wall).max() > 12:
+        return im
+    lab, _ = ndimage.label((a.max(-1) < 70) & (np.ptp(a, -1) < 14))
+    edge = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+    keep = ndimage.gaussian_filter((~np.isin(lab, edge[edge > 0])).astype(np.float32), 0.8)
+    ys, xs = np.nonzero(keep > 0.02)
+    out = DARK + (a - DARK) * keep[..., None]
+    return Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8)[ys.min():ys.max() + 1, xs.min():xs.max() + 1])
 
 
-def timeline(room, start):
-    """The room with the timeline under the gate: a hairline from `start` to now, the ages ticked and named."""
-    a = Image.new("L", (W, H))
-    d = ImageDraw.Draw(a)
-    d.line([(GX, LINE), (GX + GW, LINE)], fill=64)
-    f = ImageFont.truetype(FONT, 12)
-    for year, text in TICKS:
-        if year < start:
-            continue
-        x = round(GX + GW * along(year, start))
-        d.line([(x, LINE - 2), (x, LINE + 2)], fill=96)
-        d.text((x, LINE + 18), text, font=f, fill=104, anchor="ms")
-    im = Image.open(room)
-    im.paste(Image.new("RGB", (W, H), IVORY), mask=a)
-    return im
+def blank():
+    return np.broadcast_to(DARK, (H, W, 3)).copy()
 
 
-def mark():
-    """The dot that rides the timeline."""
-    a = Image.new("L", (72, 72))
-    ImageDraw.Draw(a).ellipse((15, 15, 57, 57), fill=240)
-    im = Image.new("RGBA", (9, 9), IVORY)
-    im.putalpha(a.resize((9, 9), Image.LANCZOS))
-    return im
+def hang(canvas, pic, zoom=1.0):
+    """The whole picture in the dark, as large as fits the box and `zoom` times that, about the middle;
+    resampled from its own pixels for every frame, its edges drawn to a fraction of a pixel."""
+    k = min(BOX[0] / pic.w, BOX[1] / pic.h) * zoom
+    x0, y0 = MIDDLE[0] - pic.w * k / 2, MIDDLE[1] - pic.h * k / 2
+    x1, y1 = x0 + pic.w * k, y0 + pic.h * k
+    X0, Y0, X1, Y1 = max(0, math.floor(x0)), max(0, math.floor(y0)), min(W, math.ceil(x1)), min(H, math.ceil(y1))
+    box = tuple((v - o) / k * pic.s + PAD for v, o in ((X0, x0), (Y0, y0), (X1, x0), (Y1, y0)))
+    patch = np.asarray(pic.img.resize((X1 - X0, Y1 - Y0), Image.LANCZOS, box=box), np.float32)
+    xs, ys = np.arange(X0, X1) + 0.5, np.arange(Y0, Y1) + 0.5
+    m = (np.clip(ys - y0 + 0.5, 0, 1) * np.clip(y1 - ys + 0.5, 0, 1))[:, None, None] \
+        * (np.clip(xs - x0 + 0.5, 0, 1) * np.clip(x1 - xs + 0.5, 0, 1))[None, :, None]
+    region = canvas[Y0:Y1, X0:X1]
+    region += (patch - region) * m
 
 
-def camera(im, kind):
-    """Where the camera looks on a plate: the window, (centre, width) in px of the plate, at the start and
-    the end of its move, inside any wall showing round the work. A long or a tall painting is travelled from
-    end to end. Otherwise the camera pushes in toward the busiest part of the work, or starts close on it and
-    draws back to the whole, or, for `macro`, looks at it at the plate's own resolution, drifting a little."""
-    g = np.asarray(im.resize((im.width // 16, im.height // 16), Image.BOX), np.float32)
-    wall = (np.abs(g - plate.to_srgb_255(BACKDROP)).max(-1) <= 12) & (np.ptp(g, -1) <= 6)
-    y0, y1, x0, x1 = 0, len(g), 0, len(g[0])
-    for _ in range(3):  # trim rows and columns that are mostly wall, from the outside in
-        r = np.flatnonzero(wall[y0:y1, x0:x1].mean(1) <= 0.5)
-        if r.size:
-            y0, y1 = y0 + r[0], y0 + r[-1] + 1
-        c = np.flatnonzero(wall[y0:y1, x0:x1].mean(0) <= 0.5)
-        if c.size:
-            x0, x1 = x0 + c[0], x0 + c[-1] + 1
-    lo, hi = 16 * np.array((x0, y0)), 16 * np.array((x1, y1))
-    w0 = min(hi[0] - lo[0], (hi[1] - lo[1]) * 4 / 3)
-    keep = lambda c, w: np.clip(c, lo + (w / 2, w * 3 / 8), hi - (w / 2, w * 3 / 8))
-    span = hi - lo
-    if kind != "macro" and (span[0] > SCROLL * span[1] or span[1] * 4 / 3 > 1.2 * span[0]):
-        return (keep(lo, w0), w0), (keep(hi, w0), w0)
-    g = g[y0:y1, x0:x1].mean(-1)
-    busy = ndimage.gaussian_filter(ndimage.gaussian_gradient_magnitude(g, 1), max(g.shape) / 20)
-    v, u = np.mgrid[0:1:g.shape[0] * 1j, 0:1:g.shape[1] * 1j]
-    fy, fx = np.unravel_index((busy * np.exp(-((u - 0.5) ** 2 + (v - 0.5) ** 2) / 0.08)).argmax(), g.shape)
-    focus = lo + 16 * np.array((fx + 0.5, fy + 0.5))
-    if kind == "macro":
-        c = keep(focus, GW)
-        return (keep(c + (0.08 * GW, 0.03 * GW), 1.06 * GW), 1.06 * GW), (c, GW)
-    w1 = w0 / ZOOM[kind]
-    c1 = keep(focus, w1)
-    if kind == "reveal":
-        return (c1, w1), (keep((lo + hi) / 2, w0), w0)
-    c0 = keep(c1 - np.clip(c1 - (lo + hi) / 2, -DRIFT * w0, DRIFT * w0), w0)
-    return (c0, w0), (c1, w1)
+def whole(name):
+    """A painting hung whole in the dark, the camera drawing a little nearer as it looks. -> frame(t)"""
+    pic = Picture(unmounted(name))
+
+    def frame(t):
+        canvas = blank()
+        hang(canvas, pic, 1 + 0.03 * t)
+        return canvas
+    return frame
 
 
-def still(src, kind, path):
-    """The plate round the path of the camera, cut to the gate's shape at a little over the gate's
-    resolution, with the lens's softness and halo. Returns the window at the start and the end of the
-    move, (x, y, width) in px of the still."""
-    im = Image.open(src).convert("RGB")
-    pw, ph = im.size
-    (c0, w0), (c1, w1) = camera(im, kind)
-    lo = np.minimum(c0 - (w0 / 2, w0 * 3 / 8), c1 - (w1 / 2, w1 * 3 / 8))
-    hi = np.maximum(c0 + (w0 / 2, w0 * 3 / 8), c1 + (w1 / 2, w1 * 3 / 8))
-    cw = max(hi[0] - lo[0], (hi[1] - lo[1]) * 4 / 3)
-    corner = (lo + hi) / 2 - (cw / 2, cw * 3 / 8)
-    s = 1.25 * GW / min(w0, w1)  # px of the still to a px of the plate
-    sheet = Image.new("RGB", (round(cw * s), round(cw * s * 3 / 4)), BACKDROP)
-    sheet.paste(im.resize((round(pw * s), round(ph * s)), Image.LANCZOS), tuple(np.round(-corner * s).astype(int)))
-    px = 1.25  # px of the still to a px of the gate, where the camera is closest
-    img = lin(np.asarray(sheet))
-    img = (0.8 * ndimage.gaussian_filter(img, (K * px, K * px, 0))
-           + 0.2 * ndimage.gaussian_filter(img, (14 * K * px, 14 * K * px, 0), truncate=2.5))
-    png(img, path)
-    return [(*((c - (w / 2, w * 3 / 8) - corner) * s), w * s) for c, w in ((c0, w0), (c1, w1))]
+def glass(top, light, dawn):
+    """The dark glass under a band of cold light, its rim at `top`; with `dawn`, a warm line comes up along the
+    rim and glows above it. Drawn in linear light. -> frame"""
+    d = np.hypot(X - W / 2, Y - top - RADIUS) - RADIUS
+    above, below = np.maximum(d, 0), np.minimum(d, 0)
+    out = d > 0
+    haze = (1 - np.exp(-above / 8)) * np.exp(-above / 75) * out + 0.3 * np.exp(below / 6) * ~out
+    warm = (np.exp(-above / 3.5) + 0.25 * np.exp(-above / 22)) * out + 0.6 * np.exp(below / 2.5) * ~out
+    lin = LIGHT[DARK.astype(np.uint8)] + light * (haze[..., None] * HAZE + dawn * warm[..., None] * WARM)
+    return DARKEN[np.clip(lin * 4095 + 0.5, 0, 4095).astype(np.int32)]
 
 
-def move(a, b, n):
-    """ffmpeg's perspective filter carrying a window from a to b, (x, y, width), over n frames: eased, and
-    weaving in the gate as film does."""
-    u = f"(in/{n - 1})"
-    p = f"(0.5*{u}+0.5*{u}*{u}*(3-2*{u}))"
-    wv = 0.7 * K * max(a[2], b[2]) / GW
-    x = f"({a[0]:.2f}{b[0] - a[0]:+.2f}*{p}{wv:+.3f}*(0.6*sin(2.31*in)+0.5*sin(5.77*in+1.3)))"
-    y = f"({a[1]:.2f}{b[1] - a[1]:+.2f}*{p}{0.6 * wv:+.3f}*(0.6*sin(3.17*in+0.4)+0.5*sin(7.03*in+2.1)))"
-    w = f"({a[2]:.2f}{b[2] - a[2]:+.2f}*{p})"
-    return (f"perspective=x0={x}:y0={y}:x1={x}+{w}:y1={y}:x2={x}:y2={y}+0.75*{w}:x3={x}+{w}:y3={y}+0.75*{w}"
-            ":interpolation=cubic:eval=frame")
+def snapshots(slug, count, width):
+    """The painting going on: `count` views of the canvas taken evenly through its strokes, `width` px across,
+    as JPEG. The program runs twice: once to count its strokes, once to look."""
+    m = importlib.import_module(f"works.{slug}")
+    lay, seen, out = impasto.lay, [0], []
+    try:
+        impasto.lay = lambda *a, **k: lay(*a, watch=lambda rgb, height: seen.__setitem__(0, seen[0] + 1), **k)
+        m.paint()
+        look = set(np.round(np.linspace(1, seen[0], count)).astype(int))
+        seen[0] = 0
+
+        def watch(rgb, height):
+            seen[0] += 1
+            if seen[0] in look:
+                step = max(1, rgb.shape[1] // (2 * width))
+                im = Image.fromarray(np.clip(to_srgb(rgb[::step, ::step]) * 255 + 0.5, 0, 255).astype(np.uint8))
+                buf = io.BytesIO()
+                im.resize((width, round(width * rgb.shape[0] / rgb.shape[1])), Image.LANCZOS).save(buf, "JPEG", quality=92)
+                out.append(buf.getvalue())
+        impasto.lay = lambda *a, **k: lay(*a, watch=watch, **k)
+        m.paint()
+    finally:
+        impasto.lay = lay
+    return out
 
 
-def loop(path):
-    return ["-loop", "1", "-framerate", str(FPS), "-i", str(path)]
+def painting(slug, n):
+    """A work being painted, `n` frames: the canvas filling stroke by stroke, and at the end the light coming
+    on over the finished paint. -> frame(t)"""
+    final = Picture(unmounted(slug))
+    stills = snapshots(slug, round(0.85 * n), round(final.w * min(BOX[0] / final.w, BOX[1] / final.h) * 1.1))
+    seen = {}
+
+    def frame(t):
+        i = round(min(1.0, t / 0.85) * (len(stills) - 1))
+        if i not in seen:
+            seen.clear()
+            seen[i] = Picture(Image.open(io.BytesIO(stills[i])), final.w, final.h)
+        canvas = blank()
+        hang(canvas, seen[i])
+        lit = noise.smoothstep(0.88, 0.97, t)
+        if lit > 0:
+            done = blank()
+            hang(done, final)
+            canvas += (done - canvas) * lit
+        return canvas
+    return frame
 
 
-def film(slugs=None, out=ROOT / "plates" / "_timeline.mp4"):
+def order(mods):
+    """The works as a visitor meets them: room by room, oldest first in each."""
+    return [s for room in ROOMS for s in sorted((s for s, m in mods.items() if m.ROOM == room), key=lambda s: mods[s].YEAR)]
+
+
+def plan(mods):
+    """The parts of the film for the score, (kind, bars), and its shots, (part, what, frames). The first works
+    are seen a bar each, then two a bar, the last eighteen on every note of the figure, and before the title
+    a flash of the collection on every sixteenth."""
+    works = [s for s in order(mods) if s != PAINTED]
+    slow, middle, quick = works[:4], works[4:-18], works[-18:]
+    assert len(middle) >= 2, "enough works to cut between"
+    gaps = [int(g) * STEP for g in np.diff(score.RHYTHM + (16,))]
+    flash = works[::max(1, len(works) // 15)][:15]
+    shots = [("intro", "glass", 2 * BAR)] + [("slow", s, BAR) for s in slow] + [("paint", PAINTED, 4 * BAR)]
+    shots += [("cuts", s, BAR // 2 * (1 + (i == 0 and len(middle) % 2))) for i, s in enumerate(middle)]
+    shots += [("quick", s, gaps[i % 6]) for i, s in enumerate(quick)]
+    shots += [("burst", s, STEP) for s in flash] + [("burst", "dark", (16 - len(flash)) * STEP)]
+    shots += [("title", "glass", 2 * BAR), ("coda", "glass", 2 * BAR + TAIL)]
+    parts = [("intro", 2), ("slow", len(slow)), ("paint", 4), ("cuts", math.ceil(len(middle) / 2)), ("quick", 3),
+             ("burst", 1), ("title", 2), ("coda", 2)]
+    assert sum(f for _, _, f in shots) == sum(n for _, n in parts) * BAR + TAIL, "the cuts fill the bars"
+    return parts, shots
+
+
+def film(out=ROOT / "plates" / "_timeline.mp4"):
     t0 = time.time()
-    mods = {s: importlib.import_module(f"works.{s}") for s in slugs or hanging()}
-    order = sorted(mods, key=lambda s: mods[s].YEAR)
-    entrance = (ROOT / "museum" / "entrance.md").read_text()
-    enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-                            "-r", str(FPS), "-i", "-",
-                            "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,"
-                            "setparams=colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv",
-                            "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-tune", "film",
-                            "-movflags", "+faststart", str(out)], stdin=subprocess.PIPE)
-    held = []  # the last frames of the shot before, kept back for this one to dissolve over
-
-    def shot(inputs, graph, frames, hold=0):
-        """One shot through ffmpeg, into the film. Its first frames dissolve over any held back from the shot
-        before; its last `hold` are held back in turn."""
-        nonlocal held
-        p = subprocess.Popen(["ffmpeg", "-v", "error", *inputs, "-filter_complex", graph, "-frames:v", str(frames),
-                              "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
-        under, held = held, []
-        for k in range(frames):
-            f = np.frombuffer(p.stdout.read(W * H * 3), np.uint8).reshape(H, W, 3)
-            if k < len(under):  # two projectors on one screen: their light adds
-                t = (k + 1) / (len(under) + 1)
-                f = np.round(255 * ((1 - t) * LIGHT[under[k]] + t * LIGHT[f]) ** (1 / 2.2)).astype(np.uint8)
-            if k >= frames - hold:
-                held.append(f)
-            else:
-                enc.stdin.write(f.tobytes())
-        if p.wait():
-            sys.exit(f"ffmpeg failed: {graph[:200]}")
-
-    def card(lines, seconds):
-        im, (x, y) = words(lines)
-        im.save(tmp / "card.png")
-        shot(loop(tmp / "card.png"), f"color=c={DARK.replace('#', '0x')}:s={W}x{H}:r={FPS}[bg];"
-             f"[0]fade=in:st=0.8:d=1.2:alpha=1,fade=out:st={seconds - 2}:d=1.2:alpha=1[t];"
-             f"[bg][t]overlay={x}:{y}:format=auto,format=rgb24", round(seconds * FPS))
-
-    def dark(x=None, frames=BEAT):
-        """A moment of the dark room; the timeline shows, its mark at x, while a work is coming."""
-        if x is None:
-            shot(loop(tmp / "room.png"), "format=rgb24", frames)
-        else:
-            shot([*loop(tmp / "line.png"), *loop(tmp / "mark.png")],
-                 f"[0][1]overlay={x - 4}:{LINE - 4}:format=auto,format=rgb24", frames)
-
-    def picture(src, kind, room, seconds=None, fade=(True, True), hold=0, extra=(), tail=None):
-        """A plate in the gate, the camera moving over it, on the room, and whatever the `extra` inputs and
-        `tail(seconds)`, the end of the graph, lay over it. Returns the shot's length in seconds."""
-        a, b = still(src, kind, tmp / "still.png")
-        sec = seconds or SHOT[kind] * max(1, math.hypot(b[0] - a[0], b[1] - a[1]) / a[2])  # a gate a shot
-        n = round(sec * FPS)
-        fades = "".join([",fade=in:d=%s" % FADE if fade[0] else "",
-                         f",fade=out:st={sec - FADE:.3f}:d={FADE}" if fade[1] else ""])
-        shot([*loop(tmp / "still.png"), *loop(tmp / "mask.png"), *loop(room), *extra],
-             f"[0]{move(a, b, n)},scale={GW}:{GH}{fades},format=yuv444p,"
-             f"eq=contrast=1+{FLICKER}:brightness=0.437*{FLICKER}:eval=frame,noise=c0s=3:c0f=t,"
-             f"format=gbrp,pad={W}:{H}:{GX}:{GY}[p];[1]format=gbrp[m];[p][m]blend=all_mode=multiply[a];"
-             f"[2]format=gbrp[r];[a][r]blend=all_mode=screen{tail(sec) if tail else ''},format=rgb24", n, hold)
-        return sec
-
+    mods = {s: importlib.import_module(f"works.{s}") for s in hanging()}
+    parts, shots = plan(mods)
+    title = setting([("The Claude Glass", 84, False, 0.02, IVORY)])
+    credit = setting([("Painted in code by Claude", 32, True, 0, DIM)])
+    url = setting([("github.com/Chaoqi31/claude-glass", 20, False, 0.12, DIM)])
+    said = {w: setting([(w, 46, False, 0.01, IVORY)]) for pair in WORDS.values() for w in pair}
+    below = MIDDLE[1] + BOX[1] / 2 + 22                       # where the words stand, under the paintings
+    begins, span = {}, {}
+    for part, _, n in shots:
+        begins.setdefault(part, sum(span.values()))
+        span[part] = span.get(part, 0) + n
     with tempfile.TemporaryDirectory() as tmp:
-        tmp = Path(tmp)
-        start = max(y for y, _ in TICKS if y <= mods[order[0]].YEAR)  # the last tick before the oldest work
-        mask, room = gate()
-        png(mask, tmp / "mask.png")
-        png(room, tmp / "room.png")
-        timeline(tmp / "room.png", start).save(tmp / "line.png")
-        mark().save(tmp / "mark.png")
-        plates = lambda s: ROOT / "plates" / f"{s}.jpg"
-
-        def grain(s):
-            """How much fine detail a plate shows where the camera looks closest at it."""
-            im = Image.open(plates(s)).convert("RGB")
-            _, (c, w) = camera(im, "macro")
-            g = np.asarray(im.convert("L").crop((*np.int32(c - (w / 2, w * 3 / 8)), *np.int32(c + (w / 2, w * 3 / 8)))),
-                           np.float32)
-            return (g - ndimage.gaussian_filter(g, 3)).std()
-
-        for s in [max(part, key=grain) for part in np.array_split(order, OPEN)]:  # cold: the paint itself, cut hard
-            picture(plates(s), "macro", tmp / "room.png", fade=(False, False))
-        dark(frames=12)
-        card([(None, 352, 44, [(re.search(r"^# (.+)$", entrance, re.M)[1], False, 0.95)]),
-              (None, 394, 20, [(re.search(r"^\*(.+)\*$", entrance, re.M)[1], True, 0.7)])], 5.5)
-        dark()
-        xa, ease = GX, r"min(t/1.6\,1)"
-        for i, s in enumerate(order):
-            m = mods[s]
-            lit = i % 3 != 0, (i + 1) % 3 != 0 and i < len(order) - 1  # dissolving in, dissolving out
-            cap, (cx, cy) = words([(GX, GY + GH + 36, 18, [(when(m), False, 0.95), (m.PLACE, False, 0.62),
-                                                           (m.TITLE, True, 0.95)])])
-            cap.save(tmp / "caption.png")
-            xb = round(GX + GW * along(m.YEAR, start))
-            # the caption comes up after the picture and goes before it
-            sec = picture(plates(s), ("push", "reveal")[i % 2], tmp / "line.png",
-                          fade=(not lit[0], not lit[1]), hold=MIX if lit[1] else 0,
-                          extra=[*loop(tmp / "caption.png"), *loop(tmp / "mark.png")],
-                          tail=lambda sec: f"[b];[3]fade=in:st=0.6:d=0.8:alpha=1,fade=out:st={sec - 1.2:.3f}:d=0.6:alpha=1[c];"
-                          f"[b][c]overlay={cx}:{cy}:format=auto[d];"
-                          f"[d][4]overlay=x='{xa - 4}+{xb - xa}*(3-2*{ease})*{ease}*{ease}':y={LINE - 4}:format=auto")
-            if not lit[1]:
-                dark(xb if i < len(order) - 1 else None)
-            xa = xb
-            print(f"{i + 1:3d}/{len(order)} {s:16s} {when(m):14s} {sec:4.1f}s {time.time() - t0:6.0f}s", flush=True)
-        picture(ROOT / "plates" / "_wall.jpg", "reveal", tmp / "room.png", seconds=7.5)  # all of it, on one wall
-        dark(frames=12)
-        card([(None, 368, 20, [("Painted in code by Claude (Opus 5.5) · 2026", False, 0.9)])], 6.0)
-    enc.stdin.close()
-    enc.wait()
-    print(f"{out.name}: {len(order)} works, {out.stat().st_size / 1e6:.1f} MB, {time.time() - t0:.0f}s")
+        wav = Path(tmp) / "score.wav"
+        music.write(wav, score.render(parts))
+        print(f"score: {sum(n for _, n in parts)} bars, {time.time() - t0:.0f}s", flush=True)
+        enc = subprocess.Popen(
+            ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
+             "-i", "-", "-i", str(wav), "-map", "0:v", "-map", "1:a",
+             # tagged as sRGB, which it is, so that Safari and QuickTime show the colours the plates have
+             "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,"
+                    "setparams=colorspace=bt709:color_primaries=bt709:color_trc=iec61966-2-1:range=tv",
+             "-c:v", "libx264", "-preset", "slow", "-crf", "24", "-tune", "film", "-x264-params", "aq-mode=3",
+             "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", str(out)], stdin=subprocess.PIPE)
+        seen, start = {}, 0
+        for j, (part, name, n) in enumerate(shots):
+            if part == "paint":
+                frame = painting(name, n)
+            elif name not in ("glass", "dark"):
+                frame = seen[name] = seen.get(name) or whole(name)
+            for i in range(n):
+                into = start + i - begins[part]
+                if name == "dark":
+                    canvas = blank()
+                elif part == "intro":
+                    canvas = glass(RIM, noise.smoothstep(0, 1.5 * BAR, into), 0.25 * noise.smoothstep(0.5 * BAR, 2 * BAR, into))
+                elif name == "glass":                                  # the title and the coda are one shot
+                    u = into + (span["title"] if part == "coda" else 0)
+                    rise = noise.smoothstep(0, 4 * BAR + TAIL, u)
+                    canvas = glass(RIM - 0.1 * H * rise, 1.0, 0.3 + 0.9 * noise.smoothstep(BAR, 4 * BAR, u))
+                    y = 0.36 * H - 0.05 * H * rise
+                    overlay(canvas, title, y, noise.smoothstep(0, 6, u))
+                    overlay(canvas, credit, y + title.height + 26, noise.smoothstep(2 * BAR, 2 * BAR + 20, u))
+                    overlay(canvas, url, y + title.height + credit.height + 46, noise.smoothstep(3 * BAR, 3 * BAR + 20, u))
+                    if part == "coda":
+                        canvas *= 1 - noise.smoothstep(n - 1.4 * FPS, n - 0.2 * FPS, i)
+                else:
+                    canvas = frame(i / n)
+                if part in WORDS:                                      # the words stay put across the cuts
+                    half = span[part] / 2
+                    u = into % half
+                    overlay(canvas, said[WORDS[part][int(into >= half)]], below,
+                            noise.smoothstep(0, 6, u) * noise.smoothstep(half, half - 6, u))
+                enc.stdin.write(np.clip(canvas + 0.5, 0, 255).astype(np.uint8).tobytes())
+            start += n
+            print(f"{j + 1:3d}/{len(shots)} {part:6s} {name:16s} {n:4d} frames {time.time() - t0:6.0f}s", flush=True)
+        enc.stdin.close()
+        enc.wait()
+    print(f"{out.name}: {len(mods)} works, {out.stat().st_size / 1e6:.1f} MB, {time.time() - t0:.0f}s")
 
 
 if __name__ == "__main__":

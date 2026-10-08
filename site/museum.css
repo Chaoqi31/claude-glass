@@ -82,11 +82,10 @@ main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .room header p { margin: .5rem 0 0; color: var(--dim); font-style: italic; }
 .row { margin: 0 0 clamp(6rem, 18vh, 11rem); }
 .work { margin: 0; }
-.plate { display: block; cursor: zoom-in; }
+.plate { display: block; }
 .plate img { display: block; width: 100%; height: auto; box-shadow: 0 .9rem 1.6rem -.6rem rgb(0 0 0 / .45);
   transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
 .plate:hover img { transform: translateY(-3px); }
-.plate.peering { cursor: none; }
 .row.left .work, .row.right .work { display: grid; gap: 1.75rem 3.5rem; align-items: end; }
 .row.left .work { grid-template-columns: minmax(0, 1fr) 15rem; }
 .row.right .work { grid-template-columns: 15rem minmax(0, 1fr); }
@@ -109,13 +108,6 @@ figcaption.label { max-width: 32rem; }
 .label .note { margin-top: 1rem; color: var(--ink); }
 .label .source { margin-top: 1rem; font-size: .8rem; }
 .source a { font-family: var(--mono); }
-
-.loupe { position: fixed; top: 0; left: 0; z-index: 4; width: 15rem; height: 15rem; border-radius: 50%; pointer-events: none;
-  opacity: 0; scale: .85; background: #0b0a09 no-repeat;
-  box-shadow: 0 0 0 1px rgb(0 0 0 / .45), 0 0 0 3px rgb(236 230 216 / .85), 0 0 0 4px rgb(0 0 0 / .3),
-    0 1.25rem 2.5rem rgb(0 0 0 / .45), inset 0 0 1.25rem rgb(0 0 0 / .4);
-  transition: opacity .25s ease, scale .25s ease; }
-.loupe.on { opacity: 1; scale: 1; }
 
 .colophon { max-width: 33em; margin: 0 auto; padding: clamp(8rem, 24vh, 14rem) 1.25rem 6rem; color: var(--dim); }
 .colophon h2 { color: var(--ink); font-size: 1.2rem; font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: .16em; text-align: center; }

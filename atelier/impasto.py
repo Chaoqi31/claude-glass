@@ -55,7 +55,7 @@ def _look(B, along, across):
 
 def lay(rgb, height, paths, width, colours, r, share=None, thick=0.25, spent=0.6, grooves=0.9, lips=0.15,
         land=0.6, lift=0.4, tails=0.9, pickup=0.5, merge=3.0, ends=(0.15, 0.05), taper=0.2, fray=1.2, flatten=0.8,
-        wet=None, dry=0.0, hide=1.0):
+        wet=None, dry=0.0, hide=1.0, watch=None):
     """Lay strokes, in order, into rgb (H,W,3) and height (H,W), in place.
 
     paths    one (n, 2) array of points (x, y) per stroke, in the order the brush moves
@@ -86,6 +86,8 @@ def lay(rgb, height, paths, width, colours, r, share=None, thick=0.25, spent=0.6
              thin, a scumble breaks all along its length and catches only the high points of the
              weave and of the paint beneath
     hide     how well the paint covers (1 opaque; less, a veil through which the colour beneath shows)
+    watch    called as watch(rgb, height) after each stroke goes on: someone looking over the painter's
+             shoulder, as the film does
     """
     H, W = height.shape
     N, K = colours.shape[:2]
@@ -205,6 +207,8 @@ def lay(rgb, height, paths, width, colours, r, share=None, thick=0.25, spent=0.6
             top = fresh * (base + (hold - base) * (1 - flatten) + paint) + (1 - fresh) * np.maximum(hold, base + paint)
             fh[idx] = hold + (top - hold) * a
             fw[idx] += (1 - fresh) * a
+        if watch:
+            watch(rgb, height)
 
 
 def glints(height, light=(-0.6, -0.5, 0.62), sharp=160, crest=0.4):
@@ -258,4 +262,8 @@ if __name__ == "__main__":
     lay(c, h, [np.array([[10, 20], [110, 20]])], 8, blue, noise.rng(5), grooves=0, wet=np.zeros((40, 120), np.float32))
     assert np.abs(np.diff(h[17:24, 30:90])).mean() < 0.05 < np.abs(np.diff(h[2:6, 30:90])).mean(), \
         "on dry paint the paste fills the weave"
+    seen = []
+    lay(c, h, [np.array([[10, 8], [110, 8]]), np.array([[10, 32], [110, 32]])], 4, np.repeat(red, 2, 0),
+        noise.rng(6), watch=lambda c_, h_: seen.append(c_[32, 60, 2]))
+    assert len(seen) == 2 and seen[0] > 0.5 > seen[1], "a watcher sees each stroke as it goes on"
     print("ok")

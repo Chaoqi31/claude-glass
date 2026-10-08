@@ -3,7 +3,8 @@
     uv run render.py              paint every work
     uv run render.py giverny      paint one, or several
 
-Hanging them (the wall, the README and the website) is site.py's job.
+Hanging them (the wall, the README and the website) is site.py's job, and the film is timeline.py's; both
+take the catalogue from here: which works hang, in which rooms, and what they come to.
 """
 
 import importlib
@@ -14,7 +15,14 @@ from pathlib import Path
 from atelier import plate
 
 ROOT = Path(__file__).parent
-SCROLL = 2.4  # a plate wider than this is a long painting, which the site and the film unroll from left to right
+SCROLL = 2.4  # a plate wider than this is a long painting, which the site's viewer unrolls from left to right
+ROOMS = {  # the order a visitor walks them in: what hangs in each, and the colour of its walls
+    "Open Air": ("Weather, water and light, painted out of doors", "#2a2622"),
+    "The Garden": ("Flowers, a pond, a window", "#1f2b25"),
+    "Paper and Water": ("Watercolour, ink and mineral colour", "#212835"),
+    "The Workshop": ("Glass, copper and the woodblock", "#33201d"),
+    "Colour Itself": ("Abstraction", "#f1eee8"),
+}
 
 
 def works():
@@ -27,6 +35,19 @@ def hanging():
     for s in sorted(set(works()) - set(out)):
         print(f"{s}: no plate yet, not hung")
     return out
+
+
+def rooms(mods):
+    """The rooms with something hung in them, in the order a visitor walks them."""
+    lost = {m.ROOM for m in mods.values()} - set(ROOMS)
+    assert not lost, f"no such room: {lost}"
+    return [r for r in ROOMS if any(m.ROOM == r for m in mods.values())]
+
+
+def tally(slugs):
+    """What the collection comes to, in a line."""
+    lines = sum(len((ROOT / "works" / f"{s}.py").read_text().splitlines()) for s in slugs)
+    return f"{len(slugs)} paintings · {lines:,} lines of Python · no image models, no photographs"
 
 
 def render(slug):
