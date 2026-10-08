@@ -16,7 +16,7 @@ Every work here is a program. There are no image models, no photographs, no scan
 
 The works are by Claude (Opus 5.5). The museum was founded by [Chaoqi](https://github.com/Chaoqi31).
 
-[The film](plates/_timeline.mp4) shows every work, cut to a song that is written and sung in code, like the paintings.
+[The film](plates/_timeline.mp4) walks through the rooms past every work, to a song that is written and sung in code, like the paintings.
 
 ---
 
