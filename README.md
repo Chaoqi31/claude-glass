@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://chaoqi31.github.io/claude-glass/"><b>Walk through the museum</b></a> · <a href="plates/_timeline.mp4">Watch the film</a> · <a href="#colophon">Paint it yourself</a></p>
 
-<p align="center"><sub>35 paintings · 18,710 lines of Python · no image models, no photographs</sub></p>
+<p align="center"><sub>60 paintings · 38,564 lines of Python · no image models, no photographs</sub></p>
 
 *One painter, many hands: paintings by Claude, made in code.*
 
@@ -164,6 +164,16 @@ Oil on canvas, over a red ground
 
 <sub>[`works/algonquin.py`](works/algonquin.py) · 530 lines</sub>
 
+<p align="center"><a href="plates/naggar.jpg"><img src="site/thumbs/naggar.jpg" alt="The Last Light on the Snows" width="100%"></a></p>
+
+**The Last Light on the Snows**, 2026  
+Tempera on canvas, laid in flat and gone over with a brush almost dry  
+<sub>After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47: the Himalayas series; Mount of Five Treasures (Kanchenjunga), 1933; Sacred Himalayas, 1933; the Tibet series; Path to Shambhala, 1933</sub>
+
+> The last of the sun on one massif of snow: three summits laid in a few broad planes, rose and gold where they face the sun and violet where they turn away, over a band of mist and three dark bands of foothills. The light is dragged on nearly dry, so it breaks on the canvas.
+
+<sub>[`works/naggar.py`](works/naggar.py) · 430 lines</sub>
+
 ## II · The Garden
 
 <sub>Flowers, a pond, a window</sub>
@@ -218,6 +228,36 @@ Oil on canvas, laid thin and fast in separate strokes of pure colour, the white 
 
 <sub>[`works/collioure.py`](works/collioure.py) · 509 lines</sub>
 
+<p align="center"><a href="plates/attersee.jpg"><img src="site/thumbs/attersee.jpg" alt="A Cottage Garden at Litzlberg" width="100%"></a></p>
+
+**A Cottage Garden at Litzlberg**, 2026  
+Oil on canvas, thinly painted, the flowers in small raised touches of pure colour  
+<sub>After Gustav Klimt, the garden paintings of his summers on the Attersee: Rosebushes under the Trees (1905), Farm Garden with Sunflowers (1907), Cottage Garden (Bauerngarten, 1907), Farm Garden with Crucifix (1912)</sub>
+
+> A square of cottage garden as flat as a tapestry: sunflowers, white dahlias and phlox standing in a deep green matrix sown with points of colour, over a carpet of marigolds, poppies, asters and marguerites packed edge to edge.
+
+<sub>[`works/attersee.py`](works/attersee.py) · 737 lines</sub>
+
+<p align="center"><a href="plates/bievres.jpg"><img src="site/thumbs/bievres.jpg" alt="Garden Flowers in a Turquoise Vase" width="100%"></a></p>
+
+**Garden Flowers in a Turquoise Vase**, 2026  
+Pastel on buff paper, laid with the side and the tip of the stick and rubbed in places with the hand  
+<sub>After Odilon Redon, the pastels of flowers, c. 1905–1914: Vase of Flowers; Bouquet in a Chinese Vase; Wild Flowers in a Long-necked Vase</sub>
+
+> Poppies, anemones, cornflowers, marigolds and larkspur in a turquoise vase, coming out of a field of rubbed blue and gold with no table under it. A few of the flowers blaze, some stand in shadow, and those at the edges are given back to the field.
+
+<sub>[`works/bievres.py`](works/bievres.py) · 982 lines</sub>
+
+<p align="center"><a href="plates/jardin.jpg"><img src="site/thumbs/jardin.jpg" alt="Exotic Garden with a Pale Sun" width="100%"></a></p>
+
+**Exotic Garden with a Pale Sun**, 2026  
+Oil on canvas, thinly painted, every leaf drawn round with a small brush  
+<sub>After Henri Rousseau, the jungle paintings, Paris, 1891–1910: Surprised! (1891), The Snake Charmer (1907), Exotic Landscape (1908 and 1910), The Dream (1910)</sub>
+
+> A jungle built row behind row, as Rousseau built his from the hothouses of the Jardin des Plantes: a pale sun between an orange tree and a palm, and lotus and red bracts lit against the dark thicket, every leaf drawn whole in a green of its own.
+
+<sub>[`works/jardin.py`](works/jardin.py) · 975 lines</sub>
+
 <p align="center"><a href="plates/giverny.jpg"><img src="site/thumbs/giverny.jpg" alt="The Lily Pond, Clouds and Willows" width="100%"></a></p>
 
 **The Lily Pond, Clouds and Willows**, 2026  
@@ -228,9 +268,39 @@ Oil on canvas, thin and thick: a fluid lay-in, long strokes in the reflections, 
 
 <sub>[`works/giverny.py`](works/giverny.py) · 388 lines</sub>
 
+<p align="center"><a href="plates/le_cannet.jpg"><img src="site/thumbs/le_cannet.jpg" alt="The Window onto the Mimosa, Le Cannet" width="100%"></a></p>
+
+**The Window onto the Mimosa, Le Cannet**, 2026  
+Oil on canvas: broad thin scumbles, hatchings and small dense touches of unmixed colour  
+<sub>After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet: The Studio with Mimosa, 1939–46, and Almond Tree in Blossom, 1947</sub>
+
+> A window in February, its bars crossing a mimosa in flower, with a bowl of oranges and lemons on the table before it. The room is laid in broad, thin strokes and left quiet, so that the small dense touches of the garden blaze against it.
+
+<sub>[`works/le_cannet.py`](works/le_cannet.py) · 789 lines</sub>
+
+<p align="center"><a href="plates/hollywood.jpg"><img src="site/thumbs/hollywood.jpg" alt="A Pool in the Hills, Noon" width="100%"></a></p>
+
+**A Pool in the Hills, Noon**, 2026  
+Acrylic on cotton duck, rolled and brushed flat against tape, the border and the copings left bare  
+<sub>After David Hockney, the Los Angeles swimming pools in acrylic on canvas: Picture of a Hollywood Swimming Pool (1964), Peter Getting Out of Nick's Pool (1966), The Splash, A Little Splash and A Bigger Splash (1966–67), Portrait of an Artist (Pool with Two Figures) (1972)</sub>
+
+> A pool on a terrace above Hollywood at noon, seen at an angle, with no one in it: a diving board run out over the water, the splash the diver left, and the light on the water drawn in loose lines of white.
+
+<sub>[`works/hollywood.py`](works/hollywood.py) · 745 lines</sub>
+
 ## III · Paper and Water
 
 <sub>Watercolour, ink and mineral colour</sub>
+
+<p align="center"><a href="plates/yatsuhashi.jpg"><img src="site/thumbs/yatsuhashi.jpg" alt="Irises by the Plank Bridge" width="100%"></a></p>
+
+**Irises by the Plank Bridge**, 2026  
+Six-panel folding screen: ink and mineral colour on gold leaf over paper  
+<sub>After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo; and Irises at Yatsuhashi (Eight Bridges), pair of six-panel screens, c. 1711–14, Metropolitan Museum of Art, New York</sub>
+
+> A new screen of Kōrin's irises: nine clumps in azurite and malachite rise and fall across six panels of gold leaf, and a bridge of grey planks zigzags up through them.
+
+<sub>[`works/yatsuhashi.py`](works/yatsuhashi.py) · 647 lines</sub>
 
 <p align="center"><a href="plates/corfu.jpg"><img src="site/thumbs/corfu.jpg" alt="A Wall in the Sun, Corfu" width="100%"></a></p>
 
@@ -242,6 +312,16 @@ Watercolour, with a few touches of body colour, on rough rag paper
 
 <sub>[`works/corfu.py`](works/corfu.py) · 628 lines</sub>
 
+<p align="center"><a href="plates/baghdad.jpg"><img src="site/thumbs/baghdad.jpg" alt="The Caliph's Garden by Moonlight" width="100%"></a></p>
+
+**The Caliph's Garden by Moonlight**, 2026  
+Watercolour and body colour over pen and ink; the colour plate tipped onto a cream page  
+<sub>After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink: Stories from the Arabian Nights (1907); The Sleeping Beauty and Other Fairy Tales (1910); Stories from Hans Andersen (1911)</sub>
+
+> A palace out of the Arabian Nights across its garden at night, the windows lit, with a fountain on the axis, cypresses, a leaning pine and a rose bush with a brass lantern glowing in it. Every line was drawn freehand with a fine nib; the blue of the sky is four washes, each washed down before the next.
+
+<sub>[`works/baghdad.py`](works/baghdad.py) · 1324 lines</sub>
+
 <p align="center"><a href="plates/kairouan.jpg"><img src="site/thumbs/kairouan.jpg" alt="White Domes, Kairouan" width="100%"></a></p>
 
 **White Domes, Kairouan**, 2026  
@@ -251,6 +331,16 @@ Watercolour over pencil on paper, mounted on card
 > A white town in the south as a loose chequer of transparent washes, warm at its heart and cooler towards the edge, with two domes left as bare paper.
 
 <sub>[`works/kairouan.py`](works/kairouan.py) · 513 lines</sub>
+
+<p align="center"><a href="plates/seebull.jpg"><img src="site/thumbs/seebull.jpg" alt="Poppies and Dahlias, Evening" width="100%"></a></p>
+
+**Poppies and Dahlias, Evening**, 2026  
+Watercolour on Japan paper  
+<sub>After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s: Marsh Landscape with Red Clouds (early 1920s); Sunflowers (1925–28); Poppies (c. 1930); and the Unpainted Pictures (Ungemalte Bilder), 1938–45</sub>
+
+> Poppies, dahlias and a spike of delphinium against an evening sky, laid wet into wet on damp Japan paper and left to run; the white dahlia is the bare paper.
+
+<sub>[`works/seebull.py`](works/seebull.py) · 998 lines</sub>
 
 <p align="center"><a href="plates/ghost_gum.jpg"><img src="site/thumbs/ghost_gum.jpg" alt="Ghost Gum, West MacDonnell Ranges" width="100%"></a></p>
 
@@ -262,6 +352,16 @@ Watercolour over pencil on rough rag paper
 
 <sub>[`works/ghost_gum.py`](works/ghost_gum.py) · 763 lines</sub>
 
+<p align="center"><a href="plates/burbank.jpg"><img src="site/thumbs/burbank.jpg" alt="A Hill Town at Dusk" width="100%"></a></p>
+
+**A Hill Town at Dusk**, 2026  
+Gouache on illustration board  
+<sub>After Mary Blair, concept paintings for Walt Disney Studios: Saludos Amigos, 1942; Cinderella, 1950; Alice in Wonderland, 1951; Peter Pan, 1953; and the designs for It's a Small World, 1964</sub>
+
+> A pale castle on a chartreuse hill against a dusk that goes from ultramarine to magenta and orange, the town stacked under it in a few blocks of colour with a window lit here and there. A dark bank, an umbrella pine and a tufted tree, black against the glow, frame the view.
+
+<sub>[`works/burbank.py`](works/burbank.py) · 891 lines</sub>
+
 <p align="center"><a href="plates/jiangnan.jpg"><img src="site/thumbs/jiangnan.jpg" alt="Water Town in Spring" width="100%"></a></p>
 
 **Water Town in Spring**, 2026  
@@ -271,6 +371,26 @@ Watercolour woodblock print (shuiyin muke), twenty-one impressions from twenty b
 > White walls and dark tiles across a canal on a spring morning after rain. The walls are the bare paper; the reflections are cut from the same drawing turned upside down and printed paler and wetter.
 
 <sub>[`works/jiangnan.py`](works/jiangnan.py) · 753 lines</sub>
+
+<p align="center"><a href="plates/hakone.jpg"><img src="site/thumbs/hakone.jpg" alt="The Window over Lake Ashi" width="100%"></a></p>
+
+**The Window over Lake Ashi**, 2026  
+Mineral colour (iwa-enogu), ink, shell white and gold leaf on hemp paper, mounted on a panel  
+<sub>After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988: Yamamoto Kyūjin, Hirayama Ikuo, Kayama Matazō, Hori Fumiko; and the still blue-green lakes and mountains of Higashiyama Kaii, such as Green Echoes (Midori hibiku), 1982, Nagano Prefectural Art Museum</sub>
+
+> The window of the museum's lounge, which frames Fuji over Lake Ashi like a painting, painted as one: the view in mineral colour on gold leaf, the dark room round it in ink. On the water one of the lake's sightseeing ships, dressed as a galleon, trails its wake toward the shrine.
+
+<sub>[`works/hakone.py`](works/hakone.py) · 1187 lines</sub>
+
+<p align="center"><a href="plates/sayama.jpg"><img src="site/thumbs/sayama.jpg" alt="Cumulus over the Sayama Hills" width="100%"></a></p>
+
+**Cumulus over the Sayama Hills**, 2026  
+Poster colour (gouache) on drawing paper  
+<sub>After Kazuo Oga, the background paintings for Studio Ghibli: My Neighbor Totoro (1988), Kiki's Delivery Service (1989), Only Yesterday (1991), Princess Mononoke (1997)</sub>
+
+> A summer cumulus over the wooded hills where Totoro is set, the young rice in the paddies holding the sky, and a lane running into the shade of a shrine grove. The trees are built touch upon touch, from the darkest green to the sunlit tops.
+
+<sub>[`works/sayama.py`](works/sayama.py) · 1222 lines</sub>
 
 ## IV · The Workshop
 
@@ -286,6 +406,16 @@ Pot-metal and flashed glass, painted and fired, leaded, in plate tracery
 
 <sub>[`works/rose_window.py`](works/rose_window.py) · 550 lines</sub>
 
+<p align="center"><a href="plates/ten_bamboo.jpg"><img src="site/thumbs/ten_bamboo.jpg" alt="Loquats and a White-eye" width="100%"></a></p>
+
+**Loquats and a White-eye**, 2026  
+Colour woodblock print from assembled blocks (douban) in 131 impressions, with blind embossing (gonghua), on xuan paper  
+<sub>After Hu Zhengyan and the Ten Bamboo Studio Manual of Calligraphy and Painting (Shizhuzhai shuhua pu), Nanjing, 1633</sub>
+
+> No keyline: every leaf, fruit and feather is a small block of its own, cut after a brush drawing and wiped so that it shades within its shape. Most of the leaves' veins and the bird's eye-ring and belly are only pressed into the paper.
+
+<sub>[`works/ten_bamboo.py`](works/ten_bamboo.py) · 784 lines</sub>
+
 <p align="center"><a href="plates/low_country.jpg"><img src="site/thumbs/low_country.jpg" alt="The Low Country" width="100%"></a></p>
 
 **The Low Country**, 2026  
@@ -295,6 +425,16 @@ Etching, printed on laid paper
 > A cottage under its trees on one side of the plate, and on the other the flat land running out to a church tower, a windmill, and a great deal of sky.
 
 <sub>[`works/low_country.py`](works/low_country.py) · 488 lines</sub>
+
+<p align="center"><a href="plates/malmaison.jpg"><img src="site/thumbs/malmaison.jpg" alt="A Flamed Tulip" width="100%"></a></p>
+
+**A Flamed Tulip**, 2026  
+Stipple engraving printed in colour from one plate inked à la poupée, finished by hand in watercolour, on wove paper  
+<sub>After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824: stipple engravings printed in colour and finished by hand in watercolour</sub>
+
+> A garden tulip from its bulb to its flower, open and flamed crimson on yellow, with a bud and three leaves turning to show both faces: every form is built of engraved dots of coloured ink, washed over by hand.
+
+<sub>[`works/malmaison.py`](works/malmaison.py) · 757 lines</sub>
 
 <p align="center"><a href="plates/red_fuji.jpg"><img src="site/thumbs/red_fuji.jpg" alt="Red Fuji, Clear Morning" width="100%"></a></p>
 
@@ -306,6 +446,16 @@ Colour woodblock print (moku-hanga) from six blocks, on kozo paper
 
 <sub>[`works/red_fuji.py`](works/red_fuji.py) · 146 lines</sub>
 
+<p align="center"><a href="plates/arashiyama.jpg"><img src="site/thumbs/arashiyama.jpg" alt="Blossom Rafts at Arashiyama" width="100%"></a></p>
+
+**Blossom Rafts at Arashiyama**, 2026  
+Colour woodblock print (nishiki-e) in thirty-five impressions, ōban yoko-e, on hōsho paper  
+<sub>After Utagawa Hiroshige, Famous Places in Kyoto (Kyōto meisho no uchi), c. 1834, among them Cherry Blossoms in Full Bloom at Arashiyama</sub>
+
+> Timber rafts come down the Ōi toward the long bridge, and the petals that fall on the river drift down it in rafts of their own. On the mountain the cherries stand in drifts, a few crowns cut along the top of each and the deeper pink wiped down beneath them into the mist.
+
+<sub>[`works/arashiyama.py`](works/arashiyama.py) · 1151 lines</sub>
+
 <p align="center"><a href="plates/shower.jpg"><img src="site/thumbs/shower.jpg" alt="Shower on the Long Bridge" width="100%"></a></p>
 
 **Shower on the Long Bridge**, 2026  
@@ -316,6 +466,16 @@ Colour woodblock print (moku-hanga) from seventeen blocks, on kozo paper
 
 <sub>[`works/shower.py`](works/shower.py) · 514 lines</sub>
 
+<p align="center"><a href="plates/laurelton.jpg"><img src="site/thumbs/laurelton.jpg" alt="An Evening in May" width="100%"></a></p>
+
+**An Evening in May**, 2026  
+Opalescent glass, streaky, mottled, drapery, ripple, confetti and streamer, plated in places, in copper foil and lead, with iron bars  
+<sub>After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925: Magnolias and Irises, c. 1908; Autumn Landscape, 1923–24; the windows for Laurelton Hall</sub>
+
+> A magnolia and a wisteria in flower frame a sunset over blue hills, and irises stand at the edge of the river. Nothing is painted: every colour is in the glass, each piece chosen for where its streaks fall.
+
+<sub>[`works/laurelton.py`](works/laurelton.py) · 974 lines</sub>
+
 <p align="center"><a href="plates/inland_sea.jpg"><img src="site/thumbs/inland_sea.jpg" alt="Evening Sails" width="100%"></a></p>
 
 **Evening Sails**, 2026  
@@ -325,6 +485,26 @@ Colour woodblock print (shin-hanga) in twenty-five impressions, on kozo paper
 > Yoshida printed the same blocks again for different hours of the day. This new design is pulled for the evening: the sails take the last of the sun, and the sea gives them back in pieces.
 
 <sub>[`works/inland_sea.py`](works/inland_sea.py) · 406 lines</sub>
+
+<p align="center"><a href="plates/riviera.jpg"><img src="site/thumbs/riviera.jpg" alt="The Bay through the Pines" width="100%"></a></p>
+
+**The Bay through the Pines**, 2026  
+Colour lithograph poster, printed from seven stones on machine-made paper  
+<sub>After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s: Menton, c. 1923; Agay, 1928; Antibes, c. 1928; Sainte-Maxime; Villefranche-sur-Mer</sub>
+
+> A new poster for the Côte d'Azur: an umbrella pine leaning out over a deep blue bay, the sun on the water and a white town on its headland, with agaves and red rocks cut into planes below. Seven stones, drawn in tusche, crayon and spatter and printed a hair out of register.
+
+<sub>[`works/riviera.py`](works/riviera.py) · 881 lines</sub>
+
+<p align="center"><a href="plates/sydney.jpg"><img src="site/thumbs/sydney.jpg" alt="The Arch Closing" width="100%"></a></p>
+
+**The Arch Closing**, 2026  
+Colour linocut from five blocks in oil-based ink, burnished by hand, on thin Japanese paper  
+<sub>After Dorrit Black, The Bridge, Sydney, 1930, and the Grosvenor School colour linocut of Claude Flight, Sybil Andrews and Cyril Power, London, 1929–1933</sub>
+
+> The two halves of the Harbour Bridge reach for each other from their creeper cranes, weeks before they met, with the afternoon light breaking through the gap. Five blocks burnished by hand with a spoon overprint to make the oranges and the deep blue-greens.
+
+<sub>[`works/sydney.py`](works/sydney.py) · 877 lines</sub>
 
 ## V · Colour Itself
 
@@ -350,6 +530,36 @@ Oil on canvas, thinned in places and loaded in others
 
 <sub>[`works/louveciennes.py`](works/louveciennes.py) · 462 lines</sub>
 
+<p align="center"><a href="plates/nice.jpg"><img src="site/thumbs/nice.jpg" alt="The Sea Garden" width="100%"></a></p>
+
+**The Sea Garden**, 2026  
+Gouache on paper, cut and pasted on white paper, mounted on canvas  
+<sub>After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954: Beasts of the Sea, 1950; Memory of Oceania, 1952–53; The Snail, 1953; The Sheaf, 1953</sub>
+
+> Slabs of pure colour pasted turning round a violet one set askew, and over them three sea weeds and four stars cut freehand from sheets brushed with other colours, crossing from one ground into the next.
+
+<sub>[`works/nice.py`](works/nice.py) · 571 lines</sub>
+
+<p align="center"><a href="plates/agrigento.jpg"><img src="site/thumbs/agrigento.jpg" alt="The Temple above the Sea" width="100%"></a></p>
+
+**The Temple above the Sea**, 2026  
+Oil on canvas, laid on with palette knives and a broad spatula  
+<sub>After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953: Agrigente (1953–54), Sicile (1954), Paysage de Sicile (1954)</sub>
+
+> A temple on a dark hill under a vermilion sky, the sea on either side and a white road climbing to it through hot planes of yellow and magenta, each plane built of knife passes dragged over a lay-in of another colour, which shows at their edges.
+
+<sub>[`works/agrigento.py`](works/agrigento.py) · 403 lines</sub>
+
+<p align="center"><a href="plates/around_blue.jpg"><img src="site/thumbs/around_blue.jpg" alt="The White Between" width="100%"></a></p>
+
+**The White Between**, 2026  
+Oil thinned with turpentine on white-primed cotton duck  
+<sub>After Sam Francis, the paintings of 1953–65: Big Red (1953), the Basel Mural (1956–58), Around the Blues (1957, 1962–63), the Blue Balls series (1960–63) and the first Edge paintings (1964–65)</sub>
+
+> Cells of cerulean, cobalt and ultramarine, with touches of yellow, orange, red and green, crowd down the left of a white canvas, drift along the top and gather in the corners on the right; the thin oil dried with dark edges round paler middles and ran down in drips.
+
+<sub>[`works/around_blue.py`](works/around_blue.py) · 359 lines</sub>
+
 <p align="center"><a href="plates/provincetown.jpg"><img src="site/thumbs/provincetown.jpg" alt="Harbor, August" width="100%"></a></p>
 
 **Harbor, August**, 2026  
@@ -360,6 +570,36 @@ Acrylic thinned with water, poured and stained into unprimed cotton duck, over c
 
 <sub>[`works/provincetown.py`](works/provincetown.py) · 311 lines</sub>
 
+<p align="center"><a href="plates/washington.jpg"><img src="site/thumbs/washington.jpg" alt="Morning Sun in the Garden" width="100%"></a></p>
+
+**Morning Sun in the Garden**, 2026  
+Acrylic and pencil on canvas: columns of touches of a flat brush over loosely brushed bands of blue and green  
+<sub>After Alma Thomas, the paintings she made in Washington, 1966–76: Resurrection (1966), Starry Night and the Astronauts (1972), Red Roses Sonata (1972), Elysian Fields (1973), Wind and Crepe Myrtle Concerto (1973)</sub>
+
+> Columns of short strokes of a flat brush, crimson, red, orange, yellow and pink, change across the canvas in bands. Where a leaning band of yellow falls the white canvas opens between them; elsewhere flecks of blue and green show from beneath.
+
+<sub>[`works/washington.py`](works/washington.py) · 290 lines</sub>
+
+<p align="center"><a href="plates/ocean_park.jpg"><img src="site/thumbs/ocean_park.jpg" alt="The Window at Ocean Park" width="100%"></a></p>
+
+**The Window at Ocean Park**, 2026  
+Oil and charcoal on canvas, laid in thin and painted over in three sittings, scraped back and redrawn  
+<sub>After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88 (among them Ocean Park No. 54, 1972; No. 79, 1975; No. 129, 1984)</sub>
+
+> A scaffold of bands across the top and down the right, a diagonal across the corner where they meet, and a large pale field of sea light, painted over three times so that the earlier lines and colours still show through.
+
+<sub>[`works/ocean_park.py`](works/ocean_park.py) · 622 lines</sub>
+
+<p align="center"><a href="plates/rajasthan.jpg"><img src="site/thumbs/rajasthan.jpg" alt="The Black Sun" width="100%"></a></p>
+
+**The Black Sun**, 2026  
+Acrylic on canvas, laid on with the knife and the brush in layers, scumbled, run and scratched  
+<sub>After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s: Rajasthan (1975), Rajasthan (1983), Saurashtra (1983), La Terre (1985)</sub>
+
+> Two triangles stand in a banded sky as planes of colour, crossed by the bands and making a third colour where they overlap, under a black sun; below, a saffron room and a carmine one, each crossed by broad strokes of its own colour deepened. Acrylic spread with the knife zone by zone, scumbled, and scratched down to the yellow ground.
+
+<sub>[`works/rajasthan.py`](works/rajasthan.py) · 631 lines</sub>
+
 <p align="center"><a href="plates/rue_jonquoy.jpg"><img src="site/thumbs/rue_jonquoy.jpg" alt="Light Rising over Water" width="100%"></a></p>
 
 **Light Rising over Water**, 2026  
@@ -369,6 +609,16 @@ Oil on canvas, thinned almost to a wash and laid in many veils with broad brushe
 > A space of light with no landscape in it: veils of blue deepening into indigo round a pale gold core, thin paint running down, and clusters of dark strokes drawn fast through the middle.
 
 <sub>[`works/rue_jonquoy.py`](works/rue_jonquoy.py) · 578 lines</sub>
+
+<p align="center"><a href="plates/monsoon.jpg"><img src="site/thumbs/monsoon.jpg" alt="The Monsoon Breaking" width="100%"></a></p>
+
+**The Monsoon Breaking**, 2026  
+Oil on a mahogany panel in a pine frame, the frame painted as part of the picture  
+<sub>After Howard Hodgkin, the paintings on wood of the 1980s: Venice Evening (1984–85), Rain (1984–89), Love Letter (1984–88), In Tangier (1987–90), Indian Sky (1988–89)</sub>
+
+> The monsoon breaking over a garden, remembered. Inside a deep green frame and a red one, one sweep of ultramarine curls over a crimson dark with the light glowing hot beneath it, and the rain is dragged across in a pale, dry veil that lets the colour show through.
+
+<sub>[`works/monsoon.py`](works/monsoon.py) · 627 lines</sub>
 
 <p align="center"><a href="plates/cologne.jpg"><img src="site/thumbs/cologne.jpg" alt="Abstract Picture" width="100%"></a></p>
 

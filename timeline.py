@@ -71,7 +71,7 @@ OPENING = ("impression", (0.37, 0.25), (0.37, 0.47), 3.6)   # the work the film 
 DETAILS = {   # where the camera cuts close: the passage it cuts to and the one it drifts to, as (x, y) on the
     # plate from 0 to 1, and how near, in times the work's usual size; the last work of the walk must have one
     "irises": ((0.62, 0.30), (0.54, 0.38), 3.0),
-    "jiangnan": ((0.74, 0.50), (0.64, 0.55), 3.4),
+    "hakone": ((0.33, 0.62), (0.40, 0.60), 3.6),
     "rose_window": ((0.50, 0.50), (0.50, 0.41), 3.4),
     "vetheuil": ((0.36, 0.40), (0.45, 0.44), 3.8),
 }
