@@ -1,14 +1,13 @@
-"""The film: a walk through the museum, cut to a score that is composed and played in code.
+"""The film: a minute's walk through the museum, cut to a score that is composed and played in code.
 
     uv run timeline.py      writes plates/_timeline.mp4 (1920 x 1080, 30 fps, H.264 with AAC)
 
-The museum is one long wall. A few works of each room hang along it in the order a visitor meets them, room by
-room, each room in the colour of its walls, with its name on the wall where it begins and a label beside every
-work. The film opens close on the sun of one painting. Then each room slides in over the last on the first note
-of its music, and the camera walks the wall slowly, never quite stopping. In a room it may cut close to a passage
-of paint and draw back from it to the whole work; in the first it waits in front of a bare canvas while the
-painting is painted, stroke by stroke. At the end it draws back from a last passage of paint until the whole wall
-is in sight, set in lines like a page; then the museum's first page comes in, as its website opens on it.
+The museum is one long wall. A few works of each room hang along it, room by room, each room in the colour of its
+walls, with its name on the wall where it begins and a label beside every work. The film opens close on the sun of
+one painting, under the museum's name. Then each room slides in over the last on the first beat of its music, and
+the camera walks the wall slowly, never quite stopping. In a room it may cut close to a passage of paint and draw
+back from it to the whole work; in the first it waits in front of a bare canvas while the painting is painted,
+stroke by stroke. At the end the museum's first page comes in over the last room, as its website opens on it.
 
 The plates are shown as they are, in their own colours. numpy and PIL draw each frame and ffmpeg encodes the
 frames with the music. The type is Iowan Old Style, from macOS.
@@ -31,12 +30,12 @@ import score
 from atelier import impasto, music, noise, plate
 from atelier.color import to_srgb
 from atelier.plate import BACKDROP
-from render import FRONT, PAPER, ROOMS, ROOT, hanging, rooms, strapline
+from render import FRONT, PAPER, ROOMS, ROOT, hanging, strapline
 
 W, H, FPS = 1920, 1080, 30
-STEP = round(score.STEP * FPS)            # frames in a sixteenth of the score
-assert abs(STEP - score.STEP * FPS) < 1e-9, "a sixteenth is a whole number of frames"
-BAR, HALF, TAIL = 16 * STEP, 8 * STEP, round(score.TAIL * FPS)
+BEAT = round(score.BEAT * FPS)            # frames in a beat of the score
+assert abs(BEAT - score.BEAT * FPS) < 1e-9, "a beat is a whole number of frames"
+BAR, TAIL = score.METER * BEAT, round(score.TAIL * FPS)
 WIPE = 24                                 # frames a room takes to slide in over the last
 
 DARK = np.float32([10, 10, 11])           # the dark beyond the walls
@@ -54,35 +53,23 @@ SCALE = {"sheet": 0.8, "Colour Itself": 1.15}
 HANG, TOP, FOOT = -0.03 * H, -0.52 * H, 0.52 * H   # the line the works hang on, and the wall's top and foot
 LAMP = HANG - 0.06 * H                    # where the lights above the works are brightest
 GAP, DOOR = 0.2 * W, 0.12 * W             # between works (the label in it), and a doorway
-LINES, LEAD = 4, 0.22 * H                 # the wall set as a page at the end: its lines, and the dark between
 
-# The walk. The camera walks at most SPEED px of wall a half bar, at least WAY half bars from one work to the
-# next, slowing almost to a stop at each (EASE of its speed); and at some it stays on longer: HOLD half bars
-# more, to read a room's name, to lean in, to go along a long work, to look close and draw back.
-SPEED, WAY, EASE = 560, 2.5, 0.25
-PAINT = 8                                 # bars the painted one takes to be painted, close enough to fill the frame
-HOLD = {"text": 1, "work": 0, "lean": 3, "long": 3, "detail": 5, "painted": 2 * PAINT, "finale": 8}
-LONG = 1.35                               # how near the camera goes along a long work
-PARTS = {"Open Air": "air", "The Garden": "garden", "Paper and Water": "water", "The Workshop": "workshop",
-         "Colour Itself": "colour"}       # the part of the score each room is walked to
-PAINTED, AFTER = "saint_remy", "sky"      # the work seen being painted, and the part of the score after it
-WORDS = ("Every painting", "is a program.")       # on the wall beside it
-CODA = "One painter, many hands."                 # under the whole museum
-OPENING = ("impression", (0.37, 0.25), (0.37, 0.47), 3.6)   # the work the film opens on: from, to, how near
-DETAILS = {   # where the camera cuts close: the passage it cuts to and the one it drifts to, as (x, y) on the
-    # plate from 0 to 1, and how near, in times the work's usual size; the last work of the walk must have one
-    "irises": ((0.62, 0.30), (0.54, 0.38), 3.0),
-    "hakone": ((0.33, 0.62), (0.40, 0.60), 3.6),
-    "rose_window": ((0.50, 0.50), (0.50, 0.41), 3.4),
-    "vetheuil": ((0.36, 0.40), (0.45, 0.44), 3.8),
+TOUR = {   # the works the film's wall holds, room by room in the order it passes them, and the beat of the room's
+    # music the camera comes to each on; the room's name is read on the wall from its first beat
+    "Open Air": (("impression", 4), ("saint_remy", 9)),
+    "The Garden": (("irises", 3),),
+    "Paper and Water": (("hakone", 4.5), ("sayama", 8.5)),
+    "The Workshop": (("rose_window", 3),),
+    "Colour Itself": (("louveciennes", 4.5), ("nice", 8.5)),
 }
-LEANS = {"starry": ((0.70, 0.28), 1.45)}  # where the camera leans in on its way past, and how near
-SHOWN = {   # the works the film's wall holds, five or six of each room's; the website hangs them all
-    "turner", "impression", "saint_remy", "starry", "javea",
-    "irises", "attersee", "jardin", "giverny", "hollywood",
-    "yatsuhashi", "baghdad", "burbank", "hakone", "sayama",
-    "rose_window", "malmaison", "red_fuji", "arashiyama", "riviera", "sydney",
-    "louveciennes", "nice", "washington", "rue_jonquoy", "vetheuil",
+EASE = 0.25                               # how slowly the camera goes past a work, of its speed on the way to it
+PAINTED = "saint_remy"                    # seen being painted, until a beat before its room is left
+WORDS = ("Every painting", "is a program.")       # on the wall beside it
+OPENING = ("impression", (0.37, 0.25), (0.37, 0.47), 3.6)   # the work the film opens on: from, to, how near
+DETAILS = {   # where the camera cuts close, on a bar line: the passage it cuts to and the one it drifts to, as (x, y)
+    # on the plate from 0 to 1, and how near, in times the work's usual size; then it draws back to the whole work
+    "irises": ((0.62, 0.30), (0.54, 0.38), 3.0),
+    "rose_window": ((0.50, 0.50), (0.50, 0.41), 3.4),
 }
 
 LIGHT = ((np.arange(256) / 255) ** 2.2).astype(np.float32)   # a byte of the frame as light, near enough
@@ -203,40 +190,22 @@ def after(m):
     return re.sub(r"^the [a-z ]+? of ", "", who, flags=re.I).strip()
 
 
-def order(mods):
-    """The works as a visitor meets them: room by room, oldest first in each."""
-    return [s for room in ROOMS for s in sorted((s for s, m in mods.items() if m.ROOM == room), key=lambda s: mods[s].YEAR)]
-
-
-def walk(wall):
-    """The way through the museum: for each room, the frame it slides in on and its stops, [(slug, kind, frame
-    the camera arrives)], its name on the wall first (slug None); and the parts of the score, [(part, bars)].
-    Rooms begin on a bar line, and so does every stop that begins something, a cut or the painting."""
-    out, parts, f = [], [("intro", 4)], 4 * BAR
-    for r in wall.rooms:
-        kinds = ["painted" if w.slug == PAINTED else "detail" if w.slug in DETAILS else "lean" if w.slug in LEANS
-                 else "long" if w.w / w.h > 2.4 else "work" for w in r["works"]]
-        if r is wall.rooms[-1]:
-            assert r["works"][-1].slug in DETAILS, "the walk ends close on a passage of its last work"
-            kinds[-1] = "finale"
-        start, t, x, hold = f, f + HALF // 2, r["look"], HOLD["text"]
-        stops = [(None, "text", t)]
-        for w, k in zip(r["works"], kinds):
-            to, near = (w.at((0, 0.5), LONG)[0], LONG) if k == "long" else (w.x, 1)
-            way = max(WAY, abs(to - x) * near / SPEED)        # seen nearer, the wall goes by faster
-            t += round((hold + way) * HALF / STEP) * STEP
-            if k in ("detail", "painted", "finale"):          # these begin on a bar line: the nearest one,
-                t = start + math.ceil((t - start - 0.75 * HALF) / BAR) * BAR    # going a little faster or waiting
-            stops.append((w.slug, k, t))
-            x, hold = w.at((1, 0.5), LONG)[0] if k == "long" else w.x, HOLD[k]
-        f = t + 8 * HALF if k == "finale" else start + math.ceil((t + (hold + WAY) * HALF - start) / BAR) * BAR
-        if PAINTED in (s for s, _, _ in stops):
-            p = next(t for s, _, t in stops if s == PAINTED)
-            parts += [(PARTS[r["name"]], (p - start) // BAR), ("paint", PAINT), (AFTER, (f - p) // BAR - PAINT)]
-        else:
-            parts.append((PARTS[r["name"]], (f - start) // BAR))
-        out.append((r["name"], start, stops))
-    return out, parts + [("burst", 1), ("title", 2), ("coda", 2)]
+def walk():
+    """The way through the museum: for each room, the frame it slides in on, its stops [(slug, kind, frame the
+    camera arrives)], its name on the wall first (slug None), and the frame it is left on. Each room takes the bars
+    the score gives it."""
+    out, f = [], 0
+    for name, bars in score.FORM:
+        if name in TOUR:
+            stops = [(None, "text", f + BEAT // 2)]
+            for s, beat in TOUR[name]:
+                kind = "painted" if s == PAINTED else "detail" if s in DETAILS else "work"
+                stops.append((s, kind, f + round(beat * BEAT)))
+                assert kind != "detail" or beat % score.METER == 0, f"the camera cuts close to {s} on a bar line"
+            assert all(s != PAINTED for s, _ in TOUR[name][:-1]), "the painting is painted until its room is left"
+            out.append((name, f, stops, f + bars * BAR))
+        f += bars * BAR
+    return out
 
 
 class Work:
@@ -272,12 +241,14 @@ class Wall:
     painted."""
 
     def __init__(self, mods):
-        missing = SHOWN - set(mods)
+        shown = {s for works in TOUR.values() for s, _ in works}
+        missing = shown - set(mods)
         assert not missing, f"the film shows works that do not hang: {missing}"
-        assert {OPENING[0], PAINTED, *DETAILS, *LEANS} <= SHOWN, "the film shows every work it opens on, paints or looks close at"
-        mods = {s: m for s, m in mods.items() if s in SHOWN}
+        assert {OPENING[0], PAINTED, *DETAILS} <= shown, "the film shows every work it opens on, paints or looks close at"
+        assert list(TOUR) == [r for r in ROOMS if r in TOUR], "the film walks the rooms in the museum's order"
+        assert all(mods[s].ROOM == room for room, works in TOUR.items() for s, _ in works), "every work in its own room"
         self.rooms, self.works, x = [], {}, 0.0
-        for n, room in zip(NUMERALS, rooms(mods)):
+        for n, room in zip(NUMERALS, TOUR):
             colour = ROOMS[room][1]
             light = sum(int(colour[k:k + 2], 16) for k in (1, 3, 5)) > 3 * 128
             ink, dim = (INK, INKDIM) if light else (IVORY, DIM)
@@ -287,7 +258,7 @@ class Wall:
                      text=[(t, tx + dx, ty + dy, ("room", i)) for i, (t, dx, dy) in enumerate(zip(text, (4, -2, 2), (0, 60, 242)))],
                      look=tx + wide / 2 - 0.1 * W, works=[])         # where the camera stands to read the name
             x = tx + wide + GAP
-            for s in (s for s in order(mods) if mods[s].ROOM == room):
+            for s, _ in TOUR[room]:
                 if s == PAINTED:                                  # the words on the wall before it
                     said = [Type(t, 60, ITALIC, ink) for t in WORDS]
                     x += 0.06 * W
@@ -305,18 +276,6 @@ class Wall:
         self.starts = np.array([r["x0"] for r in self.rooms])
         self.stops = np.array([r["x1"] for r in self.rooms])
         self.lin = np.stack([r["lin"] for r in self.rooms])
-
-    def page(self):
-        """The wall set as a page: broken between works into LINES lines of about the same length, set one under
-        another. -> [(from, to, dx, dy)]: the stretch of the wall from..to drawn moved by dx, dy"""
-        works = sorted(self.works.values(), key=lambda w: w.x)
-        breaks = [self.start]
-        for k in range(1, LINES):
-            aim = self.start + (self.end - self.start) * k / LINES
-            j = min(range(len(works) - 1), key=lambda j: abs(works[j].x + works[j].w / 2 + GAP / 2 - aim))
-            breaks.append(works[j].x + works[j].w / 2 + GAP * 0.7)
-        breaks.append(self.end)
-        return [(a, b, -a, i * (FOOT - TOP + LEAD)) for i, (a, b) in enumerate(zip(breaks, breaks[1:]))]
 
 
 class Key:
@@ -362,48 +321,36 @@ class Camera:
 
 class Shot:
     """A stretch of the film seen by one camera, from frame `start`, coming in by `enter`: a cut, a fade up
-    from the dark, or a wipe, the new room sliding in over the last; and the wall set as `lines`."""
+    from the dark, or a wipe, the new room sliding in over the last."""
 
-    def __init__(self, start, keys, enter="cut", lines=None):
+    def __init__(self, start, keys, enter="cut"):
         self.start, self.camera, self.enter = start, Camera(keys), enter
-        self.lines = lines or [(-math.inf, math.inf, 0.0, 0.0)]
 
 
 def shots(path, wall):
     """The film's shots, from the walk and the wall it walks."""
     slug, a, b, near = OPENING
     w = wall.works[slug]
-    out = [Shot(0, [Key(0, *w.at(a, near), near), Key(4 * BAR + WIPE, *w.at(b, near * 0.78), near * 0.78)], "fade")]
-    for (room, start, stops), r in zip(path, wall.rooms):
+    out = [Shot(0, [Key(0, *w.at(a, near), near), Key(path[0][1] + WIPE, *w.at(b, near * 0.78), near * 0.78)], "fade")]
+    for (room, start, stops, end), r in zip(path, wall.rooms):
         shot = dict(start=start, keys=[Key(stops[0][2], r["look"], 0, 1, 0.3)], enter="wipe")
         for slug, kind, t in stops[1:]:
             w, keys = wall.works[slug], shot["keys"]
-            if kind in ("detail", "finale"):                    # the approach, cut short by a cut close to the paint
-                keys.append(Key(t, w.x, 0, 1, EASE))
+            if kind == "detail":                                  # on the way to it, a cut close to the paint,
+                x = keys[-1].p[0]                                 # and back from it to the whole work
+                keys.append(Key(t, x + 0.55 * (w.x - x), 0, 1))
                 out.append(Shot(**shot))
                 a, b, near = DETAILS[slug]
-                lines = wall.page() if kind == "finale" else None
-                dx, dy = next((ln[2], ln[3]) for ln in lines if ln[0] <= w.x < ln[1]) if lines else (0, 0)
                 (ax, ay), (bx, by) = w.at(a, near), w.at(b, near * 1.04)
-                keys = [Key(t, ax + dx, ay + dy, near), Key(t + 2 * HALF, bx + dx, by + dy, near * 1.04, 0)]
-                if kind == "detail":                              # and back from it to the whole work
-                    keys.append(Key(t + 5 * HALF, w.x, 0, 1, how="zoom"))
-                else:                                             # and back until the whole museum is in sight
-                    x1, y0, y1 = max(b - a for a, b, _, _ in lines), TOP, lines[-1][3] + FOOT
-                    z = min(0.86 * W / x1, 0.62 * H / (y1 - y0))
-                    cx, cy = x1 / 2, (y0 + y1) / 2 + 0.06 * H / z
-                    keys += [Key(t + 8 * HALF, cx, cy, z, how="zoom"), Key(t + 12 * HALF, cx, cy, z * 0.97, 0.5)]
-                shot = dict(start=t, keys=keys, enter="cut", lines=lines)
+                keys = [Key(t, ax, ay, near), Key(t + 3 * BEAT, bx, by, near * 1.04, 0), Key(t + 7 * BEAT, w.x, 0, 1, how="zoom")]
+                if slug == stops[-1][0]:                          # leaning in a little until the room is left
+                    keys.append(Key(end + WIPE, w.x, 0, 1.025, 0.5))
+                shot = dict(start=t, keys=keys, enter="cut")
             elif kind == "painted":                               # the words beside it, then close to the canvas
                 left = min(x for _, x, _, cue in r["text"] if cue[0] == "words")      # until it has been painted
                 mid, near = (left + w.x + w.w / 2) / 2, 0.88 * H / w.h
-                keys += [Key(t, mid, 0.01 * H, 1.1, 0), Key(t + 3 * HALF, mid, 0.01 * H, 1.14, 0),
-                         Key(t + 6 * HALF, w.x, w.y, near, how="zoom"), Key(t + 2 * PAINT * HALF, w.x, w.y, near * 1.03, 0.5)]
-            elif kind == "lean":
-                uv, near = LEANS[slug]
-                keys += [Key(t, w.x, 0, 1, 0.5), Key(t + 2 * HALF, *w.at(uv, near), near, 0.5)]
-            elif kind == "long":                                  # along it from end to end
-                keys += [Key(t, *w.at((0, 0.5), LONG), LONG, 0.6), Key(t + HOLD["long"] * HALF, *w.at((1, 0.5), LONG), LONG, 0.6)]
+                keys += [Key(t, mid, 0.01 * H, 1.1, 0), Key(t + 2.5 * BEAT, mid, 0.01 * H, 1.14, 0),
+                         Key(t + 4.5 * BEAT, w.x, w.y, near, how="zoom"), Key(end + WIPE, w.x, w.y, near * 1.03, 0.5)]
             else:
                 keys.append(Key(t, w.x, 0, 1, EASE))
         out.append(Shot(**shot))
@@ -456,15 +403,13 @@ class Film:
 
     def __init__(self, mods):
         self.wall = Wall(mods)
-        self.path, self.parts = walk(self.wall)
+        self.path = walk()
         self.shots = shots(self.path, self.wall)
-        self.burst = sum(n for p, n in self.parts[:-3]) * BAR
-        self.dark, self.title = self.burst + 15 * STEP, self.burst + BAR
-        self.length = self.title + 4 * BAR + TAIL
-        self.painting = next(t for _, _, stops in self.path for s, _, t in stops if s == PAINTED)
+        self.title = self.path[-1][3]                         # the museum's first page comes in after the last room
+        self.length = sum(n for _, n in score.FORM) * BAR + TAIL
+        self.painting, self.painted = next((t, end - BEAT) for _, _, stops, end in self.path for s, _, t in stops if s == PAINTED)
         self.stills, self.seen = None, {}
         self.name = Type("THE CLAUDE GLASS", 100, ROMAN, INK, 0.08, 1)
-        self.coda = Type(CODA, 50, ITALIC, IVORY, 0, 1)
         # the museum's first page, as the website opens on it: the work at the door to the left, and to its right
         # these lines, each (type, how far in from the words' left edge, its baseline, when it comes up in frames
         # after the page has come in)
@@ -473,21 +418,22 @@ class Film:
         self.page = [(Type("A MUSEUM OF ONE PAINTER", 19, ROMAN, INKDIM, 0.2, 1), 0, 330, 4),
                      (Type("THE CLAUDE", 82, ROMAN, INK, 0.08, 1), 0, 428, 10),
                      (Type("GLASS", 82, ROMAN, INK, 0.08, 1), 0, 518, 16),
-                     (Type(strapline(mods), 28, ITALIC, INK, 0, 1), 0, 588, 2 * BAR),
-                     (Type("chaoqi31.github.io/claude-glass", 21, ROMAN, INKDIM, 0.06, 1), 0, 664, 3 * BAR)]
+                     (Type(strapline(mods), 28, ITALIC, INK, 0, 1), 0, 588, BAR),
+                     (Type("chaoqi31.github.io/claude-glass", 21, ROMAN, INKDIM, 0.06, 1), 0, 664, 2 * BAR)]
         x = 0
         for text, face in (("In the picture · ", ROMAN), (m.TITLE, ITALIC), (f", after {after(m)}", ROMAN)):
             t = Type(text, 18, face, INKDIM, 0, 1)
-            self.page.append((t, x, 760, 3 * BAR + 12))
+            self.page.append((t, x, 760, 2 * BAR + 12))
             x += t.w - 8                                      # type is drawn with 4 px to spare at each end
 
     def picture(self, w, f):
         """The work as it is at frame f: the painted one bare, being painted, then lit. -> [(Picture, alpha)]"""
-        if w.slug != PAINTED or f >= self.painting + PAINT * BAR:
+        span = self.painted - self.painting
+        if w.slug != PAINTED or f >= self.painted:
             return [(w.pic, 1.0)]
         if self.stills is None:
-            self.stills = snapshots(PAINTED, round(0.85 * PAINT * BAR), 1400)
-        t = max(0.0, (f - self.painting) / (PAINT * BAR))
+            self.stills = snapshots(PAINTED, round(0.85 * span), 1400)
+        t = max(0.0, (f - self.painting) / span)
         i = round(min(1.0, t / 0.85) * (len(self.stills) - 1))
         if i not in self.seen:
             self.seen.clear()
@@ -501,19 +447,18 @@ class Film:
         e = out_expo((f - start) / 22)
         return (1 - e) * 0.55, min(1.0, e * 1.5)
 
-    def band(self, canvas, cam, line, f):
-        """One line of the wall, as the camera sees it: the wall, lit, the shadows of the works on it, the works,
-        their labels and the writing on the wall."""
+    def band(self, canvas, cam, f):
+        """The wall as the camera sees it: the wall, lit, the shadows of the works on it, the works, their labels
+        and the writing on the wall."""
         cx, cy, z = cam
-        a, b, dx, dy = line
-        sx = lambda x: W / 2 + (x + dx - cx) * z
-        sy = lambda y: H / 2 + (y + dy - cy) * z
-        x0, x1, y0, y1 = sx(max(a, self.wall.start)), sx(min(b, self.wall.end)), sy(TOP), sy(FOOT)
+        sx = lambda x: W / 2 + (x - cx) * z
+        sy = lambda y: H / 2 + (y - cy) * z
+        x0, x1, y0, y1 = sx(self.wall.start), sx(self.wall.end), sy(TOP), sy(FOOT)
         X0, X1, Y0, Y1 = max(0, math.floor(x0)), min(W, math.ceil(x1)), max(0, math.floor(y0)), min(H, math.ceil(y1))
         if X1 <= X0 or Y1 <= Y0:
             return
-        xs = cx + (np.arange(X0, X1) + 0.5 - W / 2) / z - dx
-        ys = cy + (np.arange(Y0, Y1) + 0.5 - H / 2) / z - dy
+        xs = cx + (np.arange(X0, X1) + 0.5 - W / 2) / z
+        ys = cy + (np.arange(Y0, Y1) + 0.5 - H / 2) / z
         lo, hi = xs[0] - W, xs[-1] + W
         i = np.clip(np.searchsorted(self.wall.starts, xs, side="right") - 1, 0, None)
         lin = np.where((xs < self.wall.stops[i])[:, None], self.wall.lin[i], LIGHT[DARK.astype(np.int32)])
@@ -523,7 +468,7 @@ class Film:
                 if lo - spread < c < hi + spread:
                     pool += np.exp(-0.5 * ((xs - c) / spread) ** 2)
         lit = 0.8 + 0.2 * np.minimum(pool, 1)[None, :] * np.exp(-0.5 * ((ys - LAMP) / (0.42 * H)) ** 2)[:, None]
-        works = [w for w in self.wall.works.values() if a <= w.x < b and lo < w.x < hi]
+        works = [w for w in self.wall.works.values() if lo < w.x < hi]
         for w in works:
             lit *= 1 - 0.5 * np.outer(soft(ys, w.y - w.h / 2 + 16, w.y + w.h / 2 + 16, 14),
                                       soft(xs, w.x - w.w / 2 + 5, w.x + w.w / 2 + 5, 14))
@@ -540,11 +485,11 @@ class Film:
                 place(canvas, t.pic, sx(lx), sy(ly), sx(lx + t.w), sy(ly + t.h), noise.smoothstep(0.25, 0.45, z))
         for k, r in enumerate(self.wall.rooms):
             for t, tx, ty, (what, j) in r["text"]:
-                if not (a <= tx < b and lo < tx < hi):
+                if not lo < tx < hi:
                     continue
-                off, alpha = self.rise(f, self.path[k][1] - 6 + 7 * j if what == "room" else self.painting + HALF + 10 * j)
+                off, alpha = self.rise(f, self.path[k][1] - 6 + 7 * j if what == "room" else self.painting + BEAT // 2 + 10 * j)
                 if what == "words":                           # said, they go as the camera goes close to the canvas
-                    alpha *= 1 - noise.smoothstep(self.painting + 3 * HALF, self.painting + 5 * HALF, f)
+                    alpha *= 1 - noise.smoothstep(self.painting + 3 * BEAT, self.painting + 4 * BEAT, f)
                 box = (sx(tx), sy(ty), sx(tx + t.w), sy(ty + t.h))
                 place(canvas, t.pic, box[0], sy(ty + off * t.h), box[2], sy(ty + (1 + off) * t.h), alpha, clip=box)
 
@@ -553,26 +498,24 @@ class Film:
         cx, cy, z = cam = shot.camera(f)
         canvas = np.empty((H, W, 3), np.float32)
         canvas[:] = DARK
-        for line in shot.lines:
-            self.band(canvas, cam, line, f)
+        self.band(canvas, cam, f)
         v = abs(cx - shot.camera(f - 1)[0]) * z
         if v > 3:
             canvas = ndimage.uniform_filter1d(canvas, int(v * 0.5) | 1, axis=1)
         return canvas
 
     def frame(self, f):
-        if f >= self.title:                                   # the museum's first page comes in from the right
-            u = f - self.title
-            edge = W * (1 - in_out(u / WIPE))
-            canvas = np.empty((H, W, 3), np.float32)
-            canvas[:] = DARK
+        xs = np.arange(W) + 0.5
+        if f >= self.title - WIPE / 2:                        # the museum's first page slides in over the last room
+            u = (f - self.title + WIPE / 2) / WIPE
+            edge = W * (1 - in_out(u))
+            canvas = self.view(self.shots[-1], f) if edge > 0 else np.empty((H, W, 3), np.float32)
+            canvas *= 1 - 0.45 * noise.smoothstep(0, 0.25, u) * np.exp(-np.maximum(edge - xs, 0) / 60)[None, :, None]
             canvas[:, math.floor(edge):] = PAGE
             place(canvas, self.door, edge, 0, edge + W / 2, H)
             for t, dx, base, at in self.page:
-                self.said(canvas, f, t, base - 1.1 * t.size, self.title + WIPE + at, x=edge + LEFT + dx)
+                self.said(canvas, f, t, base - 1.1 * t.size, self.title + WIPE // 2 + at, x=edge + LEFT + dx)
             return canvas * (1 - noise.smoothstep(self.length - 1.4 * FPS, self.length - 0.2 * FPS, f))
-        if f >= self.dark:
-            return np.broadcast_to(DARK, (H, W, 3)).copy()
         j = max(i for i, s in enumerate(self.shots) if s.start <= f)
         k = next((i for i, s in enumerate(self.shots) if s.enter == "wipe" and abs(f - s.start + 0.5) < WIPE / 2), None)
         if k is None:
@@ -582,14 +525,12 @@ class Film:
             edge, speed = W * (1 - in_out(u)), W * abs(in_out(u + 0.5 / WIPE) - in_out(u - 0.5 / WIPE))
             old, new = self.view(self.shots[k - 1], f), self.view(self.shots[k], f)
             new = np.roll(new, int(0.25 * edge), axis=1)
-            xs = np.arange(W) + 0.5
             m = np.clip((xs - edge) / max(1.0, 0.5 * speed) + 0.5, 0, 1)
             old *= 1 - 0.45 * noise.smoothstep(0, 0.25, u) * np.exp(-np.maximum(edge - xs, 0) / 60)[None, :, None]
             canvas = old + (new - old) * m[None, :, None]
-        if f < BAR * 4:                                       # the name of the museum over the first passage
-            self.said(canvas, f, self.name, 0.42 * H, BAR, 1 - noise.smoothstep(3.3 * BAR, 3.7 * BAR, f))
-        if f >= self.burst - HALF:
-            self.said(canvas, f, self.coda, 0.83 * H, self.burst - HALF)
+        first = self.path[0][1]
+        if f < first:                                         # the name of the museum over the first passage
+            self.said(canvas, f, self.name, 0.42 * H, BAR, 1 - noise.smoothstep(first - 1.5 * BEAT, first - 0.45 * BEAT, f))
         return canvas * noise.smoothstep(0, 12, f)            # out of the dark on the first note
 
     def said(self, canvas, f, t, y, begins, fade=1.0, x=None):
@@ -607,8 +548,8 @@ def film(out=ROOT / "plates" / "_timeline.mp4"):
     print(f"{len(it.shots)} shots, {it.length / FPS:.1f}s, {time.time() - t0:.0f}s", flush=True)
     with tempfile.TemporaryDirectory() as tmp:
         wav = Path(tmp) / "score.wav"
-        music.write(wav, score.render(it.parts))
-        print(f"score: {sum(n for _, n in it.parts)} bars, {time.time() - t0:.0f}s", flush=True)
+        music.write(wav, score.render())
+        print(f"score: {sum(n for _, n in score.FORM)} bars, {time.time() - t0:.0f}s", flush=True)
         enc = subprocess.Popen(
             ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
              "-i", "-", "-i", str(wav), "-map", "0:v", "-map", "1:a",

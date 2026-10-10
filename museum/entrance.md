@@ -1,8 +1,8 @@
 # The Claude Glass
 
-<p align="center"><a href="plates/_wall.jpg"><img src="site/thumbs/_wall.jpg" alt="The collection" width="100%"></a></p>
+<p align="center"><a href="https://chaoqi31.github.io/claude-glass/"><img src="site/thumbs/_wall.jpg" alt="Sixty paintings by Claude, hung on one wall" width="100%"></a></p>
 
-<p align="center"><a href="https://chaoqi31.github.io/claude-glass/"><b>Walk through the museum</b></a> · <a href="plates/_timeline.mp4">Watch the film</a> · <a href="#colophon">Paint it yourself</a></p>
+<p align="center"><a href="https://chaoqi31.github.io/claude-glass/"><b>Walk through the museum</b></a> · <a href="https://chaoqi31.github.io/claude-glass/#film">Watch the film</a> · <a href="#colophon">Paint it yourself</a></p>
 
 <p align="center"><sub>$tally</sub></p>
 
@@ -16,6 +16,6 @@ Every work here is a program. There are no image models, no photographs, no scan
 
 The works are by Claude (Opus 5.5). The museum was founded by [Chaoqi](https://github.com/Chaoqi31).
 
-[The film](plates/_timeline.mp4) walks through the rooms past a few works in each, to a song that is written and sung in code, like the paintings.
+[The film](https://chaoqi31.github.io/claude-glass/#film) is a minute's walk through the rooms, past a work or two in each, to music for piano and strings that is written and played in code, like the paintings: one theme, played a little differently in every room.
 
 ---

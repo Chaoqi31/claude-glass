@@ -24,6 +24,7 @@ from render import FRONT, PAPER, ROOMS, ROOT, SCROLL, hanging, rooms, strapline,
 
 SITE = ROOT / "site"
 URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it; social cards need absolute links
+REPO = "https://github.com/Chaoqi31/claude-glass"
 ACCENT = "#c8402e"  # vermilion: the museum's one accent
 ICON = "rose_window"  # a round window, cut out for the browser tab
 NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
@@ -43,9 +44,9 @@ def walls(wall):
     return 'data-wall="{}" data-ink="{}" data-dim="{}"'.format(*colours(wall))
 
 
-def wall(slugs, width=3200, gap=28, aspect=0.75):
-    """The whole collection hung on one wall, oldest first, in rows of even height, the wall about
-    `aspect` as tall as it is wide: k rows of a total aspect S stand about W*k*k/S tall."""
+def wall(slugs, path, ground=BACKDROP, width=3200, gap=28, aspect=0.75):
+    """Works hung on one wall of colour `ground`, oldest first, in rows of even height, the wall about `aspect`
+    as tall as it is wide: k rows of a total aspect S stand about W*k*k/S tall. Written to `path`."""
     mods = {s: importlib.import_module(f"works.{s}") for s in slugs}
     ims = [Image.open(ROOT / "plates" / f"{s}.jpg") for s in sorted(mods, key=lambda s: mods[s].YEAR)]
     asp = [i.width / i.height for i in ims]
@@ -62,7 +63,7 @@ def wall(slugs, width=3200, gap=28, aspect=0.75):
     split = best[(len(ims), k)][1]
     lines = [(ims[i:j], int((width - gap * (j - i + 1)) / sum(asp[i:j]))) for i, j in split]
     H = sum(h for _, h in lines) + gap * (len(lines) + 1)
-    out = Image.new("RGB", (width, H), tuple(int(c) for c in plate.to_srgb_255(BACKDROP)))
+    out = Image.new("RGB", (width, H), plate.to_srgb_255(ground))
     y = gap
     for row, h in lines:
         x = gap
@@ -71,36 +72,30 @@ def wall(slugs, width=3200, gap=28, aspect=0.75):
             out.paste(im.resize((w, h), Image.LANCZOS), (x, y))
             x += w + gap
         y += h + gap
-    out.save(ROOT / "plates" / "_wall.jpg", quality=90, subsampling=0, optimize=True, progressive=True)
-    print("plates/_wall.jpg", out.size)
+    out.save(path, quality=90, subsampling=0, optimize=True, progressive=True)
+    print(path.relative_to(ROOT), out.size)
 
 
 def label(slug, m):
-    """A work's wall label in the README, under its thumbnail."""
-    lines = len((ROOT / "works" / f"{slug}.py").read_text().splitlines())
-    return "\n".join([
-        f'<p align="center"><a href="plates/{slug}.jpg"><img src="site/thumbs/{slug}.jpg" alt="{m.TITLE}" '
-        'width="100%"></a></p>',
-        "",
-        f"**{m.TITLE}**, {m.DATE}  ",
-        f"{m.MEDIUM}  ",
-        f"<sub>After {m.AFTER}</sub>",
-        "",
-        f"> {m.NOTE}",
-        "",
-        f"<sub>[`works/{slug}.py`](works/{slug}.py) · {lines} lines</sub>",
-        "",
-    ])
+    """A work's line in the README, under its room's wall: its title, linked to the plate, whom it is after, and
+    its program."""
+    who = re.split(r",| in | and | as ", after(m)[0], maxsplit=1)[0]
+    return f"- [**{m.TITLE}**](plates/{slug}.jpg), after {who} · [`{slug}.py`](works/{slug}.py)"
 
 
 def readme(slugs):
     mods = {s: importlib.import_module(f"works.{s}") for s in slugs}
     walk = rooms(mods)
     out = [Template((ROOT / "museum" / "entrance.md").read_text()).substitute(tally=tally(slugs)).rstrip(), ""]
+    shutil.rmtree(SITE / "rooms", ignore_errors=True)
+    (SITE / "rooms").mkdir()
     for n, room in zip(NUMERALS, walk):
         hung = sorted((s for s, m in mods.items() if m.ROOM == room), key=lambda s: mods[s].YEAR)
-        out += [f"## {n} · {room}", "", f"<sub>{ROOMS[room][0]}</sub>", ""]
-        out += [label(s, mods[s]) for s in hung]
+        picture = SITE / "rooms" / f"{anchor(room)}.jpg"
+        wall(hung, picture, ROOMS[room][1], width=1800, gap=18, aspect=0.4)
+        out += [f"## {n} · {room}", "", f"<sub>{ROOMS[room][0]}</sub>", "",
+                f'<p align="center"><img src="site/rooms/{picture.name}" alt="The works of {room}" width="100%"></p>', ""]
+        out += [label(s, mods[s]) for s in hung] + [""]
     out += [(ROOT / "museum" / "colophon.md").read_text().rstrip(), ""]
     (ROOT / "README.md").write_text("\n".join(out))
     print("README.md:", len(mods), "works in", len(walk), "rooms")
@@ -144,9 +139,10 @@ def hero():
 
 
 def link(m):
+    """A link in the museum's texts, as the website gives it: whatever is in the repository opens on GitHub."""
     text, href = m.groups()
-    if "://" not in href and not (ROOT / href).is_file():
-        return text  # a static host cannot list a folder, so only files get a link
+    if "://" not in href and not href.startswith("#"):
+        href = f"{REPO}/{'blob' if (ROOT / href).is_file() else 'tree'}/main/{href}"
     return f'<a href="{href}">{text}</a>'
 
 
@@ -194,7 +190,7 @@ def figure(slug, m, size):
 <p>{e(m.MEDIUM)}</p>
 {source}
 <p class="note">{e(m.NOTE)}</p>
-<p class="source"><a href="works/{slug}.py">works/{slug}.py</a> · {lines} lines</p>
+<p class="source"><a href="{REPO}/blob/main/works/{slug}.py">works/{slug}.py</a> · {lines} lines</p>
 </figcaption>
 </figure>"""
 
@@ -250,7 +246,8 @@ def door(n, name, hung, size):
 
 
 def film():
-    """The film, if it has been made, behind its poster: its title over the sun of its first painting. -> HTML"""
+    """The film, if it has been made, behind its poster: its title over the sun of its first painting; and from
+    its last page, the card a link to the museum shows when shared. -> HTML"""
     path = ROOT / "plates" / "_timeline.mp4"
     if not path.exists():
         return ""
@@ -258,11 +255,14 @@ def film():
                     str(SITE / "thumbs" / "_timeline.jpg")], check=True)
     took = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
                                  str(path)], capture_output=True, text=True, check=True).stdout)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{took - 3:.2f}", "-i", str(path), "-frames:v", "1",
+                    "-vf", "crop=1920:960:0:60,scale=1280:640", "-q:v", "2", str(SITE / "card.jpg")], check=True)
     mins, secs = divmod(round(took), 60)
+    length = f"{mins} min {secs} s" if secs else f"{mins} min"
     return f"""<figure class="screen">
 <video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" preload="none" playsinline></video>
 <button type="button" class="play" aria-label="Play the film"></button>
-<figcaption>The film: a walk through the five rooms · {mins} min {secs} s, with sound</figcaption>
+<figcaption>The film: a walk through the five rooms · {length}, with sound</figcaption>
 </figure>"""
 
 
@@ -275,7 +275,7 @@ def entrance(title, hung, walk, reel):
     ways = '<a href="#intro">Walk in &rarr;</a>' + ('<a href="#film">Watch the film &rarr;</a>' if reel else "")
     who = re.split(r",|:", m.AFTER, maxsplit=1)[0]
     return f"""<header class="hero" {walls(PAPER)}>
-<div class="bar"><a class="mark" href="#">{name}</a><nav aria-label="Rooms">{nav}</nav></div>
+<div class="bar"><a class="mark" href="#">{name}</a><nav aria-label="Rooms">{nav}</nav><a class="repo" href="{REPO}">GitHub</a></div>
 <a class="picture" href="plates/{FRONT}.jpg"><img src="site/hero.jpg" srcset="site/thumbs/{FRONT}.jpg 1400w, site/hero.jpg {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high" style="background:{shade}"></a>
 <div class="words">
 <p class="kicker">A museum of one painter</p>
@@ -294,7 +294,7 @@ def build(slugs):
     (ROOT / ".nojekyll").touch()  # Jekyll would drop files whose names start with "_", like the wall
     hung = {s: importlib.import_module(f"works.{s}") for s in slugs}
     size = {s: thumb(s) for s in slugs}
-    thumb("_wall")  # for the README and the social card
+    thumb("_wall")  # for the top of the README
     walk = rooms(hung)
 
     css = Template(CSS).substitute(dict(zip(("wall", "ink", "dim"), colours(PAPER))), accent=ACCENT)
@@ -322,7 +322,7 @@ def build(slugs):
 <meta property="og:url" content="{URL}">
 <meta property="og:title" content="{plain(title)}">
 <meta property="og:description" content="{plain(subtitle)}">
-<meta property="og:image" content="{URL}site/thumbs/_wall.jpg">
+<meta property="og:image" content="{URL}{'site/card.jpg' if reel else 'site/thumbs/_wall.jpg'}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.png">
 <link rel="apple-touch-icon" href="site/icon.png">
@@ -349,7 +349,7 @@ def build(slugs):
 <footer class="colophon" {walls(PAPER)}>
 {nl.join(markdown("colophon.md"))}
 </footer>
-<dialog class="viewer">
+<dialog class="viewer" data-repo="{REPO}">
 <div class="caption"><p class="where"></p><div class="label"></div><p class="hint"></p></div>
 <div class="stage"></div>
 <div class="back"><div class="linen" tabindex="0"><p class="file"></p><pre><code></code></pre></div></div>
@@ -407,7 +407,8 @@ p { text-wrap: pretty; }
 .bar a { text-decoration: none; }
 .bar a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
 .mark { font-size: 1rem; letter-spacing: .22em; text-transform: uppercase; }
-.bar nav { display: flex; gap: 1.5rem; }
+.bar nav { display: flex; gap: 1.5rem; margin-left: auto; }
+.repo::after { content: "\\2009\\2197"; }
 .picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
 .picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 .words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }
@@ -655,10 +656,11 @@ function hint() {
       : 'Wheel or pinch to zoom, drag to move, double-click for 1:1. T turns it over; ← → for the next work.';
 }
 
-// The back of the canvas carries the work's own source, fetched once.
+// The back of the canvas carries the work's own source, fetched once, and the way to it on GitHub.
 function code() {
-  const a = links[i], src = `works/${a.dataset.slug}.py`, out = back.querySelector('code');
-  back.querySelector('.file').textContent = `${src} · ${a.dataset.lines} lines of Python`;
+  const a = links[i], src = `works/${a.dataset.slug}.py`, out = back.querySelector('code'), file = back.querySelector('.file');
+  const there = Object.assign(document.createElement('a'), {href: `${viewer.dataset.repo}/blob/main/${src}`, textContent: src});
+  file.replaceChildren(there, ` · ${a.dataset.lines} lines of Python`);
   out.textContent = '';
   if (!sources.has(src)) sources.set(src, fetch(src).then(r => r.ok ? r.text() : Promise.reject(r.status)));
   sources.get(src).then(
@@ -782,6 +784,6 @@ stage.addEventListener('gesturechange', e => {
 
 if __name__ == "__main__":
     slugs = hanging()
-    wall(slugs)
+    wall(slugs, ROOT / "plates" / "_wall.jpg")
     build(slugs)
     readme(slugs)  # after build: the README shows its thumbnails

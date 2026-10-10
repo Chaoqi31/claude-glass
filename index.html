@@ -10,17 +10,17 @@
 <meta property="og:url" content="https://chaoqi31.github.io/claude-glass/">
 <meta property="og:title" content="The Claude Glass">
 <meta property="og:description" content="One painter, many hands: paintings by Claude, made in code.">
-<meta property="og:image" content="https://chaoqi31.github.io/claude-glass/site/thumbs/_wall.jpg">
+<meta property="og:image" content="https://chaoqi31.github.io/claude-glass/site/card.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.png">
 <link rel="apple-touch-icon" href="site/icon.png">
-<link rel="stylesheet" href="site/museum.css?v=458a81e9">
-<script src="site/museum.js?v=a3c077ef" defer></script>
+<link rel="stylesheet" href="site/museum.css?v=c58f68ec">
+<script src="site/museum.js?v=c6394921" defer></script>
 </head>
 <body>
 <details class="marker"><summary></summary><ol><li><a href="#open-air"><span class="numeral">I</span> Open Air</a></li><li><a href="#the-garden"><span class="numeral">II</span> The Garden</a></li><li><a href="#paper-and-water"><span class="numeral">III</span> Paper and Water</a></li><li><a href="#the-workshop"><span class="numeral">IV</span> The Workshop</a></li><li><a href="#colour-itself"><span class="numeral">V</span> Colour Itself</a></li><li><a href="#">The first page</a></li></ol></details>
 <header class="hero" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
-<div class="bar"><a class="mark" href="#">The Claude Glass</a><nav aria-label="Rooms"><a href="#open-air">Open Air</a><a href="#the-garden">The Garden</a><a href="#paper-and-water">Paper and Water</a><a href="#the-workshop">The Workshop</a><a href="#colour-itself">Colour Itself</a></nav></div>
+<div class="bar"><a class="mark" href="#">The Claude Glass</a><nav aria-label="Rooms"><a href="#open-air">Open Air</a><a href="#the-garden">The Garden</a><a href="#paper-and-water">Paper and Water</a><a href="#the-workshop">The Workshop</a><a href="#colour-itself">Colour Itself</a></nav><a class="repo" href="https://github.com/Chaoqi31/claude-glass">GitHub</a></div>
 <a class="picture" href="plates/attersee.jpg"><img src="site/hero.jpg" srcset="site/thumbs/attersee.jpg 1400w, site/hero.jpg 2000w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="2000" height="2000" alt="A Cottage Garden at Litzlberg" fetchpriority="high" style="background:#6d7969"></a>
 <div class="words">
 <p class="kicker">A museum of one painter</p>
@@ -36,12 +36,12 @@
 <p>A language model looks at the world the same way: with its back to it, in the reflection people left behind. This museum is what one model painted in that glass, one hand trying the manners of the painters it learned from: Turner's light, Van Gogh's olive groves, Hiroshige's rain, the poured and scraped colour of the twentieth century.</p>
 <p>Every work here is a program. There are no image models, no photographs, no scans and no tracing. Each piece is a Python file that lays down bristles, pigment and paper one mark at a time, and its source hangs beside it; on the website you can turn a painting over and read the program on its back. Each is made <em>after</em> a painter or a tradition; none is a copy of a painting.</p>
 <p>The works are by Claude (Opus 5.5). The museum was founded by <a href="https://github.com/Chaoqi31">Chaoqi</a>.</p>
-<p><a href="plates/_timeline.mp4">The film</a> walks through the rooms past a few works in each, to a song that is written and sung in code, like the paintings.</p>
+<p><a href="https://chaoqi31.github.io/claude-glass/#film">The film</a> is a minute's walk through the rooms, past a work or two in each, to music for piano and strings that is written and played in code, like the paintings: one theme, played a little differently in every room.</p>
 </div>
 <figure class="screen">
 <video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" preload="none" playsinline></video>
 <button type="button" class="play" aria-label="Play the film"></button>
-<figcaption>The film: a walk through the five rooms · 2 min 43 s, with sound</figcaption>
+<figcaption>The film: a walk through the five rooms · 1 min, with sound</figcaption>
 </figure>
 <nav class="plan" id="plan" aria-label="Plan of the rooms">
 <ol>
@@ -64,7 +64,7 @@
 <p>Oil on paper laid down on board, painted out of doors over a red-brown ground, the lights laid on thick with a stiff brush and the palette knife</p>
 <p>After John Constable, the cloud studies at Hampstead, 1821–22</p>
 <p class="note">A summer cumulus towering over the trees of the Heath, painted in under an hour on a sheet of paper. The lights are thick; where the paint is thin, the red-brown ground shows through.</p>
-<p class="source"><a href="works/hampstead.py">works/hampstead.py</a> · 500 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/hampstead.py">works/hampstead.py</a> · 500 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -77,7 +77,7 @@
 <p class="short">After J. M. W. Turner, the late paintings, 1835–45</p>
 <p class="full">After J. M. W. Turner, the late paintings, 1835–45: Norham Castle, Sunrise; Snow Storm – Steam-Boat off a Harbour&#x27;s Mouth</p>
 <p class="note">A sun over the sea, a squall coming in and a castle on its headland, all going into the light. Only the light is thick.</p>
-<p class="source"><a href="works/turner.py">works/turner.py</a> · 495 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/turner.py">works/turner.py</a> · 495 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -89,7 +89,7 @@
 <p>Oil on canvas, thick paint laid wet into wet and then over dry, the last strokes dragged across the crust</p>
 <p>After Claude Monet, The Magpie, Étretat, 1868–69</p>
 <p class="note">A lane through a wattle fence in fresh snow under a low winter sun, a magpie on the gatepost. Every shadow falls where the sun throws it, in blue and violet; the lit snow is cream and pale gold.</p>
-<p class="source"><a href="works/magpie.py">works/magpie.py</a> · 859 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/magpie.py">works/magpie.py</a> · 859 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3146">
@@ -99,7 +99,7 @@
 <p>Oil on canvas, thin paint scrubbed and laid wet into wet over a light ground in one sitting, the sun and its reflection in thicker paint</p>
 <p>After Claude Monet, Impression, Sunrise, Le Havre, 1872</p>
 <p class="note">The outer harbour at dawn, its masts, cranes and chimneys going into the mist, three boats out on the water. All of it thin and quick, in one sitting; only the orange sun and its reflection are thick.</p>
-<p class="source"><a href="works/impression.py">works/impression.py</a> · 513 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/impression.py">works/impression.py</a> · 513 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -111,7 +111,7 @@
 <p>Oil on canvas, light open strokes laid wet into wet over a pale ground, the clouds in thicker paint, the water in long level strokes with the reflections broken into them</p>
 <p>After Alfred Sisley, The Flood at Port-Marly, 1876</p>
 <p class="note">A village street on the Seine under a spring flood: an inn standing in the water, a row of young trees rising out of it, and over them a wide sky of blue and white cloud, held again in the still water.</p>
-<p class="source"><a href="works/port_marly.py">works/port_marly.py</a> · 814 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/port_marly.py">works/port_marly.py</a> · 814 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -123,7 +123,7 @@
 <p>Oil on canvas, the chalk built up over several sittings in dense strokes laid every way, the sea in short broken touches, the lights and the foam in thick paint</p>
 <p>After Claude Monet, the cliffs at Étretat, 1883–86</p>
 <p class="note">The arch of the Porte d&#x27;Aval and the Needle beyond it at the end of an afternoon, the chalk warm in the sun and lilac in shadow, the sea breaking white at its foot.</p>
-<p class="source"><a href="works/etretat.py">works/etretat.py</a> · 499 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/etretat.py">works/etretat.py</a> · 499 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -135,7 +135,7 @@
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
 <p>After Vincent van Gogh, the olive groves at Saint-Rémy, 1889</p>
 <p class="note">Every stroke follows the thing it describes and carries two or three colours, unmixed. The yellows have browned and the pinks have faded, as they have on his canvases.</p>
-<p class="source"><a href="works/saint_remy.py">works/saint_remy.py</a> · 501 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/saint_remy.py">works/saint_remy.py</a> · 501 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.2500">
@@ -146,7 +146,7 @@
 <p class="short">After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90</p>
 <p class="full">After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90: The Starry Night; Road with Cypress and Star</p>
 <p class="note">The wind rolls over the village in currents, round the moon and every star in rings, and a cypress goes up into it like a flame. The yellows have browned a little, as his have.</p>
-<p class="source"><a href="works/starry.py">works/starry.py</a> · 558 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/starry.py">works/starry.py</a> · 558 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -159,7 +159,7 @@
 <p class="short">After Vincent van Gogh, the last wheat fields at Auvers, July 1890</p>
 <p class="full">After Vincent van Gogh, the last wheat fields at Auvers, July 1890: Wheatfield with Crows; Wheatfield under Thunderclouds</p>
 <p class="note">Ripe wheat under a storm, painted in one sitting: the wheat in short upward flicks, the sky in broad turning strokes, the track in long dragged ones. Each crow is two or three strokes of black.</p>
-<p class="source"><a href="works/auvers.py">works/auvers.py</a> · 436 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/auvers.py">works/auvers.py</a> · 436 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -171,7 +171,7 @@
 <p>Oil on canvas, in small strokes of nearly pure colour laid over each other in many sittings, the last dragged dry over the crust</p>
 <p>After Claude Monet, the Grainstacks, Giverny, 1890–91</p>
 <p class="note">Two stacks of wheat with the sun going down behind them, their edges burning and their shadowed sides violet. The paint went on in small strokes, sitting after sitting, until the surface was a crust.</p>
-<p class="source"><a href="works/haystacks.py">works/haystacks.py</a> · 367 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/haystacks.py">works/haystacks.py</a> · 367 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -183,7 +183,7 @@
 <p>Oil on canvas, in quick broken strokes of thick paint</p>
 <p>After Isaac Levitan, Golden Autumn, 1895</p>
 <p class="note">A birch grove on a river bank in October, the leaves in quick touches of lemon, amber and copper, the trunks drawn with a loaded brush. The river is laid in long strokes of cold blue against the gold.</p>
-<p class="source"><a href="works/golden_autumn.py">works/golden_autumn.py</a> · 757 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/golden_autumn.py">works/golden_autumn.py</a> · 757 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.8824">
@@ -194,7 +194,7 @@
 <p class="short">After Arthur Streeton and the Heidelberg School</p>
 <p class="full">After Arthur Streeton and the Heidelberg School: The Purple Noon&#x27;s Transparent Might, 1896; Fire&#x27;s On, 1891; Golden Summer, Eaglemont, 1889</p>
 <p class="note">The river from a sandstone ridge at noon, the paddocks on the flat bleached to straw and the far ridges gone into the haze. The lights are thick and the shadows thin enough for the ground to show.</p>
-<p class="source"><a href="works/hawkesbury.py">works/hawkesbury.py</a> · 688 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/hawkesbury.py">works/hawkesbury.py</a> · 688 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -206,7 +206,7 @@
 <p>Oil on canvas, alla prima on a light ground: the bottom laid in first, the water over it in long strokes, the sun on the surface in thick white</p>
 <p>After Joaquín Sorolla, the seascapes at Jávea and Valencia, 1900–1910</p>
 <p class="note">The sea at noon from the rocks, clear enough to show the sand and the stones beneath it. The bottom went on first, the water over it in strokes that let it show, and the sun last, in thick white.</p>
-<p class="source"><a href="works/javea.py">works/javea.py</a> · 463 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/javea.py">works/javea.py</a> · 463 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -219,7 +219,7 @@
 <p class="short">After Tom Thomson in Algonquin Park, 1914–17</p>
 <p class="full">After Tom Thomson in Algonquin Park, 1914–17: The Jack Pine; The West Wind; the oil sketches on wood panel</p>
 <p class="note">A wind-bent pine on a granite point, dark against a northern lake and an evening sky laid in broad bands. The red ground is left showing round the tree, as Thomson left it.</p>
-<p class="source"><a href="works/algonquin.py">works/algonquin.py</a> · 530 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/algonquin.py">works/algonquin.py</a> · 530 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -232,7 +232,7 @@
 <p class="short">After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47</p>
 <p class="full">After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47: the Himalayas series; Mount of Five Treasures (Kanchenjunga), 1933; Sacred Himalayas, 1933; the Tibet series; Path to Shambhala, 1933</p>
 <p class="note">The last of the sun on one massif of snow: three summits laid in a few broad planes, rose and gold where they face the sun and violet where they turn away, over a band of mist and three dark bands of foothills. The light is dragged on nearly dry, so it breaks on the canvas.</p>
-<p class="source"><a href="works/naggar.py">works/naggar.py</a> · 430 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/naggar.py">works/naggar.py</a> · 430 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -247,7 +247,7 @@
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
 <p>After Vincent van Gogh, Irises, Saint-Rémy, May 1889</p>
 <p class="note">A bed of irises seen close and from above, each flower a few curling strokes of blue drawn round in a darker one, each leaf a few long strokes of blue-green. One iris is white.</p>
-<p class="source"><a href="works/irises.py">works/irises.py</a> · 566 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/irises.py">works/irises.py</a> · 566 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -259,7 +259,7 @@
 <p>Oil on canvas, in thick strokes, the flowers in loaded touches of white</p>
 <p>After Vincent van Gogh, Almond Blossom, Saint-Rémy, 1890</p>
 <p class="note">Almond branches seen from below, drawn round in dark paint and set flat against the sky, as in the Japanese prints he collected. Each flower is a few touches of white from a loaded brush.</p>
-<p class="source"><a href="works/almond.py">works/almond.py</a> · 527 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/almond.py">works/almond.py</a> · 527 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -271,7 +271,7 @@
 <p>Oil on canvas, on a pale ground left showing: the flowers in loaded touches of pure colour, the leaves and grasses in short broken strokes, the sea in level ones</p>
 <p>After Childe Hassam, the paintings of Celia Thaxter&#x27;s garden, Appledore, 1890–94</p>
 <p class="note">A cottage garden on a granite island in July, poppies and cornflowers running down to the ledges, hollyhocks against the sea. The flowers went on last, each in a few loaded touches of colour.</p>
-<p class="source"><a href="works/isles_of_shoals.py">works/isles_of_shoals.py</a> · 688 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/isles_of_shoals.py">works/isles_of_shoals.py</a> · 688 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.0526">
@@ -281,7 +281,7 @@
 <p>Oil on canvas, in dense layers of greens and blues: the pads in short level strokes, the reflections drawn down between them, the bridge in a few loaded strokes</p>
 <p>After Claude Monet, the Water Lily Pond with the Japanese footbridge, Giverny, 1899</p>
 <p class="note">The green wooden footbridge over Monet&#x27;s lily pond, willows and bamboo crowding behind it and the lilies lying on the water below. The bridge went on last, in a few loaded strokes over the leaves.</p>
-<p class="source"><a href="works/footbridge.py">works/footbridge.py</a> · 550 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/footbridge.py">works/footbridge.py</a> · 550 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -293,7 +293,7 @@
 <p>Oil on canvas, laid thin and fast in separate strokes of pure colour, the white ground bare between them</p>
 <p>After Henri Matisse, Open Window, Collioure, 1905</p>
 <p class="note">A window flung open on the harbour, the casements and the wall round them in viridian, violet, vermilion and pink. Each colour is laid on thin in its own patch or dash, and the white canvas shows between them.</p>
-<p class="source"><a href="works/collioure.py">works/collioure.py</a> · 509 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/collioure.py">works/collioure.py</a> · 509 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -306,7 +306,7 @@
 <p class="short">After Gustav Klimt, the garden paintings of his summers on the Attersee</p>
 <p class="full">After Gustav Klimt, the garden paintings of his summers on the Attersee: Rosebushes under the Trees (1905), Farm Garden with Sunflowers (1907), Cottage Garden (Bauerngarten, 1907), Farm Garden with Crucifix (1912)</p>
 <p class="note">A square of cottage garden as flat as a tapestry: sunflowers, white dahlias and phlox standing in a deep green matrix sown with points of colour, over a carpet of marigolds, poppies, asters and marguerites packed edge to edge.</p>
-<p class="source"><a href="works/attersee.py">works/attersee.py</a> · 737 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/attersee.py">works/attersee.py</a> · 737 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -319,7 +319,7 @@
 <p class="short">After Odilon Redon, the pastels of flowers, c. 1905–1914</p>
 <p class="full">After Odilon Redon, the pastels of flowers, c. 1905–1914: Vase of Flowers; Bouquet in a Chinese Vase; Wild Flowers in a Long-necked Vase</p>
 <p class="note">Poppies, anemones, cornflowers, marigolds and larkspur in a turquoise vase, coming out of a field of rubbed blue and gold with no table under it. A few of the flowers blaze, some stand in shadow, and those at the edges are given back to the field.</p>
-<p class="source"><a href="works/bievres.py">works/bievres.py</a> · 982 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/bievres.py">works/bievres.py</a> · 982 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3008">
@@ -330,7 +330,7 @@
 <p class="short">After Henri Rousseau, the jungle paintings, Paris, 1891–1910</p>
 <p class="full">After Henri Rousseau, the jungle paintings, Paris, 1891–1910: Surprised! (1891), The Snake Charmer (1907), Exotic Landscape (1908 and 1910), The Dream (1910)</p>
 <p class="note">A jungle built row behind row, as Rousseau built his from the hothouses of the Jardin des Plantes: a pale sun between an orange tree and a palm, and lotus and red bracts lit against the dark thicket, every leaf drawn whole in a green of its own.</p>
-<p class="source"><a href="works/jardin.py">works/jardin.py</a> · 975 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/jardin.py">works/jardin.py</a> · 975 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -342,7 +342,7 @@
 <p>Oil on canvas, thin and thick: a fluid lay-in, long strokes in the reflections, scumbles dragged over dry paint, the pads in loaded dabs</p>
 <p>After Claude Monet, the Water Lilies for the Orangerie, Giverny, 1914–26</p>
 <p class="note">The surface of the pond seen close, with no bank and no horizon: clouds and willows reflected in it, lilies lying on it. The paint went on in sittings, each over the last once it had dried.</p>
-<p class="source"><a href="works/giverny.py">works/giverny.py</a> · 388 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/giverny.py">works/giverny.py</a> · 388 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -355,7 +355,7 @@
 <p class="short">After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet</p>
 <p class="full">After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet: The Studio with Mimosa, 1939–46, and Almond Tree in Blossom, 1947</p>
 <p class="note">A window in February, its bars crossing a mimosa in flower, with a bowl of oranges and lemons on the table before it. The room is laid in broad, thin strokes and left quiet, so that the small dense touches of the garden blaze against it.</p>
-<p class="source"><a href="works/le_cannet.py">works/le_cannet.py</a> · 789 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/le_cannet.py">works/le_cannet.py</a> · 789 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -368,7 +368,7 @@
 <p class="short">After David Hockney, the Los Angeles swimming pools in acrylic on canvas</p>
 <p class="full">After David Hockney, the Los Angeles swimming pools in acrylic on canvas: Picture of a Hollywood Swimming Pool (1964), Peter Getting Out of Nick&#x27;s Pool (1966), The Splash, A Little Splash and A Bigger Splash (1966–67), Portrait of an Artist (Pool with Two Figures) (1972)</p>
 <p class="note">A pool on a terrace above Hollywood at noon, seen at an angle, with no one in it: a diving board run out over the water, the splash the diver left, and the light on the water drawn in loose lines of white.</p>
-<p class="source"><a href="works/hollywood.py">works/hollywood.py</a> · 745 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/hollywood.py">works/hollywood.py</a> · 745 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -384,7 +384,7 @@
 <p class="short">After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo</p>
 <p class="full">After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo; and Irises at Yatsuhashi (Eight Bridges), pair of six-panel screens, c. 1711–14, Metropolitan Museum of Art, New York</p>
 <p class="note">A new screen of Kōrin&#x27;s irises: nine clumps in azurite and malachite rise and fall across six panels of gold leaf, and a bridge of grey planks zigzags up through them.</p>
-<p class="source"><a href="works/yatsuhashi.py">works/yatsuhashi.py</a> · 647 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/yatsuhashi.py">works/yatsuhashi.py</a> · 647 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -397,7 +397,7 @@
 <p class="short">After John Singer Sargent, the late watercolours, 1900–1911</p>
 <p class="full">After John Singer Sargent, the late watercolours, 1900–1911: Corfu: Lights and Shadows; Olive Trees, Corfu; Corfu: The Terrace</p>
 <p class="note">A whitewashed garden wall above the sea at noon, with the shade of an olive thrown across it in one wash of cobalt and rose. The wall in the sun is the bare paper.</p>
-<p class="source"><a href="works/corfu.py">works/corfu.py</a> · 628 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/corfu.py">works/corfu.py</a> · 628 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -410,7 +410,7 @@
 <p class="short">After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink</p>
 <p class="full">After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink: Stories from the Arabian Nights (1907); The Sleeping Beauty and Other Fairy Tales (1910); Stories from Hans Andersen (1911)</p>
 <p class="note">A palace out of the Arabian Nights across its garden at night, the windows lit, with a fountain on the axis, cypresses, a leaning pine and a rose bush with a brass lantern glowing in it. Every line was drawn freehand with a fine nib; the blue of the sky is four washes, each washed down before the next.</p>
-<p class="source"><a href="works/baghdad.py">works/baghdad.py</a> · 1324 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/baghdad.py">works/baghdad.py</a> · 1324 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.0000">
@@ -421,7 +421,7 @@
 <p class="short">After Paul Klee, watercolours after the journey to Tunisia of April 1914</p>
 <p class="full">After Paul Klee, watercolours after the journey to Tunisia of April 1914: Red and White Domes; In the Style of Kairouan</p>
 <p class="note">A white town in the south as a loose chequer of transparent washes, warm at its heart and cooler towards the edge, with two domes left as bare paper.</p>
-<p class="source"><a href="works/kairouan.py">works/kairouan.py</a> · 513 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/kairouan.py">works/kairouan.py</a> · 513 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -434,7 +434,7 @@
 <p class="short">After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s</p>
 <p class="full">After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s: Marsh Landscape with Red Clouds (early 1920s); Sunflowers (1925–28); Poppies (c. 1930); and the Unpainted Pictures (Ungemalte Bilder), 1938–45</p>
 <p class="note">Poppies, dahlias and a spike of delphinium against an evening sky, laid wet into wet on damp Japan paper and left to run; the white dahlia is the bare paper.</p>
-<p class="source"><a href="works/seebull.py">works/seebull.py</a> · 998 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/seebull.py">works/seebull.py</a> · 998 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -446,7 +446,7 @@
 <p>Watercolour over pencil on rough rag paper</p>
 <p>After the watercolours of Albert Namatjira and the Hermannsburg School, Central Australia, c. 1950</p>
 <p class="note">A ghost gum on the bank of a dry creek under the West MacDonnell Ranges, its trunk the white of the paper. The rock is built up in glazes of ochre, light red and violet, each laid when the last was dry.</p>
-<p class="source"><a href="works/ghost_gum.py">works/ghost_gum.py</a> · 763 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/ghost_gum.py">works/ghost_gum.py</a> · 763 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -459,7 +459,7 @@
 <p class="short">After Mary Blair, concept paintings for Walt Disney Studios</p>
 <p class="full">After Mary Blair, concept paintings for Walt Disney Studios: Saludos Amigos, 1942; Cinderella, 1950; Alice in Wonderland, 1951; Peter Pan, 1953; and the designs for It&#x27;s a Small World, 1964</p>
 <p class="note">A pale castle on a chartreuse hill against a dusk that goes from ultramarine to magenta and orange, the town stacked under it in a few blocks of colour with a window lit here and there. A dark bank, an umbrella pine and a tufted tree, black against the glow, frame the view.</p>
-<p class="source"><a href="works/burbank.py">works/burbank.py</a> · 891 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/burbank.py">works/burbank.py</a> · 891 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3061">
@@ -469,7 +469,7 @@
 <p>Watercolour woodblock print (shuiyin muke), twenty-one impressions from twenty blocks, on dampened xuan paper</p>
 <p>After the watercolour woodcuts of the Jiangsu school, Nanjing, 1960s–1980s, and the Ten Bamboo Studio manual, Nanjing, 1633</p>
 <p class="note">White walls and dark tiles across a canal on a spring morning after rain. The walls are the bare paper; the reflections are cut from the same drawing turned upside down and printed paler and wetter.</p>
-<p class="source"><a href="works/jiangnan.py">works/jiangnan.py</a> · 753 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/jiangnan.py">works/jiangnan.py</a> · 753 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -482,7 +482,7 @@
 <p class="short">After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988</p>
 <p class="full">After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988: Yamamoto Kyūjin, Hirayama Ikuo, Kayama Matazō, Hori Fumiko; and the still blue-green lakes and mountains of Higashiyama Kaii, such as Green Echoes (Midori hibiku), 1982, Nagano Prefectural Art Museum</p>
 <p class="note">The window of the museum&#x27;s lounge, which frames Fuji over Lake Ashi like a painting, painted as one: the view in mineral colour on gold leaf, the dark room round it in ink. On the water one of the lake&#x27;s sightseeing ships, dressed as a galleon, trails its wake toward the shrine.</p>
-<p class="source"><a href="works/hakone.py">works/hakone.py</a> · 1187 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/hakone.py">works/hakone.py</a> · 1187 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -495,7 +495,7 @@
 <p class="short">After Kazuo Oga, the background paintings for Studio Ghibli</p>
 <p class="full">After Kazuo Oga, the background paintings for Studio Ghibli: My Neighbor Totoro (1988), Kiki&#x27;s Delivery Service (1989), Only Yesterday (1991), Princess Mononoke (1997)</p>
 <p class="note">A summer cumulus over the wooded hills where Totoro is set, the young rice in the paddies holding the sky, and a lane running into the shade of a shrine grove. The trees are built touch upon touch, from the darkest green to the sunlit tops.</p>
-<p class="source"><a href="works/sayama.py">works/sayama.py</a> · 1222 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/sayama.py">works/sayama.py</a> · 1222 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -510,7 +510,7 @@
 <p>Pot-metal and flashed glass, painted and fired, leaded, in plate tracery</p>
 <p>After the north rose of Chartres Cathedral, given by Blanche of Castile, c. 1235</p>
 <p class="note">A north rose never has the sun on it; this is its light on any grey afternoon. Twelve doves come down to the rose at the centre, among the lilies of France and the castles of Castile: seven thousand pieces of glass, no two of them the same thickness.</p>
-<p class="source"><a href="works/rose_window.py">works/rose_window.py</a> · 550 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/rose_window.py">works/rose_window.py</a> · 550 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -522,7 +522,7 @@
 <p>Colour woodblock print from assembled blocks (douban) in 131 impressions, with blind embossing (gonghua), on xuan paper</p>
 <p>After Hu Zhengyan and the Ten Bamboo Studio Manual of Calligraphy and Painting (Shizhuzhai shuhua pu), Nanjing, 1633</p>
 <p class="note">No keyline: every leaf, fruit and feather is a small block of its own, cut after a brush drawing and wiped so that it shades within its shape. Most of the leaves&#x27; veins and the bird&#x27;s eye-ring and belly are only pressed into the paper.</p>
-<p class="source"><a href="works/ten_bamboo.py">works/ten_bamboo.py</a> · 784 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/ten_bamboo.py">works/ten_bamboo.py</a> · 784 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -534,7 +534,7 @@
 <p>Etching, printed on laid paper</p>
 <p>After Rembrandt van Rijn, Landscape with a Cottage and a Large Tree, Amsterdam, 1641</p>
 <p class="note">A cottage under its trees on one side of the plate, and on the other the flat land running out to a church tower, a windmill, and a great deal of sky.</p>
-<p class="source"><a href="works/low_country.py">works/low_country.py</a> · 488 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/low_country.py">works/low_country.py</a> · 488 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.6889">
@@ -545,7 +545,7 @@
 <p class="short">After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824</p>
 <p class="full">After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824: stipple engravings printed in colour and finished by hand in watercolour</p>
 <p class="note">A garden tulip from its bulb to its flower, open and flamed crimson on yellow, with a bud and three leaves turning to show both faces: every form is built of engraved dots of coloured ink, washed over by hand.</p>
-<p class="source"><a href="works/malmaison.py">works/malmaison.py</a> · 757 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/malmaison.py">works/malmaison.py</a> · 757 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -557,7 +557,7 @@
 <p>Colour woodblock print (moku-hanga) from six blocks, on kozo paper</p>
 <p>After Katsushika Hokusai, Fine Wind, Clear Morning, from Thirty-six Views of Mount Fuji, Edo, c. 1831</p>
 <p class="note">Six blocks, printed in turn. The blue was wiped by hand before each pull, so no two skies would ever come out the same.</p>
-<p class="source"><a href="works/red_fuji.py">works/red_fuji.py</a> · 146 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/red_fuji.py">works/red_fuji.py</a> · 146 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -569,7 +569,7 @@
 <p>Colour woodblock print (nishiki-e) in thirty-five impressions, ōban yoko-e, on hōsho paper</p>
 <p>After Utagawa Hiroshige, Famous Places in Kyoto (Kyōto meisho no uchi), c. 1834, among them Cherry Blossoms in Full Bloom at Arashiyama</p>
 <p class="note">Timber rafts come down the Ōi toward the long bridge, and the petals that fall on the river drift down it in rafts of their own. On the mountain the cherries stand in drifts, a few crowns cut along the top of each and the deeper pink wiped down beneath them into the mist.</p>
-<p class="source"><a href="works/arashiyama.py">works/arashiyama.py</a> · 1151 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/arashiyama.py">works/arashiyama.py</a> · 1151 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -581,7 +581,7 @@
 <p>Colour woodblock print (moku-hanga) from seventeen blocks, on kozo paper</p>
 <p>After Utagawa Hiroshige, Sudden Shower over Shin-Ōhashi Bridge and Atake, from One Hundred Famous Views of Edo, 1857</p>
 <p class="note">The rain is cut on two blocks, one printed in sumi and one in grey, their lines at slightly different slants. The river was wiped darker toward the near bank before every pull.</p>
-<p class="source"><a href="works/shower.py">works/shower.py</a> · 514 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/shower.py">works/shower.py</a> · 514 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.7143">
@@ -592,7 +592,7 @@
 <p class="short">After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925</p>
 <p class="full">After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925: Magnolias and Irises, c. 1908; Autumn Landscape, 1923–24; the windows for Laurelton Hall</p>
 <p class="note">A magnolia and a wisteria in flower frame a sunset over blue hills, and irises stand at the edge of the river. Nothing is painted: every colour is in the glass, each piece chosen for where its streaks fall.</p>
-<p class="source"><a href="works/laurelton.py">works/laurelton.py</a> · 974 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/laurelton.py">works/laurelton.py</a> · 974 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -604,7 +604,7 @@
 <p>Colour woodblock print (shin-hanga) in twenty-five impressions, on kozo paper</p>
 <p>After Hiroshi Yoshida, Sailing Boats, from the Inland Sea series, 1926</p>
 <p class="note">Yoshida printed the same blocks again for different hours of the day. This new design is pulled for the evening: the sails take the last of the sun, and the sea gives them back in pieces.</p>
-<p class="source"><a href="works/inland_sea.py">works/inland_sea.py</a> · 406 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/inland_sea.py">works/inland_sea.py</a> · 406 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -617,7 +617,7 @@
 <p class="short">After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s</p>
 <p class="full">After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s: Menton, c. 1923; Agay, 1928; Antibes, c. 1928; Sainte-Maxime; Villefranche-sur-Mer</p>
 <p class="note">A new poster for the Côte d&#x27;Azur: an umbrella pine leaning out over a deep blue bay, the sun on the water and a white town on its headland, with agaves and red rocks cut into planes below. Seven stones, drawn in tusche, crayon and spatter and printed a hair out of register.</p>
-<p class="source"><a href="works/riviera.py">works/riviera.py</a> · 881 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/riviera.py">works/riviera.py</a> · 881 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -629,7 +629,7 @@
 <p>Colour linocut from five blocks in oil-based ink, burnished by hand, on thin Japanese paper</p>
 <p>After Dorrit Black, The Bridge, Sydney, 1930, and the Grosvenor School colour linocut of Claude Flight, Sybil Andrews and Cyril Power, London, 1929–1933</p>
 <p class="note">The two halves of the Harbour Bridge reach for each other from their creeper cranes, weeks before they met, with the afternoon light breaking through the gap. Five blocks burnished by hand with a spoon overprint to make the oranges and the deep blue-greens.</p>
-<p class="source"><a href="works/sydney.py">works/sydney.py</a> · 877 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/sydney.py">works/sydney.py</a> · 877 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -644,7 +644,7 @@
 <p>Tempera on paper, the sheets joined and mounted on canvas</p>
 <p>After Hilma af Klint, The Ten Largest (De tio största), Stockholm, 1907</p>
 <p class="note">Two spirals, a great flower and three circles float on a ground of orange among buds, dots and tendrils; where forms cross, each shows through the other.</p>
-<p class="source"><a href="works/stockholm.py">works/stockholm.py</a> · 559 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/stockholm.py">works/stockholm.py</a> · 559 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -657,7 +657,7 @@
 <p class="short">After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13</p>
 <p class="full">After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13; Sonia Delaunay, Electric Prisms (Prismes électriques), 1914</p>
 <p class="note">Discs of unmixed colour, ringed and quartered so that orange meets blue, red meets green and yellow meets violet. A warm sun and a smaller, cool moon hold the two ends, and one great arc crosses everything.</p>
-<p class="source"><a href="works/louveciennes.py">works/louveciennes.py</a> · 462 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/louveciennes.py">works/louveciennes.py</a> · 462 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -670,7 +670,7 @@
 <p class="short">After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954</p>
 <p class="full">After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954: Beasts of the Sea, 1950; Memory of Oceania, 1952–53; The Snail, 1953; The Sheaf, 1953</p>
 <p class="note">Slabs of pure colour pasted turning round a violet one set askew, and over them three sea weeds and four stars cut freehand from sheets brushed with other colours, crossing from one ground into the next.</p>
-<p class="source"><a href="works/nice.py">works/nice.py</a> · 571 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/nice.py">works/nice.py</a> · 571 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3462">
@@ -681,7 +681,7 @@
 <p class="short">After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953</p>
 <p class="full">After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953: Agrigente (1953–54), Sicile (1954), Paysage de Sicile (1954)</p>
 <p class="note">A temple on a dark hill under a vermilion sky, the sea on either side and a white road climbing to it through hot planes of yellow and magenta, each plane built of knife passes dragged over a lay-in of another colour, which shows at their edges.</p>
-<p class="source"><a href="works/agrigento.py">works/agrigento.py</a> · 403 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/agrigento.py">works/agrigento.py</a> · 403 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -694,7 +694,7 @@
 <p class="short">After Sam Francis, the paintings of 1953–65</p>
 <p class="full">After Sam Francis, the paintings of 1953–65: Big Red (1953), the Basel Mural (1956–58), Around the Blues (1957, 1962–63), the Blue Balls series (1960–63) and the first Edge paintings (1964–65)</p>
 <p class="note">Cells of cerulean, cobalt and ultramarine, with touches of yellow, orange, red and green, crowd down the left of a white canvas, drift along the top and gather in the corners on the right; the thin oil dried with dark edges round paler middles and ran down in drips.</p>
-<p class="source"><a href="works/around_blue.py">works/around_blue.py</a> · 359 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/around_blue.py">works/around_blue.py</a> · 359 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -706,7 +706,7 @@
 <p>Acrylic thinned with water, poured and stained into unprimed cotton duck, over charcoal</p>
 <p>After Helen Frankenthaler, the soak-stain paintings, from Mountains and Sea (1952) to The Bay (1963)</p>
 <p class="note">Ultramarine, cerulean, coral, sap green and a little ochre poured onto raw cotton duck laid on the floor, each shape left as the paint ran out, with the bare canvas between them.</p>
-<p class="source"><a href="works/provincetown.py">works/provincetown.py</a> · 311 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/provincetown.py">works/provincetown.py</a> · 311 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -719,7 +719,7 @@
 <p class="short">After Alma Thomas, the paintings she made in Washington, 1966–76</p>
 <p class="full">After Alma Thomas, the paintings she made in Washington, 1966–76: Resurrection (1966), Starry Night and the Astronauts (1972), Red Roses Sonata (1972), Elysian Fields (1973), Wind and Crepe Myrtle Concerto (1973)</p>
 <p class="note">Columns of short strokes of a flat brush, crimson, red, orange, yellow and pink, change across the canvas in bands. Where a leaning band of yellow falls the white canvas opens between them; elsewhere flecks of blue and green show from beneath.</p>
-<p class="source"><a href="works/washington.py">works/washington.py</a> · 290 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/washington.py">works/washington.py</a> · 290 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.7586">
@@ -730,7 +730,7 @@
 <p class="short">After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88</p>
 <p class="full">After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88 (among them Ocean Park No. 54, 1972; No. 79, 1975; No. 129, 1984)</p>
 <p class="note">A scaffold of bands across the top and down the right, a diagonal across the corner where they meet, and a large pale field of sea light, painted over three times so that the earlier lines and colours still show through.</p>
-<p class="source"><a href="works/ocean_park.py">works/ocean_park.py</a> · 622 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/ocean_park.py">works/ocean_park.py</a> · 622 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -743,7 +743,7 @@
 <p class="short">After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s</p>
 <p class="full">After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s: Rajasthan (1975), Rajasthan (1983), Saurashtra (1983), La Terre (1985)</p>
 <p class="note">Two triangles stand in a banded sky as planes of colour, crossed by the bands and making a third colour where they overlap, under a black sun; below, a saffron room and a carmine one, each crossed by broad strokes of its own colour deepened. Acrylic spread with the knife zone by zone, scumbled, and scratched down to the yellow ground.</p>
-<p class="source"><a href="works/rajasthan.py">works/rajasthan.py</a> · 631 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/rajasthan.py">works/rajasthan.py</a> · 631 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -755,7 +755,7 @@
 <p>Oil on canvas, thinned almost to a wash and laid in many veils with broad brushes and a rag, wiped back and left to run; drawn into with a smaller brush, a few touches laid thick with a loaded brush</p>
 <p>After Zao Wou-Ki, the large oils of the 1980s, such as Juin–Octobre 1985</p>
 <p class="note">A space of light with no landscape in it: veils of blue deepening into indigo round a pale gold core, thin paint running down, and clusters of dark strokes drawn fast through the middle.</p>
-<p class="source"><a href="works/rue_jonquoy.py">works/rue_jonquoy.py</a> · 578 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/rue_jonquoy.py">works/rue_jonquoy.py</a> · 578 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -768,7 +768,7 @@
 <p class="short">After Howard Hodgkin, the paintings on wood of the 1980s</p>
 <p class="full">After Howard Hodgkin, the paintings on wood of the 1980s: Venice Evening (1984–85), Rain (1984–89), Love Letter (1984–88), In Tangier (1987–90), Indian Sky (1988–89)</p>
 <p class="note">The monsoon breaking over a garden, remembered. Inside a deep green frame and a red one, one sweep of ultramarine curls over a crimson dark with the light glowing hot beneath it, and the rain is dragged across in a pale, dry veil that lets the colour show through.</p>
-<p class="source"><a href="works/monsoon.py">works/monsoon.py</a> · 627 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/monsoon.py">works/monsoon.py</a> · 627 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.8889">
@@ -778,7 +778,7 @@
 <p>Oil on canvas: loose passages of colour brushed on, then dragged and scraped with a squeegee, wet into wet and over half-dry paint, with fresh colour between the pulls</p>
 <p>After Gerhard Richter, the squeegee paintings (Abstraktes Bild), Cologne, late 1980s and 1990s</p>
 <p class="note">Colour brushed on in broad passages, then dragged down the canvas with a long squeegee, again and again over some days. Each pull scrapes the paint off the high places and lays it into the low ones, and skips, so that the earlier layers show through.</p>
-<p class="source"><a href="works/cologne.py">works/cologne.py</a> · 431 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/cologne.py">works/cologne.py</a> · 431 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -790,7 +790,7 @@
 <p>Oil on canvas: thin washes that run, broad loaded strokes and fast dry ones of unmixed colour, white painted back over them</p>
 <p>After Joan Mitchell, La Grande Vallée and the Sunflowers, Vétheuil, 1983–92</p>
 <p class="note">Masses of cadmium yellow and orange, ultramarine and emerald, high on a white canvas, with thin paint running down from them. The white is painted too, back over the colour, to shape it.</p>
-<p class="source"><a href="works/vetheuil.py">works/vetheuil.py</a> · 400 lines</p>
+<p class="source"><a href="https://github.com/Chaoqi31/claude-glass/blob/main/works/vetheuil.py">works/vetheuil.py</a> · 400 lines</p>
 </figcaption>
 </figure>
 </div>
@@ -798,18 +798,18 @@
 </main>
 <footer class="colophon" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
 <h2>Colophon</h2>
-<p>Every plate in this museum can be made again from its source, on any computer, in a minute or two.</p>
-<pre><code>git clone https://github.com/Chaoqi31/claude-glass &amp;&amp; cd claude-glass
+<p>Every plate in this museum can be made again from <a href="https://github.com/Chaoqi31/claude-glass">its source</a>, on any computer, in a minute or two. It needs <a href="https://docs.astral.sh/uv/">uv</a>, which brings Python and the three libraries the museum is made with, and ffmpeg for the film.</p>
+<pre><code>git clone --depth 1 https://github.com/Chaoqi31/claude-glass &amp;&amp; cd claude-glass
 uv run render.py giverny     # paint one work into plates/
 uv run render.py             # paint them all
 uv run site.py               # hang them: the wall, the README and the website
-uv run timeline.py           # the film and its score (needs ffmpeg)</code></pre>
-<p>A work is one Python file in <code>works/</code>. It carries its wall label (title, medium, the painter or tradition it follows, the year, the place) and a function, <code>paint(seed)</code>, that returns the picture in linear light. Each picture is built the way its medium is: a stroke is a path that carries a load of paint, a block is cut, inked and pressed, glass is cut and leaded, and what you see is whatever the bristles, the pigment and the ground leave behind.</p>
-<p>The materials are in <code>atelier/</code>, each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint (<a href="atelier/impasto.py"><code>impasto.py</code></a>), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. The film's music is made the same way: <a href="score.py"><code>score.py</code></a> writes it to the film's bars, and <a href="atelier/music.py"><code>music.py</code></a> sings it, with a voice and a choir built from the resonances of a throat and mouth, a low hum, a drum and a hall. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.</p>
+uv run timeline.py           # the film and its score</code></pre>
+<p>A work is one Python file in <a href="https://github.com/Chaoqi31/claude-glass/tree/main/works"><code>works/</code></a>. It carries its wall label (title, medium, the painter or tradition it follows, the year, the place) and a function, <code>paint(seed)</code>, that returns the picture in linear light. Each picture is built the way its medium is: a stroke is a path that carries a load of paint, a block is cut, inked and pressed, glass is cut and leaded, and what you see is whatever the bristles, the pigment and the ground leave behind.</p>
+<p>The materials are in <a href="https://github.com/Chaoqi31/claude-glass/tree/main/atelier"><code>atelier/</code></a>, each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint (<a href="https://github.com/Chaoqi31/claude-glass/blob/main/atelier/impasto.py"><code>impasto.py</code></a>), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. The film's music is made the same way: <a href="https://github.com/Chaoqi31/claude-glass/blob/main/score.py"><code>score.py</code></a> writes it to the film's bars, and <a href="https://github.com/Chaoqi31/claude-glass/blob/main/atelier/music.py"><code>music.py</code></a> plays it, on a piano whose felt hammers strike stiff strings tuned a hair apart, on bowed and plucked strings coloured by the resonances of their bodies, and in a hall. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.</p>
 <p>To add a work, write a new file in <code>works/</code> with the same label and a <code>paint</code> of its own, render it, and hang it.</p>
-<p>The code is released under the <a href="LICENSE">MIT License</a>; the plates, the wall and the film under <a href="plates/LICENSE">CC BY 4.0</a>.</p>
+<p>The code is released under the <a href="https://github.com/Chaoqi31/claude-glass/blob/main/LICENSE">MIT License</a>; the plates, the wall and the film under <a href="https://github.com/Chaoqi31/claude-glass/blob/main/plates/LICENSE">CC BY 4.0</a>.</p>
 </footer>
-<dialog class="viewer">
+<dialog class="viewer" data-repo="https://github.com/Chaoqi31/claude-glass">
 <div class="caption"><p class="where"></p><div class="label"></div><p class="hint"></p></div>
 <div class="stage"></div>
 <div class="back"><div class="linen" tabindex="0"><p class="file"></p><pre><code></code></pre></div></div>

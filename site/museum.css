@@ -38,7 +38,8 @@ p { text-wrap: pretty; }
 .bar a { text-decoration: none; }
 .bar a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
 .mark { font-size: 1rem; letter-spacing: .22em; text-transform: uppercase; }
-.bar nav { display: flex; gap: 1.5rem; }
+.bar nav { display: flex; gap: 1.5rem; margin-left: auto; }
+.repo::after { content: "\2009\2197"; }
 .picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
 .picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 .words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }

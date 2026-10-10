@@ -84,10 +84,11 @@ function hint() {
       : 'Wheel or pinch to zoom, drag to move, double-click for 1:1. T turns it over; ← → for the next work.';
 }
 
-// The back of the canvas carries the work's own source, fetched once.
+// The back of the canvas carries the work's own source, fetched once, and the way to it on GitHub.
 function code() {
-  const a = links[i], src = `works/${a.dataset.slug}.py`, out = back.querySelector('code');
-  back.querySelector('.file').textContent = `${src} · ${a.dataset.lines} lines of Python`;
+  const a = links[i], src = `works/${a.dataset.slug}.py`, out = back.querySelector('code'), file = back.querySelector('.file');
+  const there = Object.assign(document.createElement('a'), {href: `${viewer.dataset.repo}/blob/main/${src}`, textContent: src});
+  file.replaceChildren(there, ` · ${a.dataset.lines} lines of Python`);
   out.textContent = '';
   if (!sources.has(src)) sources.set(src, fetch(src).then(r => r.ok ? r.text() : Promise.reject(r.status)));
   sources.get(src).then(
