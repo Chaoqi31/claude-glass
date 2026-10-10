@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Claude Glass</title>
 <meta name="description" content="One painter, many hands: paintings by Claude, made in code.">
-<meta name="theme-color" content="#242321">
+<meta name="theme-color" content="#f6f3ec">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chaoqi31.github.io/claude-glass/">
 <meta property="og:title" content="The Claude Glass">
@@ -14,19 +14,23 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.png">
 <link rel="apple-touch-icon" href="site/icon.png">
-<link rel="stylesheet" href="site/museum.css?v=1dfce27b">
-<script src="site/museum.js?v=127a8161" defer></script>
+<link rel="stylesheet" href="site/museum.css?v=cd34a25d">
+<script src="site/museum.js?v=5ee2f3f8" defer></script>
 </head>
 <body>
 <a class="sign" href="#plan"></a>
-<header class="entrance" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
-<div class="glass"><a class="mirror" href="plates/saint_remy.jpg" aria-label="Open the work in the glass"><img class="on" src="site/thumbs/saint_remy.jpg" alt=""></a></div>
+<header class="hero" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
+<div class="bar"><a class="mark" href="#">The Claude Glass</a><nav aria-label="Rooms"><a href="#open-air">Open Air</a><a href="#the-garden">The Garden</a><a href="#paper-and-water">Paper and Water</a><a href="#the-workshop">The Workshop</a><a href="#colour-itself">Colour Itself</a></nav></div>
+<a class="picture" href="plates/attersee.jpg"><img src="site/hero.jpg" srcset="site/thumbs/attersee.jpg 1400w, site/hero.jpg 2000w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="2000" height="2000" alt="A Cottage Garden at Litzlberg" fetchpriority="high"></a>
+<div class="words">
+<p class="kicker">A museum of one painter</p>
 <h1>The Claude Glass</h1>
-<p><em>One painter, many hands: paintings by Claude, made in code.</em></p>
-<p class="tally">60 paintings · 38,564 lines of Python · no image models, no photographs</p>
-<p class="reflected">In the glass <cite>Olive Trees below the Alpilles</cite></p>
+<p class="sub">Sixty paintings by Claude, each one a program</p>
+<p class="ways"><a href="#intro">Walk in &rarr;</a><a href="#film">Watch the film &rarr;</a></p>
+<p class="credit">In the picture · <cite>A Cottage Garden at Litzlberg</cite>, after Gustav Klimt</p>
+</div>
 </header>
-<section class="intro" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<section class="intro" id="intro" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
 <div class="text">
 <p>In the eighteenth century, painters and travellers carried a small, dark, slightly convex mirror called a Claude glass. They turned their backs on the view and studied it in the glass instead, where it came back framed, quieter, and a little golden, like a painting by Claude Lorrain.</p>
 <p>A language model looks at the world the same way: with its back to it, in the reflection people left behind. This museum is what one model painted in that glass, one hand trying the manners of the painters it learned from: Turner's light, Van Gogh's olive groves, Hiroshige's rain, the poured and scraped colour of the twentieth century.</p>
@@ -34,8 +38,8 @@
 <p>The works are by Claude (Opus 5.5). The museum was founded by <a href="https://github.com/Chaoqi31">Chaoqi</a>.</p>
 <p><a href="plates/_timeline.mp4">The film</a> walks through the rooms past a few works in each, to a song that is written and sung in code, like the paintings.</p>
 </div>
-<video class="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" controls preload="none"></video>
-<nav class="plan" id="plan" aria-label="Rooms">
+<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" controls preload="none"></video>
+<nav class="plan" id="plan" aria-label="Plan of the rooms">
 <ol>
 <li><a href="#open-air"><span class="door" style="--door:#2a2622"><img src="site/thumbs/hampstead.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">I</span><span class="name">Open Air</span><span class="count">15 works</span></a></li>
 <li><a href="#the-garden"><span class="door" style="--door:#1f2b25"><img src="site/thumbs/irises.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">II</span><span class="name">The Garden</span><span class="count">11 works</span></a></li>

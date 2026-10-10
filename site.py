@@ -24,19 +24,24 @@ from render import ROOMS, ROOT, SCROLL, hanging, rooms, tally
 SITE = ROOT / "site"
 URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it; social cards need absolute links
 ACCENT = "#c8402e"  # vermilion: the museum's one accent
-HERO = "saint_remy"  # the work in the glass as the doors open
+PAPER = "#f6f3ec"  # the entrance's wall: a page of paper with the name on it
+HERO = "attersee"  # the work beside the name as the doors open
 ICON = "rose_window"  # a round window, cut out for the browser tab
 NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
 REGIONS = ["Africa", "West Asia", "South Asia", "East Asia", "Southeast Asia", "Europe", "Americas", "Oceania"]
 e = html.escape
 
 
-def walls(wall):
-    """A room's colours, for the page to take on: the wall, and type that reads on it (ivory on a dark wall,
-    ink on a light one) with its quieter tone."""
+def colours(wall):
+    """A wall's colours: the wall, and type that reads on it (ivory on a dark wall, ink on a light one) with its
+    quieter tone."""
     light = sum(int(wall[k:k + 2], 16) for k in (1, 3, 5)) > 3 * 128
-    ink, dim = ("#29251f", "#6e675c") if light else ("#ece6d8", "#a19b8e")
-    return f'data-wall="{wall}" data-ink="{ink}" data-dim="{dim}"'
+    return (wall, "#29251f", "#6e675c") if light else (wall, "#ece6d8", "#a19b8e")
+
+
+def walls(wall):
+    """A room's colours, for the page to take on as a visitor walks in."""
+    return 'data-wall="{}" data-ink="{}" data-dim="{}"'.format(*colours(wall))
 
 
 def wall(slugs, width=3200, gap=28, aspect=0.75):
@@ -123,6 +128,15 @@ def icon():
     ImageDraw.Draw(cut).ellipse((6, 6, 714, 714), fill=255)
     im.putalpha(cut.resize((180, 180), Image.LANCZOS))
     im.save(SITE / "icon.png", optimize=True)
+
+
+def hero():
+    """The work at the door, large enough for half a sharp screen (smaller screens take its thumbnail); return
+    its size."""
+    with Image.open(ROOT / "plates" / f"{HERO}.jpg") as im:
+        im.thumbnail((2000, 2000), Image.LANCZOS)
+        im.save(SITE / "hero.jpg", quality=82, subsampling=0, optimize=True, progressive=True)
+        return im.size
 
 
 def link(m):
@@ -215,8 +229,37 @@ def film():
         return ""
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-4", "-i", str(ROOT / "plates" / "_timeline.mp4"),
                     "-frames:v", "1", "-q:v", "3", str(SITE / "thumbs" / "_timeline.jpg")], check=True)
-    return ('<video class="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" '
+    return ('<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" '
             'height="1080" controls preload="none"></video>')
+
+
+def words(n):
+    """A count under a hundred, in words."""
+    ones = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
+            "seventeen eighteen nineteen").split()
+    tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
+    return ones[n] if n < 20 else tens[n // 10 - 2] + (f"-{ones[n % 10]}" if n % 10 else "")
+
+
+def entrance(title, hung, walk, reel):
+    """The first screen: a bar with the rooms over the work at the door, and the name beside it on paper."""
+    m = hung[HERO]
+    w, h = hero()
+    name = e(html.unescape(re.sub("<.*?>", "", title)))
+    nav = "".join(f'<a href="#{anchor(r)}">{e(r)}</a>' for r in walk)
+    ways = '<a href="#intro">Walk in &rarr;</a>' + ('<a href="#film">Watch the film &rarr;</a>' if reel else "")
+    who = re.split(r",|:", m.AFTER, maxsplit=1)[0]
+    return f"""<header class="hero" {walls(PAPER)}>
+<div class="bar"><a class="mark" href="#">{name}</a><nav aria-label="Rooms">{nav}</nav></div>
+<a class="picture" href="plates/{HERO}.jpg"><img src="site/hero.jpg" srcset="site/thumbs/{HERO}.jpg 1400w, site/hero.jpg {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high"></a>
+<div class="words">
+<p class="kicker">A museum of one painter</p>
+{title}
+<p class="sub">{words(len(hung)).capitalize()} paintings by Claude, each one a program</p>
+<p class="ways">{ways}</p>
+<p class="credit">In the picture · <cite>{e(m.TITLE)}</cite>, after {e(who)}</p>
+</div>
+</header>"""
 
 
 def build(slugs):
@@ -228,7 +271,7 @@ def build(slugs):
     thumb("_wall")  # for the README and the social card
     walk = rooms(hung)
 
-    css = Template(CSS).substitute(wall=BACKDROP, accent=ACCENT)
+    css = Template(CSS).substitute(dict(zip(("wall", "ink", "dim"), colours(PAPER))), accent=ACCENT)
     (SITE / "museum.css").write_text(css)
     (SITE / "museum.js").write_text(JS)
     icon()
@@ -237,6 +280,7 @@ def build(slugs):
     title, subtitle, *text = markdown("entrance.md")
     plan = "\n".join(door(n, r, hung) for n, r in zip(NUMERALS, walk))
     halls = "\n".join(room(n, r, {s: m for s, m in hung.items() if m.ROOM == r}, size) for n, r in zip(NUMERALS, walk))
+    reel = film()
     plain = lambda h: e(html.unescape(re.sub("<.*?>", "", h)))
     nl = "\n"
     (ROOT / "index.html").write_text(f"""<!doctype html>
@@ -246,7 +290,7 @@ def build(slugs):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{plain(title)}</title>
 <meta name="description" content="{plain(subtitle)}">
-<meta name="theme-color" content="{BACKDROP}">
+<meta name="theme-color" content="{PAPER}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{URL}">
 <meta property="og:title" content="{plain(title)}">
@@ -260,19 +304,13 @@ def build(slugs):
 </head>
 <body>
 <a class="sign" href="#plan"></a>
-<header class="entrance" {walls(BACKDROP)}>
-<div class="glass"><a class="mirror" href="plates/{HERO}.jpg" aria-label="Open the work in the glass"><img class="on" src="site/thumbs/{HERO}.jpg" alt=""></a></div>
-{title}
-{subtitle}
-<p class="tally">{tally(slugs)}</p>
-<p class="reflected">In the glass <cite>{e(hung[HERO].TITLE)}</cite></p>
-</header>
-<section class="intro" {walls(BACKDROP)}>
+{entrance(title, hung, walk, reel)}
+<section class="intro" id="intro" {walls(BACKDROP)}>
 <div class="text">
 {nl.join(text)}
 </div>
-{film()}
-<nav class="plan" id="plan" aria-label="Rooms">
+{reel}
+<nav class="plan" id="plan" aria-label="Plan of the rooms">
 <ol>
 {plan}
 </ol>
@@ -303,12 +341,12 @@ def build(slugs):
 
 CSS = """\
 @property --wall { syntax: "<color>"; inherits: true; initial-value: $wall; }
-@property --ink { syntax: "<color>"; inherits: true; initial-value: #ece6d8; }
-@property --dim { syntax: "<color>"; inherits: true; initial-value: #a19b8e; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: $ink; }
+@property --dim { syntax: "<color>"; inherits: true; initial-value: $dim; }
 :root {
   --wall: $wall;
-  --ink: #ece6d8;
-  --dim: #a19b8e;
+  --ink: $ink;
+  --dim: $dim;
   --accent: $accent;
   --rule: color-mix(in srgb, var(--dim) 28%, transparent);
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
@@ -329,32 +367,31 @@ a:hover { text-decoration-color: currentColor; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 code, pre { font-family: var(--mono); font-size: .85em; }
 pre { padding: 1rem 1.25rem; overflow-x: auto; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; }
-h1, h2, h3, .entrance p { text-wrap: balance; }
+h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 .numeral { letter-spacing: .08em; }
 
-.entrance { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100svh;
-  padding: 3rem 1.25rem 4rem; text-align: center; }
-.glass { --tx: 0; --ty: 0; position: relative; width: min(88vw, 60svh * 4 / 3, 44rem); aspect-ratio: 4 / 3; border-radius: 50%;
-  overflow: hidden; background: #0b0a09; box-shadow: 0 2.5rem 4rem -1rem rgb(0 0 0 / .6), 0 0 0 1px rgb(255 255 255 / .05); }
-.glass::before, .glass::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none; }
-.glass::before { box-shadow: inset 0 0 3rem 1rem rgb(8 6 4 / .65), inset 0 0 0 1px rgb(255 255 255 / .14); }
-.glass::after { background: radial-gradient(ellipse 50% 36% at calc(30% + var(--tx) * 14%) calc(22% + var(--ty) * 14%),
-  rgb(255 248 232 / .2), transparent 70%); }
-.mirror { position: absolute; inset: -4%; display: block; transform: translate(calc(var(--tx) * -2.5%), calc(var(--ty) * -2.5%));
-  filter: sepia(.22) saturate(.9) brightness(.95); transition: transform .8s cubic-bezier(.2, .7, .3, 1), filter 1.4s ease; }
-.glass:hover .mirror { filter: none; }
-.mirror img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2.2s ease; }
-.mirror img.on { opacity: 1; animation: drift 16s ease-out both; }
-@keyframes drift { from { transform: scale(1.16) translate(var(--x, 0), var(--y, 0)); } to { transform: scale(1.02); } }
-.entrance h1 { margin: clamp(2rem, 6svh, 3.5rem) 0 0; font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 400; line-height: 1.05;
-  letter-spacing: .02em; }
-.entrance h1 + p { margin: .9rem 0 0; color: var(--dim); font-size: 1.15rem; }
-.tally { margin: .6rem 0 0; color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .12em;
-  font-variant-numeric: oldstyle-nums; }
-.reflected { margin: 2.25rem 0 0; color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .14em; }
-.reflected cite { display: block; margin-top: .2rem; color: var(--ink); font-size: 1rem; font-variant-caps: normal; letter-spacing: 0;
-  transition: opacity .5s ease; }
+.hero { display: grid; grid-template: "bar bar" auto "picture words" minmax(0, 1fr) / 1fr 1fr; height: 100svh; min-height: 36rem; }
+.bar { grid-area: bar; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 2rem;
+  padding: 1.2rem 4vw; border-bottom: 1px solid var(--rule); font-size: .8rem; font-variant-caps: all-small-caps;
+  letter-spacing: .18em; white-space: nowrap; }
+.bar a { text-decoration: none; }
+.bar a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+.mark { font-size: 1rem; letter-spacing: .22em; text-transform: uppercase; }
+.bar nav { display: flex; gap: 1.5rem; }
+.picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
+.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }
+.words p { margin: 0; }
+.kicker { color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .18em; }
+.hero h1 { margin: .9rem 0 0; font-size: clamp(2.6rem, 4.3vw, 4.2rem); font-weight: 400; line-height: 1.1; letter-spacing: .08em;
+  text-transform: uppercase; }
+.words .sub { margin-top: 1.4rem; font-size: 1.2rem; font-style: italic; line-height: 1.45; }
+.words .ways { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.3rem; }
+.ways a { padding: .7rem 1.25rem; border: 1px solid var(--ink); font-size: .95rem; text-decoration: none; }
+.ways a:first-child { background: var(--ink); color: var(--wall); }
+.ways a:hover { border-color: var(--accent); }
+.words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
 .intro { padding: clamp(3rem, 10vh, 6rem) 1.25rem 0; }
 .text { max-width: 33em; margin: 0 auto; }
@@ -378,6 +415,7 @@ p { text-wrap: pretty; }
   opacity: 0; pointer-events: none; transition: opacity .6s ease; }
 .sign.on { opacity: 1; pointer-events: auto; }
 @media (max-width: 64rem) { .sign { display: none; } }
+@media (max-width: 52rem) { .bar nav { display: none; } }
 
 main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .room > header { padding: clamp(10rem, 30vh, 18rem) 0 clamp(4rem, 11vh, 7rem); text-align: center; }
@@ -452,6 +490,12 @@ figcaption.label { max-width: 32rem; }
 .viewer.scroll.turned[open] { display: grid; overflow: hidden; }
 
 @media (max-width: 52rem), (orientation: portrait) {
+  .hero { grid-template: "bar" auto "picture" 46svh "words" auto / minmax(0, 1fr); height: auto; }
+  .words { padding: 2.2rem 6vw 3rem; }
+  .hero h1 { margin-top: .6rem; font-size: min(9.6vw, 4.2rem); }
+  .words .sub { margin-top: .9rem; }
+  .words .ways { margin-top: 1.6rem; }
+  .words .credit { margin-top: 1.8rem; }
   .row.left .work, .row.right .work { grid-template-columns: minmax(0, 1fr); }
   .row.right .label { order: 0; }
   .row.right .plate { justify-self: start; }
@@ -467,9 +511,9 @@ figcaption.label { max-width: 32rem; }
 }
 """
 
-JS = r"""// The museum's moving parts: the glass at the door; walls that take on each room's colour as a visitor
-// walks in; and one <dialog> that shows every work (a plate zooms and pans, a long painting unrolls from its
-// left end) and turns it over, to the program on its back.
+JS = r"""// The museum's moving parts: walls that take on each room's colour as a visitor walks in; and one <dialog>
+// that shows every work (a plate zooms and pans, a long painting unrolls from its left end) and turns it over,
+// to the program on its back.
 const root = document.documentElement;
 root.classList.add('js');
 const links = [...document.querySelectorAll('main a.plate')];
@@ -504,45 +548,8 @@ const rise = new IntersectionObserver(seen => {
 }, {rootMargin: '0px 0px -8% 0px'});
 document.querySelectorAll('.work').forEach(w => rise.observe(w));
 
-// The glass at the door: the works come up in it one after another, a little golden until you look closer.
-const glass = document.querySelector('.glass'), mirror = glass.querySelector('.mirror');
-const named = document.querySelector('.reflected cite');
-let k = Math.max(0, links.findIndex(a => a.href === mirror.href));
-
-function reflect(n) {
-  n = (n + links.length) % links.length;
-  const a = links[n], im = new Image();
-  im.alt = '';
-  im.src = a.querySelector('img').src;
-  im.decode().then(() => {
-    k = n;
-    im.style.setProperty('--x', `${(Math.random() - .5) * 8}%`);
-    im.style.setProperty('--y', `${(Math.random() - .5) * 6}%`);
-    const old = [...mirror.children];
-    mirror.append(im);
-    mirror.href = a.href;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      im.classList.add('on');
-      old.forEach(o => o.classList.remove('on'));
-    }));
-    setTimeout(() => old.forEach(o => o.remove()), 2400);
-    named.style.opacity = 0;
-    setTimeout(() => { named.textContent = a.querySelector('img').alt; named.style.opacity = ''; }, 500);
-  }, () => {});
-}
-setInterval(() => {
-  if (!document.hidden && !calm.matches && !viewer.open && glass.getBoundingClientRect().bottom > 0) reflect(k + 1);
-}, 7000);
-mirror.addEventListener('click', e => {
-  if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-  e.preventDefault();
-  open(k, mirror);
-});
-document.querySelector('.entrance').addEventListener('pointermove', e => {
-  const r = glass.getBoundingClientRect(), c = v => Math.max(-1, Math.min(1, v)).toFixed(3);
-  glass.style.setProperty('--tx', c((e.clientX - r.left) / r.width - .5));
-  glass.style.setProperty('--ty', c((e.clientY - r.top) / r.height - .5));
-});
+// "Watch the film" at the door scrolls down to the film and starts it.
+document.querySelector('a[href="#film"]')?.addEventListener('click', () => document.getElementById('film').play());
 
 // The viewer.
 function open(n, by) {
@@ -630,10 +637,10 @@ function zoom(cx, cy, to, glide) {
 }
 
 document.addEventListener('click', e => {
-  const a = e.target.closest('main a.plate');
+  const a = e.target.closest('main a.plate, .picture');  // a work on the walls, or the one at the door
   if (!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
-  open(links.indexOf(a), a);
+  open(links.findIndex(l => l.href === a.href), a);
 });
 viewer.querySelector('.turn').onclick = turn;
 viewer.querySelector('.prev').onclick = () => show(i - 1);

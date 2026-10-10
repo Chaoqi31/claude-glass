@@ -1,10 +1,10 @@
-@property --wall { syntax: "<color>"; inherits: true; initial-value: #242321; }
-@property --ink { syntax: "<color>"; inherits: true; initial-value: #ece6d8; }
-@property --dim { syntax: "<color>"; inherits: true; initial-value: #a19b8e; }
+@property --wall { syntax: "<color>"; inherits: true; initial-value: #f6f3ec; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #29251f; }
+@property --dim { syntax: "<color>"; inherits: true; initial-value: #6e675c; }
 :root {
-  --wall: #242321;
-  --ink: #ece6d8;
-  --dim: #a19b8e;
+  --wall: #f6f3ec;
+  --ink: #29251f;
+  --dim: #6e675c;
   --accent: #c8402e;
   --rule: color-mix(in srgb, var(--dim) 28%, transparent);
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
@@ -25,32 +25,31 @@ a:hover { text-decoration-color: currentColor; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 code, pre { font-family: var(--mono); font-size: .85em; }
 pre { padding: 1rem 1.25rem; overflow-x: auto; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; }
-h1, h2, h3, .entrance p { text-wrap: balance; }
+h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 .numeral { letter-spacing: .08em; }
 
-.entrance { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100svh;
-  padding: 3rem 1.25rem 4rem; text-align: center; }
-.glass { --tx: 0; --ty: 0; position: relative; width: min(88vw, 60svh * 4 / 3, 44rem); aspect-ratio: 4 / 3; border-radius: 50%;
-  overflow: hidden; background: #0b0a09; box-shadow: 0 2.5rem 4rem -1rem rgb(0 0 0 / .6), 0 0 0 1px rgb(255 255 255 / .05); }
-.glass::before, .glass::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none; }
-.glass::before { box-shadow: inset 0 0 3rem 1rem rgb(8 6 4 / .65), inset 0 0 0 1px rgb(255 255 255 / .14); }
-.glass::after { background: radial-gradient(ellipse 50% 36% at calc(30% + var(--tx) * 14%) calc(22% + var(--ty) * 14%),
-  rgb(255 248 232 / .2), transparent 70%); }
-.mirror { position: absolute; inset: -4%; display: block; transform: translate(calc(var(--tx) * -2.5%), calc(var(--ty) * -2.5%));
-  filter: sepia(.22) saturate(.9) brightness(.95); transition: transform .8s cubic-bezier(.2, .7, .3, 1), filter 1.4s ease; }
-.glass:hover .mirror { filter: none; }
-.mirror img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2.2s ease; }
-.mirror img.on { opacity: 1; animation: drift 16s ease-out both; }
-@keyframes drift { from { transform: scale(1.16) translate(var(--x, 0), var(--y, 0)); } to { transform: scale(1.02); } }
-.entrance h1 { margin: clamp(2rem, 6svh, 3.5rem) 0 0; font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 400; line-height: 1.05;
-  letter-spacing: .02em; }
-.entrance h1 + p { margin: .9rem 0 0; color: var(--dim); font-size: 1.15rem; }
-.tally { margin: .6rem 0 0; color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .12em;
-  font-variant-numeric: oldstyle-nums; }
-.reflected { margin: 2.25rem 0 0; color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .14em; }
-.reflected cite { display: block; margin-top: .2rem; color: var(--ink); font-size: 1rem; font-variant-caps: normal; letter-spacing: 0;
-  transition: opacity .5s ease; }
+.hero { display: grid; grid-template: "bar bar" auto "picture words" minmax(0, 1fr) / 1fr 1fr; height: 100svh; min-height: 36rem; }
+.bar { grid-area: bar; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 2rem;
+  padding: 1.2rem 4vw; border-bottom: 1px solid var(--rule); font-size: .8rem; font-variant-caps: all-small-caps;
+  letter-spacing: .18em; white-space: nowrap; }
+.bar a { text-decoration: none; }
+.bar a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+.mark { font-size: 1rem; letter-spacing: .22em; text-transform: uppercase; }
+.bar nav { display: flex; gap: 1.5rem; }
+.picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
+.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }
+.words p { margin: 0; }
+.kicker { color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .18em; }
+.hero h1 { margin: .9rem 0 0; font-size: clamp(2.6rem, 4.3vw, 4.2rem); font-weight: 400; line-height: 1.1; letter-spacing: .08em;
+  text-transform: uppercase; }
+.words .sub { margin-top: 1.4rem; font-size: 1.2rem; font-style: italic; line-height: 1.45; }
+.words .ways { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.3rem; }
+.ways a { padding: .7rem 1.25rem; border: 1px solid var(--ink); font-size: .95rem; text-decoration: none; }
+.ways a:first-child { background: var(--ink); color: var(--wall); }
+.ways a:hover { border-color: var(--accent); }
+.words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
 .intro { padding: clamp(3rem, 10vh, 6rem) 1.25rem 0; }
 .text { max-width: 33em; margin: 0 auto; }
@@ -74,6 +73,7 @@ p { text-wrap: pretty; }
   opacity: 0; pointer-events: none; transition: opacity .6s ease; }
 .sign.on { opacity: 1; pointer-events: auto; }
 @media (max-width: 64rem) { .sign { display: none; } }
+@media (max-width: 52rem) { .bar nav { display: none; } }
 
 main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .room > header { padding: clamp(10rem, 30vh, 18rem) 0 clamp(4rem, 11vh, 7rem); text-align: center; }
@@ -148,6 +148,12 @@ figcaption.label { max-width: 32rem; }
 .viewer.scroll.turned[open] { display: grid; overflow: hidden; }
 
 @media (max-width: 52rem), (orientation: portrait) {
+  .hero { grid-template: "bar" auto "picture" 46svh "words" auto / minmax(0, 1fr); height: auto; }
+  .words { padding: 2.2rem 6vw 3rem; }
+  .hero h1 { margin-top: .6rem; font-size: min(9.6vw, 4.2rem); }
+  .words .sub { margin-top: .9rem; }
+  .words .ways { margin-top: 1.6rem; }
+  .words .credit { margin-top: 1.8rem; }
   .row.left .work, .row.right .work { grid-template-columns: minmax(0, 1fr); }
   .row.right .label { order: 0; }
   .row.right .plate { justify-self: start; }

@@ -1,6 +1,6 @@
-// The museum's moving parts: the glass at the door; walls that take on each room's colour as a visitor
-// walks in; and one <dialog> that shows every work (a plate zooms and pans, a long painting unrolls from its
-// left end) and turns it over, to the program on its back.
+// The museum's moving parts: walls that take on each room's colour as a visitor walks in; and one <dialog>
+// that shows every work (a plate zooms and pans, a long painting unrolls from its left end) and turns it over,
+// to the program on its back.
 const root = document.documentElement;
 root.classList.add('js');
 const links = [...document.querySelectorAll('main a.plate')];
@@ -35,45 +35,8 @@ const rise = new IntersectionObserver(seen => {
 }, {rootMargin: '0px 0px -8% 0px'});
 document.querySelectorAll('.work').forEach(w => rise.observe(w));
 
-// The glass at the door: the works come up in it one after another, a little golden until you look closer.
-const glass = document.querySelector('.glass'), mirror = glass.querySelector('.mirror');
-const named = document.querySelector('.reflected cite');
-let k = Math.max(0, links.findIndex(a => a.href === mirror.href));
-
-function reflect(n) {
-  n = (n + links.length) % links.length;
-  const a = links[n], im = new Image();
-  im.alt = '';
-  im.src = a.querySelector('img').src;
-  im.decode().then(() => {
-    k = n;
-    im.style.setProperty('--x', `${(Math.random() - .5) * 8}%`);
-    im.style.setProperty('--y', `${(Math.random() - .5) * 6}%`);
-    const old = [...mirror.children];
-    mirror.append(im);
-    mirror.href = a.href;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      im.classList.add('on');
-      old.forEach(o => o.classList.remove('on'));
-    }));
-    setTimeout(() => old.forEach(o => o.remove()), 2400);
-    named.style.opacity = 0;
-    setTimeout(() => { named.textContent = a.querySelector('img').alt; named.style.opacity = ''; }, 500);
-  }, () => {});
-}
-setInterval(() => {
-  if (!document.hidden && !calm.matches && !viewer.open && glass.getBoundingClientRect().bottom > 0) reflect(k + 1);
-}, 7000);
-mirror.addEventListener('click', e => {
-  if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-  e.preventDefault();
-  open(k, mirror);
-});
-document.querySelector('.entrance').addEventListener('pointermove', e => {
-  const r = glass.getBoundingClientRect(), c = v => Math.max(-1, Math.min(1, v)).toFixed(3);
-  glass.style.setProperty('--tx', c((e.clientX - r.left) / r.width - .5));
-  glass.style.setProperty('--ty', c((e.clientY - r.top) / r.height - .5));
-});
+// "Watch the film" at the door scrolls down to the film and starts it.
+document.querySelector('a[href="#film"]')?.addEventListener('click', () => document.getElementById('film').play());
 
 // The viewer.
 function open(n, by) {
@@ -161,10 +124,10 @@ function zoom(cx, cy, to, glide) {
 }
 
 document.addEventListener('click', e => {
-  const a = e.target.closest('main a.plate');
+  const a = e.target.closest('main a.plate, .picture');  // a work on the walls, or the one at the door
   if (!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
-  open(links.indexOf(a), a);
+  open(links.findIndex(l => l.href === a.href), a);
 });
 viewer.querySelector('.turn').onclick = turn;
 viewer.querySelector('.prev').onclick = () => show(i - 1);
