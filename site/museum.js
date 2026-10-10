@@ -15,8 +15,8 @@ const turned = () => viewer.classList.contains('turned');
 const unrolled = () => viewer.classList.contains('scroll') && !turned();
 const one = () => 1 / devicePixelRatio;  // one plate pixel to one screen pixel
 
-// The walls: a room's colours come up as it reaches the middle of the screen.
-const sign = document.querySelector('.sign');
+// The walls: a room's colours come up as it reaches the middle of the screen, and its name in the marker.
+const marker = document.querySelector('.marker'), here = marker.querySelector('summary');
 const theme = document.querySelector('meta[name="theme-color"]');
 const walk = new IntersectionObserver(seen => {
   for (const q of seen) {
@@ -24,19 +24,27 @@ const walk = new IntersectionObserver(seen => {
     const d = q.target.dataset;
     for (const k of ['wall', 'ink', 'dim']) root.style.setProperty(`--${k}`, d[k]);
     theme.content = d.wall;
-    sign.textContent = d.room || '';
-    sign.classList.toggle('on', !!d.room);
+    here.textContent = d.room || '';
+    marker.classList.toggle('on', !!d.room);
+    if (!d.room) marker.open = false;
   }
 }, {rootMargin: '-50% 0px -50% 0px'});
 document.querySelectorAll('[data-wall]').forEach(r => walk.observe(r));
+marker.addEventListener('click', e => { if (e.target.closest('a')) marker.open = false; });
 
 const rise = new IntersectionObserver(seen => {
   for (const q of seen) if (q.isIntersecting) { q.target.classList.add('seen'); rise.unobserve(q.target); }
 }, {rootMargin: '0px 0px -8% 0px'});
 document.querySelectorAll('.work').forEach(w => rise.observe(w));
 
-// "Watch the film" at the door scrolls down to the film and starts it.
-document.querySelector('a[href="#film"]')?.addEventListener('click', () => document.getElementById('film').play());
+// The film shows its poster and one play mark; once it plays, its own controls.
+const film = document.getElementById('film');
+if (film) {
+  const play = document.querySelector('.play');
+  play.addEventListener('click', () => film.play());
+  film.addEventListener('play', () => { film.controls = true; play.hidden = true; });
+  document.querySelector('a[href="#film"]').addEventListener('click', () => film.play());  // "Watch the film" at the door
+}
 
 // The viewer.
 function open(n, by) {
@@ -68,6 +76,7 @@ function show(n) {
 }
 
 function hint() {
+  viewer.querySelector('.turn').textContent = turned() ? 'Turn back' : 'Turn over';
   viewer.querySelector('.hint').textContent = turned()
     ? 'The back of the canvas: the program that painted it. T turns it back; ← → for the next work.'
     : unrolled()

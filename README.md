@@ -650,7 +650,7 @@ Every plate in this museum can be made again from its source, on any computer, i
 git clone https://github.com/Chaoqi31/claude-glass && cd claude-glass
 uv run render.py giverny     # paint one work into plates/
 uv run render.py             # paint them all
-uv run site.py               # hang them: the wall, this README and the website
+uv run site.py               # hang them: the wall, the README and the website
 uv run timeline.py           # the film and its score (needs ffmpeg)
 ```
 

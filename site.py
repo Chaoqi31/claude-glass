@@ -10,6 +10,7 @@ every room has walls of its own colour, and the page takes it on as a visitor wa
 import hashlib
 import html
 import importlib
+import itertools
 import re
 import shutil
 import subprocess
@@ -19,13 +20,11 @@ from PIL import Image, ImageDraw
 
 from atelier import plate
 from atelier.plate import BACKDROP
-from render import ROOMS, ROOT, SCROLL, hanging, rooms, tally
+from render import FRONT, PAPER, ROOMS, ROOT, SCROLL, hanging, rooms, strapline, tally
 
 SITE = ROOT / "site"
 URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it; social cards need absolute links
 ACCENT = "#c8402e"  # vermilion: the museum's one accent
-PAPER = "#f6f3ec"  # the entrance's wall: a page of paper with the name on it
-HERO = "attersee"  # the work beside the name as the doors open
 ICON = "rose_window"  # a round window, cut out for the browser tab
 NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
 REGIONS = ["Africa", "West Asia", "South Asia", "East Asia", "Southeast Asia", "Europe", "Americas", "Oceania"]
@@ -109,13 +108,18 @@ def readme(slugs):
     print("by region:", " · ".join(f"{g} {n}" for g, n in count.items()))
 
 
+def tone(im):
+    """A picture's colour on the whole, to stand in for it until it has loaded."""
+    return "#{:02x}{:02x}{:02x}".format(*im.convert("RGB").resize((1, 1), Image.BOX).getpixel((0, 0)))
+
+
 def thumb(name):
-    """Write site/thumbs/<name>.jpg; return the plate's size and the thumbnail's."""
+    """Write site/thumbs/<name>.jpg; return the plate's size, the thumbnail's, and its tone."""
     with Image.open(ROOT / "plates" / f"{name}.jpg") as im:
         size = im.size
         im.thumbnail((1400, 1400), Image.LANCZOS)
         im.save(SITE / "thumbs" / f"{name}.jpg", quality=85, subsampling=0, optimize=True, progressive=True)
-        return size, im.size
+        return size, im.size, tone(im)
 
 
 def icon():
@@ -132,11 +136,11 @@ def icon():
 
 def hero():
     """The work at the door, large enough for half a sharp screen (smaller screens take its thumbnail); return
-    its size."""
-    with Image.open(ROOT / "plates" / f"{HERO}.jpg") as im:
+    its size and tone."""
+    with Image.open(ROOT / "plates" / f"{FRONT}.jpg") as im:
         im.thumbnail((2000, 2000), Image.LANCZOS)
         im.save(SITE / "hero.jpg", quality=82, subsampling=0, optimize=True, progressive=True)
-        return im.size
+        return im.size, tone(im)
 
 
 def link(m):
@@ -170,15 +174,25 @@ def anchor(room):
     return re.sub(r"\W+", "-", room.lower())
 
 
+def after(m):
+    """Whom a work is after, as its label says it: the source's first clause on the wall, and all of it in the
+    viewer. -> (short, full)"""
+    full = m.AFTER[0].lower() + m.AFTER[1:] if m.AFTER.startswith("The ") else m.AFTER
+    return re.sub(r"\s*\([^)]*$", "", re.split(r"[:;]", full)[0]), full
+
+
 def figure(slug, m, size):
-    (w, h), (tw, th) = size
+    (w, h), (tw, th), shade = size
     lines = len((ROOT / "works" / f"{slug}.py").read_text().splitlines())
+    short, full = after(m)
+    source = f"<p>After {e(full)}</p>" if short == full else \
+        f'<p class="short">After {e(short)}</p>\n<p class="full">After {e(full)}</p>'
     return f"""<figure class="work{' long' if w / h > SCROLL else ''}" style="--a:{w / h:.4f}">
-<a class="plate" href="plates/{slug}.jpg" data-slug="{slug}" data-lines="{lines}" data-w="{w}" data-h="{h}"><img src="site/thumbs/{slug}.jpg" width="{tw}" height="{th}" alt="{e(m.TITLE)}" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/{slug}.jpg" data-slug="{slug}" data-lines="{lines}" data-w="{w}" data-h="{h}"><img src="site/thumbs/{slug}.jpg" width="{tw}" height="{th}" alt="{e(m.TITLE)}" loading="lazy" decoding="async" style="background:{shade}"></a>
 <figcaption class="label">
 <h3><cite>{e(m.TITLE)}</cite>, {e(m.DATE)}</h3>
 <p>{e(m.MEDIUM)}</p>
-<p>After {e(m.AFTER)}</p>
+{source}
 <p class="note">{e(m.NOTE)}</p>
 <p class="source"><a href="works/{slug}.py">works/{slug}.py</a> · {lines} lines</p>
 </figcaption>
@@ -213,49 +227,60 @@ def room(n, name, hung, size):
 </section>"""
 
 
-def door(n, name, hung):
-    """A room on the plan: a doorway painted the colour of its walls, with the oldest work in it showing."""
-    here = [s for s, m in hung.items() if m.ROOM == name]
-    first = min(here, key=lambda s: hung[s].YEAR)
-    return (f'<li><a href="#{anchor(name)}"><span class="door" style="--door:{ROOMS[name][1]}"><img '
-            f'src="site/thumbs/{first}.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">'
-            f'{n}</span><span class="name">{e(name)}</span><span class="count">{len(here)} '
-            f'work{"s" * (len(here) != 1)}</span></a></li>')
+def mini(slug):
+    """A small copy of a work, for the plan of the rooms; return its aspect."""
+    with Image.open(ROOT / "plates" / f"{slug}.jpg") as im:
+        im.thumbnail((640, 180), Image.LANCZOS)
+        im.save(SITE / "mini" / f"{slug}.jpg", quality=84, optimize=True, progressive=True)
+        return im.width / im.height
+
+
+def door(n, name, hung, size):
+    """A room on the plan: its numeral, name, line and count, and its first works hung small along a stretch of
+    its wall, as many as come nearest to five of their heights across."""
+    here = sorted((s for s, m in hung.items() if m.ROOM == name), key=lambda s: hung[s].YEAR)
+    across = list(itertools.accumulate(size[s][0][0] / size[s][0][1] for s in here))
+    shown = here[:1 + min(range(len(here)), key=lambda i: abs(across[i] - 5))]
+    hang = "".join(f'<img src="site/mini/{s}.jpg" alt="" loading="lazy" decoding="async" style="--a:{mini(s):.4f};'
+                   f'background:{size[s][2]}">' for s in shown)
+    return (f'<li><a href="#{anchor(name)}"><span class="numeral">{n}</span><span class="name">{e(name)}</span>'
+            f'<span class="about">{e(ROOMS[name][0])}</span><span class="count">{len(here)} '
+            f'work{"s" * (len(here) != 1)}</span><span class="strip" style="--door:{ROOMS[name][1]}">{hang}</span>'
+            f'</a></li>')
 
 
 def film():
-    """The film, if it has been made; its poster is its last moment but one: the title over the glass at dawn."""
-    if not (ROOT / "plates" / "_timeline.mp4").exists():
+    """The film, if it has been made, behind its poster: its title over the sun of its first painting. -> HTML"""
+    path = ROOT / "plates" / "_timeline.mp4"
+    if not path.exists():
         return ""
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-4", "-i", str(ROOT / "plates" / "_timeline.mp4"),
-                    "-frames:v", "1", "-q:v", "3", str(SITE / "thumbs" / "_timeline.jpg")], check=True)
-    return ('<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" '
-            'height="1080" controls preload="none"></video>')
-
-
-def words(n):
-    """A count under a hundred, in words."""
-    ones = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
-            "seventeen eighteen nineteen").split()
-    tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
-    return ones[n] if n < 20 else tens[n // 10 - 2] + (f"-{ones[n % 10]}" if n % 10 else "")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "4", "-i", str(path), "-frames:v", "1", "-q:v", "3",
+                    str(SITE / "thumbs" / "_timeline.jpg")], check=True)
+    took = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                 str(path)], capture_output=True, text=True, check=True).stdout)
+    mins, secs = divmod(round(took), 60)
+    return f"""<figure class="screen">
+<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" preload="none" playsinline></video>
+<button type="button" class="play" aria-label="Play the film"></button>
+<figcaption>The film: a walk through the five rooms · {mins} min {secs} s, with sound</figcaption>
+</figure>"""
 
 
 def entrance(title, hung, walk, reel):
     """The first screen: a bar with the rooms over the work at the door, and the name beside it on paper."""
-    m = hung[HERO]
-    w, h = hero()
+    m = hung[FRONT]
+    (w, h), shade = hero()
     name = e(html.unescape(re.sub("<.*?>", "", title)))
     nav = "".join(f'<a href="#{anchor(r)}">{e(r)}</a>' for r in walk)
     ways = '<a href="#intro">Walk in &rarr;</a>' + ('<a href="#film">Watch the film &rarr;</a>' if reel else "")
     who = re.split(r",|:", m.AFTER, maxsplit=1)[0]
     return f"""<header class="hero" {walls(PAPER)}>
 <div class="bar"><a class="mark" href="#">{name}</a><nav aria-label="Rooms">{nav}</nav></div>
-<a class="picture" href="plates/{HERO}.jpg"><img src="site/hero.jpg" srcset="site/thumbs/{HERO}.jpg 1400w, site/hero.jpg {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high"></a>
+<a class="picture" href="plates/{FRONT}.jpg"><img src="site/hero.jpg" srcset="site/thumbs/{FRONT}.jpg 1400w, site/hero.jpg {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high" style="background:{shade}"></a>
 <div class="words">
 <p class="kicker">A museum of one painter</p>
 {title}
-<p class="sub">{words(len(hung)).capitalize()} paintings by Claude, each one a program</p>
+<p class="sub">{strapline(hung)}</p>
 <p class="ways">{ways}</p>
 <p class="credit">In the picture · <cite>{e(m.TITLE)}</cite>, after {e(who)}</p>
 </div>
@@ -263,8 +288,9 @@ def entrance(title, hung, walk, reel):
 
 
 def build(slugs):
-    shutil.rmtree(SITE / "thumbs", ignore_errors=True)
-    (SITE / "thumbs").mkdir(parents=True)
+    for d in ("thumbs", "mini"):
+        shutil.rmtree(SITE / d, ignore_errors=True)
+        (SITE / d).mkdir(parents=True)
     (ROOT / ".nojekyll").touch()  # Jekyll would drop files whose names start with "_", like the wall
     hung = {s: importlib.import_module(f"works.{s}") for s in slugs}
     size = {s: thumb(s) for s in slugs}
@@ -278,8 +304,9 @@ def build(slugs):
     # a changed stylesheet or script gets a new URL, so no browser pairs new HTML with an old cached copy
     v = {k: hashlib.sha1(s.encode()).hexdigest()[:8] for k, s in (("css", css), ("js", JS))}
     title, subtitle, *text = markdown("entrance.md")
-    plan = "\n".join(door(n, r, hung) for n, r in zip(NUMERALS, walk))
+    plan = "\n".join(door(n, r, hung, size) for n, r in zip(NUMERALS, walk))
     halls = "\n".join(room(n, r, {s: m for s, m in hung.items() if m.ROOM == r}, size) for n, r in zip(NUMERALS, walk))
+    marks = "".join(f'<li><a href="#{anchor(r)}"><span class="numeral">{n}</span> {e(r)}</a></li>' for n, r in zip(NUMERALS, walk))
     reel = film()
     plain = lambda h: e(html.unescape(re.sub("<.*?>", "", h)))
     nl = "\n"
@@ -303,9 +330,9 @@ def build(slugs):
 <script src="site/museum.js?v={v['js']}" defer></script>
 </head>
 <body>
-<a class="sign" href="#plan"></a>
+<details class="marker"><summary></summary><ol>{marks}<li><a href="#">The first page</a></li></ol></details>
 {entrance(title, hung, walk, reel)}
-<section class="intro" id="intro" {walls(BACKDROP)}>
+<section class="intro" id="intro" {walls(PAPER)}>
 <div class="text">
 {nl.join(text)}
 </div>
@@ -319,7 +346,7 @@ def build(slugs):
 <main>
 {halls}
 </main>
-<footer class="colophon" {walls(BACKDROP)}>
+<footer class="colophon" {walls(PAPER)}>
 {nl.join(markdown("colophon.md"))}
 </footer>
 <dialog class="viewer">
@@ -327,7 +354,7 @@ def build(slugs):
 <div class="stage"></div>
 <div class="back"><div class="linen" tabindex="0"><p class="file"></p><pre><code></code></pre></div></div>
 <div class="controls">
-<button type="button" class="turn" aria-label="Turn it over" title="Turn it over (T)">&#8635;</button>
+<button type="button" class="turn" title="Turn it over (T)">Turn over</button>
 <button type="button" class="prev" aria-label="Previous work">&larr;</button>
 <button type="button" class="next" aria-label="Next work">&rarr;</button>
 <button type="button" class="close" aria-label="Close" autofocus>&times;</button>
@@ -354,7 +381,8 @@ CSS = """\
   color-scheme: dark;
   background: var(--wall);
   color: var(--ink);
-  font: 1.0625rem/1.6 var(--serif);
+  font: 106.25%/1.6 var(--serif);  /* not 1.0625rem: while the walls change colour, Safari reads a rem here against
+                                      this very size, frame after frame, and the type swells */
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   transition: --wall 1.6s ease, --ink 1.6s ease, --dim 1.6s ease;
@@ -366,7 +394,8 @@ a { color: inherit; text-decoration-color: var(--rule); text-decoration-thicknes
 a:hover { text-decoration-color: currentColor; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 code, pre { font-family: var(--mono); font-size: .85em; }
-pre { padding: 1rem 1.25rem; overflow-x: auto; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; }
+pre { padding: 1rem 1.25rem; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; white-space: pre-wrap;
+  overflow-wrap: anywhere; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 .numeral { letter-spacing: .08em; }
@@ -393,28 +422,50 @@ p { text-wrap: pretty; }
 .ways a:hover { border-color: var(--accent); }
 .words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
-.intro { padding: clamp(3rem, 10vh, 6rem) 1.25rem 0; }
+.intro { padding: clamp(4rem, 12vh, 7rem) 1.25rem 0; }
 .text { max-width: 33em; margin: 0 auto; }
 .text p { margin: 0 0 1.1em; }
 .text p:first-child::first-letter { float: left; margin: .06em .1em 0 0; color: var(--accent); font-size: 3.55em; line-height: .82; }
-.film { display: block; width: min(100%, 60rem); height: auto; margin: clamp(3rem, 9vh, 5rem) auto 0; background: #090807;
-  box-shadow: 0 2rem 3rem -1rem rgb(0 0 0 / .5); }
+.screen { position: relative; width: min(100%, 60rem); margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
+.film { display: block; width: 100%; height: auto; background: #090807; box-shadow: 0 1.2rem 2.2rem -1.2rem rgb(0 0 0 / .45); }
+.play { position: absolute; inset: 0 0 auto; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: none; cursor: pointer; }
+.play::before { content: ""; position: absolute; left: clamp(.8rem, 2.5%, 1.6rem); bottom: clamp(.8rem, 4%, 1.6rem); width: 3.6rem;
+  height: 3.6rem; border-radius: 50%; background: rgb(246 243 236 / .92); transition: scale .4s cubic-bezier(.2, .7, .3, 1); }
+.play::after { content: ""; position: absolute; left: calc(clamp(.8rem, 2.5%, 1.6rem) + 1.42rem); bottom: calc(clamp(.8rem, 4%, 1.6rem) + 1.2rem);
+  border: solid transparent; border-width: .6rem 0 .6rem 1rem; border-left-color: #29251f; }
+.play:hover::before { scale: 1.08; }
+.screen figcaption { margin-top: .9rem; color: var(--dim); font-size: .85rem; font-style: italic; text-align: center; }
 .plan { max-width: 54rem; margin: clamp(5rem, 14vh, 8rem) auto 0; }
-.plan ol { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.75rem, 1fr)); gap: 2rem clamp(.75rem, 2vw, 1.25rem); margin: 0; padding: 0; list-style: none; }
-.plan a { display: grid; justify-items: center; gap: .15rem; text-align: center; text-decoration: none; }
-.door { display: grid; place-items: center; width: min(100%, 10rem); aspect-ratio: 3 / 4.2; margin-bottom: .9rem; border-radius: 50% 50% 0 0 / 32% 32% 0 0;
-  background: var(--door); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .09), inset 0 -3rem 3rem -2.5rem rgb(0 0 0 / .35);
-  transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
-.door img { width: 48%; height: auto; box-shadow: 0 .5rem .9rem -.35rem rgb(0 0 0 / .55); }
-.plan a:hover .door { transform: translateY(-5px); }
-.plan .numeral { color: var(--accent); font-size: .95rem; }
-.plan .name { font-variant-caps: all-small-caps; letter-spacing: .12em; }
-.plan .count { color: var(--dim); font-size: .8rem; font-style: italic; }
-.sign { position: fixed; top: 50%; left: .85rem; z-index: 5; writing-mode: vertical-rl; rotate: 180deg; translate: 0 -50%;
-  color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .2em; text-decoration: none;
+.plan ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+.plan a { display: grid; grid-template: "num name strip" auto "num about strip" auto "num count strip" 1fr / 2.4rem minmax(0, 14rem) minmax(0, 1fr);
+  column-gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
+.plan .numeral { grid-area: num; color: var(--accent); font-size: 1.1rem; line-height: 1.6; }
+.plan .name { grid-area: name; font-size: 1.1rem; font-variant-caps: all-small-caps; letter-spacing: .14em; line-height: 1.6; }
+.plan a:hover .name { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: .3em; }
+.plan .about { grid-area: about; color: var(--dim); font-size: .9rem; font-style: italic; line-height: 1.4; }
+.plan .count { grid-area: count; margin-top: .5rem; color: var(--dim); font-size: .8rem; }
+.strip { grid-area: strip; align-self: center; display: flex; gap: .6rem; align-items: center; padding: 1rem 1.1rem; background: var(--door);
+  box-shadow: inset 0 0 0 1px var(--rule); }
+.strip img { flex: var(--a) 1 0; min-width: 0; height: auto; aspect-ratio: var(--a); box-shadow: 0 .35rem .6rem -.25rem rgb(0 0 0 / .45);
+  transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+.plan a:hover .strip img { translate: 0 -3px; }
+@media (max-width: 40rem) {
+  .plan a { grid-template: "num name" auto "num about" auto "num count" auto "strip strip" auto / 2rem minmax(0, 1fr); column-gap: .6rem; }
+  .strip { margin-top: 1rem; padding: .8rem; gap: .45rem; }
+}
+.marker { position: fixed; top: .7rem; left: .7rem; z-index: 5; font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .16em;
   opacity: 0; pointer-events: none; transition: opacity .6s ease; }
-.sign.on { opacity: 1; pointer-events: auto; }
-@media (max-width: 64rem) { .sign { display: none; } }
+.marker.on { opacity: 1; pointer-events: auto; }
+.marker summary { padding: .3rem .85rem; border-radius: 1rem; background: color-mix(in srgb, var(--wall) 88%, transparent);
+  box-shadow: inset 0 0 0 1px var(--rule); color: var(--ink); cursor: pointer; list-style: none; }
+.marker summary::-webkit-details-marker { display: none; }
+.marker summary::after { content: "  \\25BE"; color: var(--dim); }
+.marker[open] summary::after { content: "  \\25B4"; }
+.marker ol { margin: .4rem 0 0; padding: .5rem .9rem; list-style: none; background: var(--wall);
+  box-shadow: inset 0 0 0 1px var(--rule), 0 .8rem 1.6rem -.8rem rgb(0 0 0 / .5); }
+.marker a { display: block; padding: .3rem 0; color: var(--ink); text-decoration: none; }
+.marker a:hover { color: var(--accent); }
+.marker .numeral { display: inline-block; min-width: 2.4em; color: var(--accent); }
 @media (max-width: 52rem) { .bar nav { display: none; } }
 
 main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
@@ -449,6 +500,8 @@ figcaption.label { max-width: 32rem; }
 .label p { margin: 0; }
 .label .note { margin-top: 1rem; color: var(--ink); }
 .label .source { margin-top: 1rem; font-size: .8rem; }
+.label .full, .viewer .label .short { display: none; }
+.viewer .label .full { display: block; }
 .source a { font-family: var(--mono); }
 
 .colophon { max-width: 33em; margin: 0 auto; padding: clamp(8rem, 24vh, 14rem) 1.25rem 6rem; color: var(--dim); }
@@ -471,6 +524,8 @@ figcaption.label { max-width: 32rem; }
 .controls button { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--wall) 60%, transparent);
   color: var(--ink); font: 1.35rem/1 var(--serif); cursor: pointer; }
 .controls button:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.controls .turn { width: auto; padding: 0 1.1rem; border-radius: 1.4rem; font: .85rem/1 var(--serif); font-variant-caps: all-small-caps;
+  letter-spacing: .12em; }
 .viewer.scroll[open] { display: flex; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--dim) transparent; }
 .viewer.scroll .caption { flex: 0 0 min(24rem, 80vw); max-height: none; padding: 2rem 2.5rem; }
 .viewer.scroll .stage { flex: none; height: 100%; touch-action: pan-x; }
@@ -496,11 +551,14 @@ figcaption.label { max-width: 32rem; }
   .words .sub { margin-top: .9rem; }
   .words .ways { margin-top: 1.6rem; }
   .words .credit { margin-top: 1.8rem; }
+  .room > header { padding: clamp(5rem, 14vh, 8rem) 0 clamp(2.5rem, 6vh, 4rem); }
+  .row { margin-bottom: clamp(4rem, 11vh, 6rem); }
   .row.left .work, .row.right .work { grid-template-columns: minmax(0, 1fr); }
   .row.right .label { order: 0; }
   .row.right .plate { justify-self: start; }
   .row.pair { flex-direction: column; max-width: none; }
   .row.pair .work { flex: none; }
+  .viewer[open] { padding-top: 3.6rem; }  /* the controls above the work, not over it */
   .viewer[open]:not(.scroll), .viewer.turned[open] { grid-template: "stage" minmax(0, 1fr) "caption" auto / minmax(0, 1fr); }
   .viewer:not(.scroll) .caption, .viewer.turned .caption { max-height: 40vh; padding: 1rem 1.25rem 1.5rem; }
 }
@@ -528,8 +586,8 @@ const turned = () => viewer.classList.contains('turned');
 const unrolled = () => viewer.classList.contains('scroll') && !turned();
 const one = () => 1 / devicePixelRatio;  // one plate pixel to one screen pixel
 
-// The walls: a room's colours come up as it reaches the middle of the screen.
-const sign = document.querySelector('.sign');
+// The walls: a room's colours come up as it reaches the middle of the screen, and its name in the marker.
+const marker = document.querySelector('.marker'), here = marker.querySelector('summary');
 const theme = document.querySelector('meta[name="theme-color"]');
 const walk = new IntersectionObserver(seen => {
   for (const q of seen) {
@@ -537,19 +595,27 @@ const walk = new IntersectionObserver(seen => {
     const d = q.target.dataset;
     for (const k of ['wall', 'ink', 'dim']) root.style.setProperty(`--${k}`, d[k]);
     theme.content = d.wall;
-    sign.textContent = d.room || '';
-    sign.classList.toggle('on', !!d.room);
+    here.textContent = d.room || '';
+    marker.classList.toggle('on', !!d.room);
+    if (!d.room) marker.open = false;
   }
 }, {rootMargin: '-50% 0px -50% 0px'});
 document.querySelectorAll('[data-wall]').forEach(r => walk.observe(r));
+marker.addEventListener('click', e => { if (e.target.closest('a')) marker.open = false; });
 
 const rise = new IntersectionObserver(seen => {
   for (const q of seen) if (q.isIntersecting) { q.target.classList.add('seen'); rise.unobserve(q.target); }
 }, {rootMargin: '0px 0px -8% 0px'});
 document.querySelectorAll('.work').forEach(w => rise.observe(w));
 
-// "Watch the film" at the door scrolls down to the film and starts it.
-document.querySelector('a[href="#film"]')?.addEventListener('click', () => document.getElementById('film').play());
+// The film shows its poster and one play mark; once it plays, its own controls.
+const film = document.getElementById('film');
+if (film) {
+  const play = document.querySelector('.play');
+  play.addEventListener('click', () => film.play());
+  film.addEventListener('play', () => { film.controls = true; play.hidden = true; });
+  document.querySelector('a[href="#film"]').addEventListener('click', () => film.play());  // "Watch the film" at the door
+}
 
 // The viewer.
 function open(n, by) {
@@ -581,6 +647,7 @@ function show(n) {
 }
 
 function hint() {
+  viewer.querySelector('.turn').textContent = turned() ? 'Turn back' : 'Turn over';
   viewer.querySelector('.hint').textContent = turned()
     ? 'The back of the canvas: the program that painted it. T turns it back; ← → for the next work.'
     : unrolled()

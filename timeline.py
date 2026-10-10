@@ -8,7 +8,7 @@ work. The film opens close on the sun of one painting. Then each room slides in 
 of its music, and the camera walks the wall slowly, never quite stopping. In a room it may cut close to a passage
 of paint and draw back from it to the whole work; in the first it waits in front of a bare canvas while the
 painting is painted, stroke by stroke. At the end it draws back from a last passage of paint until the whole wall
-is in sight, set in lines like a page, and the glass goes dark for the title.
+is in sight, set in lines like a page; then the museum's first page comes in, as its website opens on it.
 
 The plates are shown as they are, in their own colours. numpy and PIL draw each frame and ffmpeg encodes the
 frames with the music. The type is Iowan Old Style, from macOS.
@@ -31,7 +31,7 @@ import score
 from atelier import impasto, music, noise, plate
 from atelier.color import to_srgb
 from atelier.plate import BACKDROP
-from render import ROOMS, ROOT, hanging, rooms
+from render import FRONT, PAPER, ROOMS, ROOT, hanging, rooms, strapline
 
 W, H, FPS = 1920, 1080, 30
 STEP = round(score.STEP * FPS)            # frames in a sixteenth of the score
@@ -60,7 +60,8 @@ LINES, LEAD = 4, 0.22 * H                 # the wall set as a page at the end: i
 # next, slowing almost to a stop at each (EASE of its speed); and at some it stays on longer: HOLD half bars
 # more, to read a room's name, to lean in, to go along a long work, to look close and draw back.
 SPEED, WAY, EASE = 560, 2.5, 0.25
-HOLD = {"text": 1, "work": 0, "lean": 3, "long": 3, "detail": 5, "painted": 8, "finale": 8}
+PAINT = 8                                 # bars the painted one takes to be painted, close enough to fill the frame
+HOLD = {"text": 1, "work": 0, "lean": 3, "long": 3, "detail": 5, "painted": 2 * PAINT, "finale": 8}
 LONG = 1.35                               # how near the camera goes along a long work
 PARTS = {"Open Air": "air", "The Garden": "garden", "Paper and Water": "water", "The Workshop": "workshop",
          "Colour Itself": "colour"}       # the part of the score each room is walked to
@@ -86,10 +87,8 @@ SHOWN = {   # the works the film's wall holds, five or six of each room's; the w
 
 LIGHT = ((np.arange(256) / 255) ** 2.2).astype(np.float32)   # a byte of the frame as light, near enough
 DARKEN = np.round(255 * np.linspace(0, 1, 4096) ** (1 / 2.2)).astype(np.float32)
-HAZE = LIGHT[[96, 150, 196]] * 0.75                        # the cold light over the glass
-WARM = LIGHT[[244, 128, 56]]                               # and the warm line along its rim
-RADIUS, RIM = 1.3 * W, 0.84 * H                           # the curve of the glass, and where its rim tops out
-Y, X = np.mgrid[0:H, 0:W].astype(np.float32) + 0.5
+PAGE = np.float32(plate.to_srgb_255(PAPER))                  # the museum's first page, as on the website
+LEFT = 0.56 * W                                             # where its words begin, beside the work at the door
 
 
 def in_out(t):
@@ -233,7 +232,7 @@ def walk(wall):
         f = t + 8 * HALF if k == "finale" else start + math.ceil((t + (hold + WAY) * HALF - start) / BAR) * BAR
         if PAINTED in (s for s, _, _ in stops):
             p = next(t for s, _, t in stops if s == PAINTED)
-            parts += [(PARTS[r["name"]], (p - start) // BAR), ("paint", 4), (AFTER, (f - p) // BAR - 4)]
+            parts += [(PARTS[r["name"]], (p - start) // BAR), ("paint", PAINT), (AFTER, (f - p) // BAR - PAINT)]
         else:
             parts.append((PARTS[r["name"]], (f - start) // BAR))
         out.append((r["name"], start, stops))
@@ -395,10 +394,11 @@ def shots(path, wall):
                     cx, cy = x1 / 2, (y0 + y1) / 2 + 0.06 * H / z
                     keys += [Key(t + 8 * HALF, cx, cy, z, how="zoom"), Key(t + 12 * HALF, cx, cy, z * 0.97, 0.5)]
                 shot = dict(start=t, keys=keys, enter="cut", lines=lines)
-            elif kind == "painted":                               # the painting with the words beside it
-                left = min(x for _, x, _, cue in r["text"] if cue[0] == "words")
-                mid = (left + w.x + w.w / 2) / 2
-                keys += [Key(t, mid, 0.01 * H, 1.1, 0), Key(t + 7 * HALF, mid, 0.01 * H, 1.2, 0.5)]
+            elif kind == "painted":                               # the words beside it, then close to the canvas
+                left = min(x for _, x, _, cue in r["text"] if cue[0] == "words")      # until it has been painted
+                mid, near = (left + w.x + w.w / 2) / 2, 0.88 * H / w.h
+                keys += [Key(t, mid, 0.01 * H, 1.1, 0), Key(t + 3 * HALF, mid, 0.01 * H, 1.14, 0),
+                         Key(t + 6 * HALF, w.x, w.y, near, how="zoom"), Key(t + 2 * PAINT * HALF, w.x, w.y, near * 1.03, 0.5)]
             elif kind == "lean":
                 uv, near = LEANS[slug]
                 keys += [Key(t, w.x, 0, 1, 0.5), Key(t + 2 * HALF, *w.at(uv, near), near, 0.5)]
@@ -415,16 +415,14 @@ def soft(t, lo, hi, blur):
     return 0.5 * (special.erf((t - lo) / (blur * 1.414)) - special.erf((t - hi) / (blur * 1.414)))
 
 
-def glass(top, light, dawn):
-    """The dark glass under a band of cold light, its rim at `top`; with `dawn`, a warm line comes up along the
-    rim and glows above it. Drawn in linear light. -> frame"""
-    d = np.hypot(X - W / 2, Y - top - RADIUS) - RADIUS
-    above, below = np.maximum(d, 0), np.minimum(d, 0)
-    out = d > 0
-    haze = (1 - np.exp(-above / 8)) * np.exp(-above / 75) * out + 0.3 * np.exp(below / 6) * ~out
-    warm = (np.exp(-above / 3.5) + 0.25 * np.exp(-above / 22)) * out + 0.6 * np.exp(below / 2.5) * ~out
-    lin = LIGHT[DARK.astype(np.uint8)] + light * (haze[..., None] * HAZE + dawn * warm[..., None] * WARM)
-    return DARKEN[np.clip(lin * 4095 + 0.5, 0, 4095).astype(np.int32)]
+def covering(name, w, h, at=(0.5, 0.4)):
+    """A plate cut to fill a w x h box, as the website fills one (object-fit: cover, at object-position `at`).
+    -> Picture"""
+    im = Image.open(ROOT / "plates" / f"{name}.jpg").convert("RGB")
+    k = max(w / im.width, h / im.height)
+    cw, ch = w / k, h / k
+    x0, y0 = (im.width - cw) * at[0], (im.height - ch) * at[1]
+    return Picture(np.asarray(im.resize((round(w), round(h)), Image.LANCZOS, box=(x0, y0, x0 + cw, y0 + ch))))
 
 
 def snapshots(slug, count, width):
@@ -465,18 +463,31 @@ class Film:
         self.length = self.title + 4 * BAR + TAIL
         self.painting = next(t for _, _, stops in self.path for s, _, t in stops if s == PAINTED)
         self.stills, self.seen = None, {}
-        self.name = Type("The Claude Glass", 120, ROMAN, INK, 0.01, 1)
+        self.name = Type("THE CLAUDE GLASS", 100, ROMAN, INK, 0.08, 1)
         self.coda = Type(CODA, 50, ITALIC, IVORY, 0, 1)
-        self.end = [Type("The Claude Glass", 84, ROMAN, IVORY, 0.02, 1), Type("Painted in code by Claude", 32, ITALIC, DIM, 0, 1),
-                    Type("github.com/Chaoqi31/claude-glass", 20, ROMAN, DIM, 0.12, 1)]
+        # the museum's first page, as the website opens on it: the work at the door to the left, and to its right
+        # these lines, each (type, how far in from the words' left edge, its baseline, when it comes up in frames
+        # after the page has come in)
+        m = mods[FRONT]
+        self.door = covering(FRONT, W / 2, H)
+        self.page = [(Type("A MUSEUM OF ONE PAINTER", 19, ROMAN, INKDIM, 0.2, 1), 0, 330, 4),
+                     (Type("THE CLAUDE", 82, ROMAN, INK, 0.08, 1), 0, 428, 10),
+                     (Type("GLASS", 82, ROMAN, INK, 0.08, 1), 0, 518, 16),
+                     (Type(strapline(mods), 28, ITALIC, INK, 0, 1), 0, 588, 2 * BAR),
+                     (Type("chaoqi31.github.io/claude-glass", 21, ROMAN, INKDIM, 0.06, 1), 0, 664, 3 * BAR)]
+        x = 0
+        for text, face in (("In the picture · ", ROMAN), (m.TITLE, ITALIC), (f", after {after(m)}", ROMAN)):
+            t = Type(text, 18, face, INKDIM, 0, 1)
+            self.page.append((t, x, 760, 3 * BAR + 12))
+            x += t.w - 8                                      # type is drawn with 4 px to spare at each end
 
     def picture(self, w, f):
         """The work as it is at frame f: the painted one bare, being painted, then lit. -> [(Picture, alpha)]"""
-        if w.slug != PAINTED or f >= self.painting + 4 * BAR:
+        if w.slug != PAINTED or f >= self.painting + PAINT * BAR:
             return [(w.pic, 1.0)]
         if self.stills is None:
-            self.stills = snapshots(PAINTED, round(0.85 * 4 * BAR), 1100)
-        t = max(0.0, (f - self.painting) / (4 * BAR))
+            self.stills = snapshots(PAINTED, round(0.85 * PAINT * BAR), 1400)
+        t = max(0.0, (f - self.painting) / (PAINT * BAR))
         i = round(min(1.0, t / 0.85) * (len(self.stills) - 1))
         if i not in self.seen:
             self.seen.clear()
@@ -532,6 +543,8 @@ class Film:
                 if not (a <= tx < b and lo < tx < hi):
                     continue
                 off, alpha = self.rise(f, self.path[k][1] - 6 + 7 * j if what == "room" else self.painting + HALF + 10 * j)
+                if what == "words":                           # said, they go as the camera goes close to the canvas
+                    alpha *= 1 - noise.smoothstep(self.painting + 3 * HALF, self.painting + 5 * HALF, f)
                 box = (sx(tx), sy(ty), sx(tx + t.w), sy(ty + t.h))
                 place(canvas, t.pic, box[0], sy(ty + off * t.h), box[2], sy(ty + (1 + off) * t.h), alpha, clip=box)
 
@@ -548,14 +561,15 @@ class Film:
         return canvas
 
     def frame(self, f):
-        if f >= self.title:                                   # the title and the coda over the glass
+        if f >= self.title:                                   # the museum's first page comes in from the right
             u = f - self.title
-            rise = noise.smoothstep(0, 4 * BAR + TAIL, u)
-            canvas = glass(RIM - 0.1 * H * rise, 1.0, 0.3 + 0.9 * noise.smoothstep(BAR, 4 * BAR, u))
-            y = 0.33 * H - 0.05 * H * rise
-            for t, at in zip(self.end, (0, 2 * BAR, 3 * BAR)):
-                t.at(canvas, round((W - t.w) / 2), round(y), noise.smoothstep(at, at + (6 if at == 0 else 20), u))
-                y += t.h + 18
+            edge = W * (1 - in_out(u / WIPE))
+            canvas = np.empty((H, W, 3), np.float32)
+            canvas[:] = DARK
+            canvas[:, math.floor(edge):] = PAGE
+            place(canvas, self.door, edge, 0, edge + W / 2, H)
+            for t, dx, base, at in self.page:
+                self.said(canvas, f, t, base - 1.1 * t.size, self.title + WIPE + at, x=edge + LEFT + dx)
             return canvas * (1 - noise.smoothstep(self.length - 1.4 * FPS, self.length - 0.2 * FPS, f))
         if f >= self.dark:
             return np.broadcast_to(DARK, (H, W, 3)).copy()
@@ -578,10 +592,11 @@ class Film:
             self.said(canvas, f, self.coda, 0.83 * H, self.burst - HALF)
         return canvas * noise.smoothstep(0, 12, f)            # out of the dark on the first note
 
-    def said(self, canvas, f, t, y, begins, fade=1.0):
-        """Type t across the middle of the frame with its top at y, rising into place from frame `begins`."""
+    def said(self, canvas, f, t, y, begins, fade=1.0, x=None):
+        """Type t with its top at y, across the middle of the frame or from x, rising into place from frame
+        `begins`."""
         off, alpha = self.rise(f, begins)
-        x = (W - t.w) / 2
+        x = (W - t.w) / 2 if x is None else x
         place(canvas, t.pic, x, y + off * t.h, x + t.w, y + (1 + off) * t.h, alpha * fade, clip=(x, y, x + t.w, y + t.h))
 
 

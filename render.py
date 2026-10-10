@@ -23,6 +23,21 @@ ROOMS = {  # the order a visitor walks them in: what hangs in each, and the colo
     "The Workshop": ("Glass, copper and the woodblock", "#33201d"),
     "Colour Itself": ("Abstraction", "#f1eee8"),
 }
+FRONT = "attersee"  # the work beside the museum's name on its first page: the website's first screen, the film's last
+PAPER = "#f6f3ec"  # the paper of that page
+
+
+def words(n):
+    """A count under a hundred, in words."""
+    ones = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
+            "seventeen eighteen nineteen").split()
+    tens = "twenty thirty forty fifty sixty seventy eighty ninety".split()
+    return ones[n] if n < 20 else tens[n // 10 - 2] + (f"-{ones[n % 10]}" if n % 10 else "")
+
+
+def strapline(slugs):
+    """The museum in a line, under its name on its first page."""
+    return f"{words(len(slugs)).capitalize()} paintings by Claude, each one a program"
 
 
 def works():

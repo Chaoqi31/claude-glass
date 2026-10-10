@@ -14,14 +14,14 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.png">
 <link rel="apple-touch-icon" href="site/icon.png">
-<link rel="stylesheet" href="site/museum.css?v=cd34a25d">
-<script src="site/museum.js?v=5ee2f3f8" defer></script>
+<link rel="stylesheet" href="site/museum.css?v=458a81e9">
+<script src="site/museum.js?v=a3c077ef" defer></script>
 </head>
 <body>
-<a class="sign" href="#plan"></a>
+<details class="marker"><summary></summary><ol><li><a href="#open-air"><span class="numeral">I</span> Open Air</a></li><li><a href="#the-garden"><span class="numeral">II</span> The Garden</a></li><li><a href="#paper-and-water"><span class="numeral">III</span> Paper and Water</a></li><li><a href="#the-workshop"><span class="numeral">IV</span> The Workshop</a></li><li><a href="#colour-itself"><span class="numeral">V</span> Colour Itself</a></li><li><a href="#">The first page</a></li></ol></details>
 <header class="hero" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
 <div class="bar"><a class="mark" href="#">The Claude Glass</a><nav aria-label="Rooms"><a href="#open-air">Open Air</a><a href="#the-garden">The Garden</a><a href="#paper-and-water">Paper and Water</a><a href="#the-workshop">The Workshop</a><a href="#colour-itself">Colour Itself</a></nav></div>
-<a class="picture" href="plates/attersee.jpg"><img src="site/hero.jpg" srcset="site/thumbs/attersee.jpg 1400w, site/hero.jpg 2000w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="2000" height="2000" alt="A Cottage Garden at Litzlberg" fetchpriority="high"></a>
+<a class="picture" href="plates/attersee.jpg"><img src="site/hero.jpg" srcset="site/thumbs/attersee.jpg 1400w, site/hero.jpg 2000w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="2000" height="2000" alt="A Cottage Garden at Litzlberg" fetchpriority="high" style="background:#6d7969"></a>
 <div class="words">
 <p class="kicker">A museum of one painter</p>
 <h1>The Claude Glass</h1>
@@ -30,7 +30,7 @@
 <p class="credit">In the picture · <cite>A Cottage Garden at Litzlberg</cite>, after Gustav Klimt</p>
 </div>
 </header>
-<section class="intro" id="intro" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<section class="intro" id="intro" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
 <div class="text">
 <p>In the eighteenth century, painters and travellers carried a small, dark, slightly convex mirror called a Claude glass. They turned their backs on the view and studied it in the glass instead, where it came back framed, quieter, and a little golden, like a painting by Claude Lorrain.</p>
 <p>A language model looks at the world the same way: with its back to it, in the reflection people left behind. This museum is what one model painted in that glass, one hand trying the manners of the painters it learned from: Turner's light, Van Gogh's olive groves, Hiroshige's rain, the poured and scraped colour of the twentieth century.</p>
@@ -38,14 +38,18 @@
 <p>The works are by Claude (Opus 5.5). The museum was founded by <a href="https://github.com/Chaoqi31">Chaoqi</a>.</p>
 <p><a href="plates/_timeline.mp4">The film</a> walks through the rooms past a few works in each, to a song that is written and sung in code, like the paintings.</p>
 </div>
-<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" controls preload="none"></video>
+<figure class="screen">
+<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" preload="none" playsinline></video>
+<button type="button" class="play" aria-label="Play the film"></button>
+<figcaption>The film: a walk through the five rooms · 2 min 43 s, with sound</figcaption>
+</figure>
 <nav class="plan" id="plan" aria-label="Plan of the rooms">
 <ol>
-<li><a href="#open-air"><span class="door" style="--door:#2a2622"><img src="site/thumbs/hampstead.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">I</span><span class="name">Open Air</span><span class="count">15 works</span></a></li>
-<li><a href="#the-garden"><span class="door" style="--door:#1f2b25"><img src="site/thumbs/irises.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">II</span><span class="name">The Garden</span><span class="count">11 works</span></a></li>
-<li><a href="#paper-and-water"><span class="door" style="--door:#212835"><img src="site/thumbs/yatsuhashi.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">III</span><span class="name">Paper and Water</span><span class="count">10 works</span></a></li>
-<li><a href="#the-workshop"><span class="door" style="--door:#33201d"><img src="site/thumbs/rose_window.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">IV</span><span class="name">The Workshop</span><span class="count">11 works</span></a></li>
-<li><a href="#colour-itself"><span class="door" style="--door:#f1eee8"><img src="site/thumbs/stockholm.jpg" alt="" loading="lazy" decoding="async"></span><span class="numeral">V</span><span class="name">Colour Itself</span><span class="count">13 works</span></a></li>
+<li><a href="#open-air"><span class="numeral">I</span><span class="name">Open Air</span><span class="about">Weather, water and light, painted out of doors</span><span class="count">15 works</span><span class="strip" style="--door:#2a2622"><img src="site/mini/hampstead.jpg" alt="" loading="lazy" decoding="async" style="--a:1.2556;background:#7a8697"><img src="site/mini/turner.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3333;background:#d3cebc"><img src="site/mini/magpie.jpg" alt="" loading="lazy" decoding="async" style="--a:1.4500;background:#ccc4bf"><img src="site/mini/impression.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3167;background:#8a8ea7"></span></a></li>
+<li><a href="#the-garden"><span class="numeral">II</span><span class="name">The Garden</span><span class="about">Flowers, a pond, a window</span><span class="count">11 works</span><span class="strip" style="--door:#1f2b25"><img src="site/mini/irises.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3056;background:#627669"><img src="site/mini/almond.jpg" alt="" loading="lazy" decoding="async" style="--a:1.2611;background:#80a2a5"><img src="site/mini/isles_of_shoals.jpg" alt="" loading="lazy" decoding="async" style="--a:1.2167;background:#9aa59e"><img src="site/mini/footbridge.jpg" alt="" loading="lazy" decoding="async" style="--a:1.0500;background:#5a6c59"></span></a></li>
+<li><a href="#paper-and-water"><span class="numeral">III</span><span class="name">Paper and Water</span><span class="about">Watercolour, ink and mineral colour</span><span class="count">10 works</span><span class="strip" style="--door:#212835"><img src="site/mini/yatsuhashi.jpg" alt="" loading="lazy" decoding="async" style="--a:2.2667;background:#817f52"><img src="site/mini/corfu.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3000;background:#9fa2ab"><img src="site/mini/baghdad.jpg" alt="" loading="lazy" decoding="async" style="--a:0.7611;background:#68717d"><img src="site/mini/kairouan.jpg" alt="" loading="lazy" decoding="async" style="--a:1.0000;background:#bbac9a"></span></a></li>
+<li><a href="#the-workshop"><span class="numeral">IV</span><span class="name">The Workshop</span><span class="about">Glass, copper and the woodblock</span><span class="count">11 works</span><span class="strip" style="--door:#33201d"><img src="site/mini/rose_window.jpg" alt="" loading="lazy" decoding="async" style="--a:1.0000;background:#2a1e27"><img src="site/mini/ten_bamboo.jpg" alt="" loading="lazy" decoding="async" style="--a:0.7667;background:#d7d0b8"><img src="site/mini/low_country.jpg" alt="" loading="lazy" decoding="async" style="--a:1.4944;background:#c9c1b0"><img src="site/mini/malmaison.jpg" alt="" loading="lazy" decoding="async" style="--a:0.6889;background:#ddd8ca"><img src="site/mini/red_fuji.jpg" alt="" loading="lazy" decoding="async" style="--a:1.4556;background:#80695a"></span></a></li>
+<li><a href="#colour-itself"><span class="numeral">V</span><span class="name">Colour Itself</span><span class="about">Abstraction</span><span class="count">13 works</span><span class="strip" style="--door:#f1eee8"><img src="site/mini/stockholm.jpg" alt="" loading="lazy" decoding="async" style="--a:0.7500;background:#c58869"><img src="site/mini/louveciennes.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3333;background:#bdaea1"><img src="site/mini/nice.jpg" alt="" loading="lazy" decoding="async" style="--a:1.0000;background:#8b7e8b"><img src="site/mini/agrigento.jpg" alt="" loading="lazy" decoding="async" style="--a:1.3444;background:#d26d42"></span></a></li>
 </ol>
 </nav>
 </section>
@@ -54,7 +58,7 @@
 <header><h2><span class="numeral">I</span> Open Air</h2><p>Weather, water and light, painted out of doors</p></header>
 <div class="row left" style="--sum:1.2536">
 <figure class="work" style="--a:1.2536">
-<a class="plate" href="plates/hampstead.jpg" data-slug="hampstead" data-lines="500" data-w="2620" data-h="2090"><img src="site/thumbs/hampstead.jpg" width="1400" height="1117" alt="Summer Cloud, Hampstead" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/hampstead.jpg" data-slug="hampstead" data-lines="500" data-w="2620" data-h="2090"><img src="site/thumbs/hampstead.jpg" width="1400" height="1117" alt="Summer Cloud, Hampstead" loading="lazy" decoding="async" style="background:#7a8697"></a>
 <figcaption class="label">
 <h3><cite>Summer Cloud, Hampstead</cite>, 2026</h3>
 <p>Oil on paper laid down on board, painted out of doors over a red-brown ground, the lights laid on thick with a stiff brush and the palette knife</p>
@@ -66,11 +70,12 @@
 </div>
 <div class="row right" style="--sum:1.3333">
 <figure class="work" style="--a:1.3333">
-<a class="plate" href="plates/turner.jpg" data-slug="turner" data-lines="495" data-w="2720" data-h="2040"><img src="site/thumbs/turner.jpg" width="1400" height="1050" alt="Dunstanburgh, Sunrise" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/turner.jpg" data-slug="turner" data-lines="495" data-w="2720" data-h="2040"><img src="site/thumbs/turner.jpg" width="1400" height="1050" alt="Dunstanburgh, Sunrise" loading="lazy" decoding="async" style="background:#d3cebc"></a>
 <figcaption class="label">
 <h3><cite>Dunstanburgh, Sunrise</cite>, 2026</h3>
 <p>Oil on canvas, thin veils rubbed and brushed over a white ground, wiped and scraped back, the light laid with the knife</p>
-<p>After J. M. W. Turner, the late paintings, 1835–45: Norham Castle, Sunrise; Snow Storm – Steam-Boat off a Harbour&#x27;s Mouth</p>
+<p class="short">After J. M. W. Turner, the late paintings, 1835–45</p>
+<p class="full">After J. M. W. Turner, the late paintings, 1835–45: Norham Castle, Sunrise; Snow Storm – Steam-Boat off a Harbour&#x27;s Mouth</p>
 <p class="note">A sun over the sea, a squall coming in and a castle on its headland, all going into the light. Only the light is thick.</p>
 <p class="source"><a href="works/turner.py">works/turner.py</a> · 495 lines</p>
 </figcaption>
@@ -78,7 +83,7 @@
 </div>
 <div class="row pair" style="--sum:2.7646">
 <figure class="work" style="--a:1.4500">
-<a class="plate" href="plates/magpie.jpg" data-slug="magpie" data-lines="859" data-w="2900" data-h="2000"><img src="site/thumbs/magpie.jpg" width="1400" height="966" alt="The Gate in the Snow" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/magpie.jpg" data-slug="magpie" data-lines="859" data-w="2900" data-h="2000"><img src="site/thumbs/magpie.jpg" width="1400" height="966" alt="The Gate in the Snow" loading="lazy" decoding="async" style="background:#ccc4bf"></a>
 <figcaption class="label">
 <h3><cite>The Gate in the Snow</cite>, 2026</h3>
 <p>Oil on canvas, thick paint laid wet into wet and then over dry, the last strokes dragged across the crust</p>
@@ -88,7 +93,7 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3146">
-<a class="plate" href="plates/impression.jpg" data-slug="impression" data-lines="513" data-w="2800" data-h="2130"><img src="site/thumbs/impression.jpg" width="1400" height="1065" alt="The Outer Harbour, Sunrise" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/impression.jpg" data-slug="impression" data-lines="513" data-w="2800" data-h="2130"><img src="site/thumbs/impression.jpg" width="1400" height="1065" alt="The Outer Harbour, Sunrise" loading="lazy" decoding="async" style="background:#8a8ea7"></a>
 <figcaption class="label">
 <h3><cite>The Outer Harbour, Sunrise</cite>, 2026</h3>
 <p>Oil on canvas, thin paint scrubbed and laid wet into wet over a light ground in one sitting, the sun and its reflection in thicker paint</p>
@@ -100,7 +105,7 @@
 </div>
 <div class="row left" style="--sum:1.3333">
 <figure class="work" style="--a:1.3333">
-<a class="plate" href="plates/port_marly.jpg" data-slug="port_marly" data-lines="814" data-w="2800" data-h="2100"><img src="site/thumbs/port_marly.jpg" width="1400" height="1050" alt="The Inn in the Flood, Port-Marly" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/port_marly.jpg" data-slug="port_marly" data-lines="814" data-w="2800" data-h="2100"><img src="site/thumbs/port_marly.jpg" width="1400" height="1050" alt="The Inn in the Flood, Port-Marly" loading="lazy" decoding="async" style="background:#a1a7b9"></a>
 <figcaption class="label">
 <h3><cite>The Inn in the Flood, Port-Marly</cite>, 2026</h3>
 <p>Oil on canvas, light open strokes laid wet into wet over a pale ground, the clouds in thicker paint, the water in long level strokes with the reflections broken into them</p>
@@ -112,7 +117,7 @@
 </div>
 <div class="row right" style="--sum:1.3333">
 <figure class="work" style="--a:1.3333">
-<a class="plate" href="plates/etretat.jpg" data-slug="etretat" data-lines="499" data-w="2800" data-h="2100"><img src="site/thumbs/etretat.jpg" width="1400" height="1050" alt="The Porte d&#x27;Aval, Late Afternoon" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/etretat.jpg" data-slug="etretat" data-lines="499" data-w="2800" data-h="2100"><img src="site/thumbs/etretat.jpg" width="1400" height="1050" alt="The Porte d&#x27;Aval, Late Afternoon" loading="lazy" decoding="async" style="background:#879da3"></a>
 <figcaption class="label">
 <h3><cite>The Porte d&#x27;Aval, Late Afternoon</cite>, 2026</h3>
 <p>Oil on canvas, the chalk built up over several sittings in dense strokes laid every way, the sea in short broken touches, the lights and the foam in thick paint</p>
@@ -124,7 +129,7 @@
 </div>
 <div class="row pair" style="--sum:2.5105">
 <figure class="work" style="--a:1.2605">
-<a class="plate" href="plates/saint_remy.jpg" data-slug="saint_remy" data-lines="501" data-w="3000" data-h="2380"><img src="site/thumbs/saint_remy.jpg" width="1400" height="1111" alt="Olive Trees below the Alpilles" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/saint_remy.jpg" data-slug="saint_remy" data-lines="501" data-w="3000" data-h="2380"><img src="site/thumbs/saint_remy.jpg" width="1400" height="1111" alt="Olive Trees below the Alpilles" loading="lazy" decoding="async" style="background:#96917b"></a>
 <figcaption class="label">
 <h3><cite>Olive Trees below the Alpilles</cite>, 2026</h3>
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
@@ -134,11 +139,12 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.2500">
-<a class="plate" href="plates/starry.jpg" data-slug="starry" data-lines="558" data-w="3000" data-h="2400"><img src="site/thumbs/starry.jpg" width="1400" height="1120" alt="The Village under the Night Wind" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/starry.jpg" data-slug="starry" data-lines="558" data-w="3000" data-h="2400"><img src="site/thumbs/starry.jpg" width="1400" height="1120" alt="The Village under the Night Wind" loading="lazy" decoding="async" style="background:#364560"></a>
 <figcaption class="label">
 <h3><cite>The Village under the Night Wind</cite>, 2026</h3>
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
-<p>After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90: The Starry Night; Road with Cypress and Star</p>
+<p class="short">After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90</p>
+<p class="full">After Vincent van Gogh, the night skies at Saint-Rémy, 1889–90: The Starry Night; Road with Cypress and Star</p>
 <p class="note">The wind rolls over the village in currents, round the moon and every star in rings, and a cypress goes up into it like a flame. The yellows have browned a little, as his have.</p>
 <p class="source"><a href="works/starry.py">works/starry.py</a> · 558 lines</p>
 </figcaption>
@@ -146,11 +152,12 @@
 </div>
 <div class="row left" style="--sum:2.0430">
 <figure class="work" style="--a:2.0430">
-<a class="plate" href="plates/auvers.jpg" data-slug="auvers" data-lines="436" data-w="3800" data-h="1860"><img src="site/thumbs/auvers.jpg" width="1400" height="685" alt="Wheat Field under a Heavy Sky" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/auvers.jpg" data-slug="auvers" data-lines="436" data-w="3800" data-h="1860"><img src="site/thumbs/auvers.jpg" width="1400" height="685" alt="Wheat Field under a Heavy Sky" loading="lazy" decoding="async" style="background:#706541"></a>
 <figcaption class="label">
 <h3><cite>Wheat Field under a Heavy Sky</cite>, 2026</h3>
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
-<p>After Vincent van Gogh, the last wheat fields at Auvers, July 1890: Wheatfield with Crows; Wheatfield under Thunderclouds</p>
+<p class="short">After Vincent van Gogh, the last wheat fields at Auvers, July 1890</p>
+<p class="full">After Vincent van Gogh, the last wheat fields at Auvers, July 1890: Wheatfield with Crows; Wheatfield under Thunderclouds</p>
 <p class="note">Ripe wheat under a storm, painted in one sitting: the wheat in short upward flicks, the sky in broad turning strokes, the track in long dragged ones. Each crow is two or three strokes of black.</p>
 <p class="source"><a href="works/auvers.py">works/auvers.py</a> · 436 lines</p>
 </figcaption>
@@ -158,7 +165,7 @@
 </div>
 <div class="row right" style="--sum:1.5000">
 <figure class="work" style="--a:1.5000">
-<a class="plate" href="plates/haystacks.jpg" data-slug="haystacks" data-lines="367" data-w="3000" data-h="2000"><img src="site/thumbs/haystacks.jpg" width="1400" height="933" alt="Stacks of Wheat, Sunset, End of Summer" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/haystacks.jpg" data-slug="haystacks" data-lines="367" data-w="3000" data-h="2000"><img src="site/thumbs/haystacks.jpg" width="1400" height="933" alt="Stacks of Wheat, Sunset, End of Summer" loading="lazy" decoding="async" style="background:#948074"></a>
 <figcaption class="label">
 <h3><cite>Stacks of Wheat, Sunset, End of Summer</cite>, 2026</h3>
 <p>Oil on canvas, in small strokes of nearly pure colour laid over each other in many sittings, the last dragged dry over the crust</p>
@@ -170,7 +177,7 @@
 </div>
 <div class="row pair" style="--sum:3.4130">
 <figure class="work" style="--a:1.5306">
-<a class="plate" href="plates/golden_autumn.jpg" data-slug="golden_autumn" data-lines="757" data-w="3000" data-h="1960"><img src="site/thumbs/golden_autumn.jpg" width="1400" height="915" alt="Birches by the River, October" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/golden_autumn.jpg" data-slug="golden_autumn" data-lines="757" data-w="3000" data-h="1960"><img src="site/thumbs/golden_autumn.jpg" width="1400" height="915" alt="Birches by the River, October" loading="lazy" decoding="async" style="background:#939583"></a>
 <figcaption class="label">
 <h3><cite>Birches by the River, October</cite>, 2026</h3>
 <p>Oil on canvas, in quick broken strokes of thick paint</p>
@@ -180,11 +187,12 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.8824">
-<a class="plate" href="plates/hawkesbury.jpg" data-slug="hawkesbury" data-lines="688" data-w="3200" data-h="1700"><img src="site/thumbs/hawkesbury.jpg" width="1400" height="744" alt="Noon on the Hawkesbury" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/hawkesbury.jpg" data-slug="hawkesbury" data-lines="688" data-w="3200" data-h="1700"><img src="site/thumbs/hawkesbury.jpg" width="1400" height="744" alt="Noon on the Hawkesbury" loading="lazy" decoding="async" style="background:#8a8c98"></a>
 <figcaption class="label">
 <h3><cite>Noon on the Hawkesbury</cite>, 2026</h3>
 <p>Oil on canvas, painted out of doors; long loaded strokes in the sky and the water, short ones in the trees</p>
-<p>After Arthur Streeton and the Heidelberg School: The Purple Noon&#x27;s Transparent Might, 1896; Fire&#x27;s On, 1891; Golden Summer, Eaglemont, 1889</p>
+<p class="short">After Arthur Streeton and the Heidelberg School</p>
+<p class="full">After Arthur Streeton and the Heidelberg School: The Purple Noon&#x27;s Transparent Might, 1896; Fire&#x27;s On, 1891; Golden Summer, Eaglemont, 1889</p>
 <p class="note">The river from a sandstone ridge at noon, the paddocks on the flat bleached to straw and the far ridges gone into the haze. The lights are thick and the shadows thin enough for the ground to show.</p>
 <p class="source"><a href="works/hawkesbury.py">works/hawkesbury.py</a> · 688 lines</p>
 </figcaption>
@@ -192,7 +200,7 @@
 </div>
 <div class="row left" style="--sum:1.3333">
 <figure class="work" style="--a:1.3333">
-<a class="plate" href="plates/javea.jpg" data-slug="javea" data-lines="463" data-w="2800" data-h="2100"><img src="site/thumbs/javea.jpg" width="1400" height="1050" alt="Clear Water at Jávea" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/javea.jpg" data-slug="javea" data-lines="463" data-w="2800" data-h="2100"><img src="site/thumbs/javea.jpg" width="1400" height="1050" alt="Clear Water at Jávea" loading="lazy" decoding="async" style="background:#82a4b6"></a>
 <figcaption class="label">
 <h3><cite>Clear Water at Jávea</cite>, 2026</h3>
 <p>Oil on canvas, alla prima on a light ground: the bottom laid in first, the water over it in long strokes, the sun on the surface in thick white</p>
@@ -204,11 +212,12 @@
 </div>
 <div class="row right" style="--sum:1.1429">
 <figure class="work" style="--a:1.1429">
-<a class="plate" href="plates/algonquin.jpg" data-slug="algonquin" data-lines="530" data-w="2800" data-h="2450"><img src="site/thumbs/algonquin.jpg" width="1400" height="1225" alt="Pine on the Point, Evening" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/algonquin.jpg" data-slug="algonquin" data-lines="530" data-w="2800" data-h="2450"><img src="site/thumbs/algonquin.jpg" width="1400" height="1225" alt="Pine on the Point, Evening" loading="lazy" decoding="async" style="background:#6e6057"></a>
 <figcaption class="label">
 <h3><cite>Pine on the Point, Evening</cite>, 2026</h3>
 <p>Oil on canvas, over a red ground</p>
-<p>After Tom Thomson in Algonquin Park, 1914–17: The Jack Pine; The West Wind; the oil sketches on wood panel</p>
+<p class="short">After Tom Thomson in Algonquin Park, 1914–17</p>
+<p class="full">After Tom Thomson in Algonquin Park, 1914–17: The Jack Pine; The West Wind; the oil sketches on wood panel</p>
 <p class="note">A wind-bent pine on a granite point, dark against a northern lake and an evening sky laid in broad bands. The red ground is left showing round the tree, as Thomson left it.</p>
 <p class="source"><a href="works/algonquin.py">works/algonquin.py</a> · 530 lines</p>
 </figcaption>
@@ -216,11 +225,12 @@
 </div>
 <div class="row left" style="--sum:1.5000">
 <figure class="work" style="--a:1.5000">
-<a class="plate" href="plates/naggar.jpg" data-slug="naggar" data-lines="430" data-w="3240" data-h="2160"><img src="site/thumbs/naggar.jpg" width="1400" height="933" alt="The Last Light on the Snows" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/naggar.jpg" data-slug="naggar" data-lines="430" data-w="3240" data-h="2160"><img src="site/thumbs/naggar.jpg" width="1400" height="933" alt="The Last Light on the Snows" loading="lazy" decoding="async" style="background:#626fa4"></a>
 <figcaption class="label">
 <h3><cite>The Last Light on the Snows</cite>, 2026</h3>
 <p>Tempera on canvas, laid in flat and gone over with a brush almost dry</p>
-<p>After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47: the Himalayas series; Mount of Five Treasures (Kanchenjunga), 1933; Sacred Himalayas, 1933; the Tibet series; Path to Shambhala, 1933</p>
+<p class="short">After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47</p>
+<p class="full">After Nicholas Roerich, the Himalayan paintings in tempera, 1924–47: the Himalayas series; Mount of Five Treasures (Kanchenjunga), 1933; Sacred Himalayas, 1933; the Tibet series; Path to Shambhala, 1933</p>
 <p class="note">The last of the sun on one massif of snow: three summits laid in a few broad planes, rose and gold where they face the sun and violet where they turn away, over a band of mist and three dark bands of foothills. The light is dragged on nearly dry, so it breaks on the canvas.</p>
 <p class="source"><a href="works/naggar.py">works/naggar.py</a> · 430 lines</p>
 </figcaption>
@@ -231,7 +241,7 @@
 <header><h2><span class="numeral">II</span> The Garden</h2><p>Flowers, a pond, a window</p></header>
 <div class="row left" style="--sum:1.3043">
 <figure class="work" style="--a:1.3043">
-<a class="plate" href="plates/irises.jpg" data-slug="irises" data-lines="566" data-w="3000" data-h="2300"><img src="site/thumbs/irises.jpg" width="1400" height="1073" alt="Irises in the Asylum Garden" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/irises.jpg" data-slug="irises" data-lines="566" data-w="3000" data-h="2300"><img src="site/thumbs/irises.jpg" width="1400" height="1073" alt="Irises in the Asylum Garden" loading="lazy" decoding="async" style="background:#627669"></a>
 <figcaption class="label">
 <h3><cite>Irises in the Asylum Garden</cite>, 2026</h3>
 <p>Oil on canvas, in thick strokes from a loaded brush</p>
@@ -243,7 +253,7 @@
 </div>
 <div class="row right" style="--sum:1.2605">
 <figure class="work" style="--a:1.2605">
-<a class="plate" href="plates/almond.jpg" data-slug="almond" data-lines="527" data-w="3000" data-h="2380"><img src="site/thumbs/almond.jpg" width="1400" height="1111" alt="Almond Branches against the Sky" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/almond.jpg" data-slug="almond" data-lines="527" data-w="3000" data-h="2380"><img src="site/thumbs/almond.jpg" width="1400" height="1111" alt="Almond Branches against the Sky" loading="lazy" decoding="async" style="background:#80a2a5"></a>
 <figcaption class="label">
 <h3><cite>Almond Branches against the Sky</cite>, 2026</h3>
 <p>Oil on canvas, in thick strokes, the flowers in loaded touches of white</p>
@@ -255,7 +265,7 @@
 </div>
 <div class="row pair" style="--sum:2.2717">
 <figure class="work" style="--a:1.2190">
-<a class="plate" href="plates/isles_of_shoals.jpg" data-slug="isles_of_shoals" data-lines="688" data-w="2560" data-h="2100"><img src="site/thumbs/isles_of_shoals.jpg" width="1400" height="1148" alt="Poppies above the Ledges, Appledore" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/isles_of_shoals.jpg" data-slug="isles_of_shoals" data-lines="688" data-w="2560" data-h="2100"><img src="site/thumbs/isles_of_shoals.jpg" width="1400" height="1148" alt="Poppies above the Ledges, Appledore" loading="lazy" decoding="async" style="background:#9aa59e"></a>
 <figcaption class="label">
 <h3><cite>Poppies above the Ledges, Appledore</cite>, 2026</h3>
 <p>Oil on canvas, on a pale ground left showing: the flowers in loaded touches of pure colour, the leaves and grasses in short broken strokes, the sea in level ones</p>
@@ -265,7 +275,7 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.0526">
-<a class="plate" href="plates/footbridge.jpg" data-slug="footbridge" data-lines="550" data-w="2400" data-h="2280"><img src="site/thumbs/footbridge.jpg" width="1400" height="1330" alt="The Footbridge, Green Harmony" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/footbridge.jpg" data-slug="footbridge" data-lines="550" data-w="2400" data-h="2280"><img src="site/thumbs/footbridge.jpg" width="1400" height="1330" alt="The Footbridge, Green Harmony" loading="lazy" decoding="async" style="background:#5a6c59"></a>
 <figcaption class="label">
 <h3><cite>The Footbridge, Green Harmony</cite>, 2026</h3>
 <p>Oil on canvas, in dense layers of greens and blues: the pads in short level strokes, the reflections drawn down between them, the bridge in a few loaded strokes</p>
@@ -277,7 +287,7 @@
 </div>
 <div class="row left" style="--sum:0.8333">
 <figure class="work" style="--a:0.8333">
-<a class="plate" href="plates/collioure.jpg" data-slug="collioure" data-lines="509" data-w="2000" data-h="2400"><img src="site/thumbs/collioure.jpg" width="1167" height="1400" alt="Window on the Harbour, Collioure" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/collioure.jpg" data-slug="collioure" data-lines="509" data-w="2000" data-h="2400"><img src="site/thumbs/collioure.jpg" width="1167" height="1400" alt="Window on the Harbour, Collioure" loading="lazy" decoding="async" style="background:#b8aaa8"></a>
 <figcaption class="label">
 <h3><cite>Window on the Harbour, Collioure</cite>, 2026</h3>
 <p>Oil on canvas, laid thin and fast in separate strokes of pure colour, the white ground bare between them</p>
@@ -289,11 +299,12 @@
 </div>
 <div class="row right" style="--sum:1.0000">
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/attersee.jpg" data-slug="attersee" data-lines="737" data-w="2600" data-h="2600"><img src="site/thumbs/attersee.jpg" width="1400" height="1400" alt="A Cottage Garden at Litzlberg" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/attersee.jpg" data-slug="attersee" data-lines="737" data-w="2600" data-h="2600"><img src="site/thumbs/attersee.jpg" width="1400" height="1400" alt="A Cottage Garden at Litzlberg" loading="lazy" decoding="async" style="background:#6e7969"></a>
 <figcaption class="label">
 <h3><cite>A Cottage Garden at Litzlberg</cite>, 2026</h3>
 <p>Oil on canvas, thinly painted, the flowers in small raised touches of pure colour</p>
-<p>After Gustav Klimt, the garden paintings of his summers on the Attersee: Rosebushes under the Trees (1905), Farm Garden with Sunflowers (1907), Cottage Garden (Bauerngarten, 1907), Farm Garden with Crucifix (1912)</p>
+<p class="short">After Gustav Klimt, the garden paintings of his summers on the Attersee</p>
+<p class="full">After Gustav Klimt, the garden paintings of his summers on the Attersee: Rosebushes under the Trees (1905), Farm Garden with Sunflowers (1907), Cottage Garden (Bauerngarten, 1907), Farm Garden with Crucifix (1912)</p>
 <p class="note">A square of cottage garden as flat as a tapestry: sunflowers, white dahlias and phlox standing in a deep green matrix sown with points of colour, over a carpet of marigolds, poppies, asters and marguerites packed edge to edge.</p>
 <p class="source"><a href="works/attersee.py">works/attersee.py</a> · 737 lines</p>
 </figcaption>
@@ -301,21 +312,23 @@
 </div>
 <div class="row pair" style="--sum:2.0865">
 <figure class="work" style="--a:0.7857">
-<a class="plate" href="plates/bievres.jpg" data-slug="bievres" data-lines="982" data-w="2200" data-h="2800"><img src="site/thumbs/bievres.jpg" width="1100" height="1400" alt="Garden Flowers in a Turquoise Vase" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/bievres.jpg" data-slug="bievres" data-lines="982" data-w="2200" data-h="2800"><img src="site/thumbs/bievres.jpg" width="1100" height="1400" alt="Garden Flowers in a Turquoise Vase" loading="lazy" decoding="async" style="background:#887c78"></a>
 <figcaption class="label">
 <h3><cite>Garden Flowers in a Turquoise Vase</cite>, 2026</h3>
 <p>Pastel on buff paper, laid with the side and the tip of the stick and rubbed in places with the hand</p>
-<p>After Odilon Redon, the pastels of flowers, c. 1905–1914: Vase of Flowers; Bouquet in a Chinese Vase; Wild Flowers in a Long-necked Vase</p>
+<p class="short">After Odilon Redon, the pastels of flowers, c. 1905–1914</p>
+<p class="full">After Odilon Redon, the pastels of flowers, c. 1905–1914: Vase of Flowers; Bouquet in a Chinese Vase; Wild Flowers in a Long-necked Vase</p>
 <p class="note">Poppies, anemones, cornflowers, marigolds and larkspur in a turquoise vase, coming out of a field of rubbed blue and gold with no table under it. A few of the flowers blaze, some stand in shadow, and those at the edges are given back to the field.</p>
 <p class="source"><a href="works/bievres.py">works/bievres.py</a> · 982 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3008">
-<a class="plate" href="plates/jardin.jpg" data-slug="jardin" data-lines="975" data-w="3200" data-h="2460"><img src="site/thumbs/jardin.jpg" width="1400" height="1076" alt="Exotic Garden with a Pale Sun" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/jardin.jpg" data-slug="jardin" data-lines="975" data-w="3200" data-h="2460"><img src="site/thumbs/jardin.jpg" width="1400" height="1076" alt="Exotic Garden with a Pale Sun" loading="lazy" decoding="async" style="background:#68805e"></a>
 <figcaption class="label">
 <h3><cite>Exotic Garden with a Pale Sun</cite>, 2026</h3>
 <p>Oil on canvas, thinly painted, every leaf drawn round with a small brush</p>
-<p>After Henri Rousseau, the jungle paintings, Paris, 1891–1910: Surprised! (1891), The Snake Charmer (1907), Exotic Landscape (1908 and 1910), The Dream (1910)</p>
+<p class="short">After Henri Rousseau, the jungle paintings, Paris, 1891–1910</p>
+<p class="full">After Henri Rousseau, the jungle paintings, Paris, 1891–1910: Surprised! (1891), The Snake Charmer (1907), Exotic Landscape (1908 and 1910), The Dream (1910)</p>
 <p class="note">A jungle built row behind row, as Rousseau built his from the hothouses of the Jardin des Plantes: a pale sun between an orange tree and a palm, and lotus and red bracts lit against the dark thicket, every leaf drawn whole in a green of its own.</p>
 <p class="source"><a href="works/jardin.py">works/jardin.py</a> · 975 lines</p>
 </figcaption>
@@ -323,7 +336,7 @@
 </div>
 <div class="row long" style="--sum:3.0000">
 <figure class="work long" style="--a:3.0000">
-<a class="plate" href="plates/giverny.jpg" data-slug="giverny" data-lines="388" data-w="4800" data-h="1600"><img src="site/thumbs/giverny.jpg" width="1400" height="467" alt="The Lily Pond, Clouds and Willows" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/giverny.jpg" data-slug="giverny" data-lines="388" data-w="4800" data-h="1600"><img src="site/thumbs/giverny.jpg" width="1400" height="467" alt="The Lily Pond, Clouds and Willows" loading="lazy" decoding="async" style="background:#505662"></a>
 <figcaption class="label">
 <h3><cite>The Lily Pond, Clouds and Willows</cite>, 2026</h3>
 <p>Oil on canvas, thin and thick: a fluid lay-in, long strokes in the reflections, scumbles dragged over dry paint, the pads in loaded dabs</p>
@@ -335,11 +348,12 @@
 </div>
 <div class="row right" style="--sum:1.1667">
 <figure class="work" style="--a:1.1667">
-<a class="plate" href="plates/le_cannet.jpg" data-slug="le_cannet" data-lines="789" data-w="2800" data-h="2400"><img src="site/thumbs/le_cannet.jpg" width="1400" height="1200" alt="The Window onto the Mimosa, Le Cannet" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/le_cannet.jpg" data-slug="le_cannet" data-lines="789" data-w="2800" data-h="2400"><img src="site/thumbs/le_cannet.jpg" width="1400" height="1200" alt="The Window onto the Mimosa, Le Cannet" loading="lazy" decoding="async" style="background:#a4868c"></a>
 <figcaption class="label">
 <h3><cite>The Window onto the Mimosa, Le Cannet</cite>, 2026</h3>
 <p>Oil on canvas: broad thin scumbles, hatchings and small dense touches of unmixed colour</p>
-<p>After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet: The Studio with Mimosa, 1939–46, and Almond Tree in Blossom, 1947</p>
+<p class="short">After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet</p>
+<p class="full">After Pierre Bonnard, the late interiors and windows at Le Bosquet, Le Cannet: The Studio with Mimosa, 1939–46, and Almond Tree in Blossom, 1947</p>
 <p class="note">A window in February, its bars crossing a mimosa in flower, with a bowl of oranges and lemons on the table before it. The room is laid in broad, thin strokes and left quiet, so that the small dense touches of the garden blaze against it.</p>
 <p class="source"><a href="works/le_cannet.py">works/le_cannet.py</a> · 789 lines</p>
 </figcaption>
@@ -347,11 +361,12 @@
 </div>
 <div class="row left" style="--sum:1.0000">
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/hollywood.jpg" data-slug="hollywood" data-lines="745" data-w="3000" data-h="3000"><img src="site/thumbs/hollywood.jpg" width="1400" height="1400" alt="A Pool in the Hills, Noon" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/hollywood.jpg" data-slug="hollywood" data-lines="745" data-w="3000" data-h="3000"><img src="site/thumbs/hollywood.jpg" width="1400" height="1400" alt="A Pool in the Hills, Noon" loading="lazy" decoding="async" style="background:#a8c4c2"></a>
 <figcaption class="label">
 <h3><cite>A Pool in the Hills, Noon</cite>, 2026</h3>
 <p>Acrylic on cotton duck, rolled and brushed flat against tape, the border and the copings left bare</p>
-<p>After David Hockney, the Los Angeles swimming pools in acrylic on canvas: Picture of a Hollywood Swimming Pool (1964), Peter Getting Out of Nick&#x27;s Pool (1966), The Splash, A Little Splash and A Bigger Splash (1966–67), Portrait of an Artist (Pool with Two Figures) (1972)</p>
+<p class="short">After David Hockney, the Los Angeles swimming pools in acrylic on canvas</p>
+<p class="full">After David Hockney, the Los Angeles swimming pools in acrylic on canvas: Picture of a Hollywood Swimming Pool (1964), Peter Getting Out of Nick&#x27;s Pool (1966), The Splash, A Little Splash and A Bigger Splash (1966–67), Portrait of an Artist (Pool with Two Figures) (1972)</p>
 <p class="note">A pool on a terrace above Hollywood at noon, seen at an angle, with no one in it: a diving board run out over the water, the splash the diver left, and the light on the water drawn in loose lines of white.</p>
 <p class="source"><a href="works/hollywood.py">works/hollywood.py</a> · 745 lines</p>
 </figcaption>
@@ -362,11 +377,12 @@
 <header><h2><span class="numeral">III</span> Paper and Water</h2><p>Watercolour, ink and mineral colour</p></header>
 <div class="row left" style="--sum:2.2667">
 <figure class="work" style="--a:2.2667">
-<a class="plate" href="plates/yatsuhashi.jpg" data-slug="yatsuhashi" data-lines="647" data-w="3400" data-h="1500"><img src="site/thumbs/yatsuhashi.jpg" width="1400" height="618" alt="Irises by the Plank Bridge" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/yatsuhashi.jpg" data-slug="yatsuhashi" data-lines="647" data-w="3400" data-h="1500"><img src="site/thumbs/yatsuhashi.jpg" width="1400" height="618" alt="Irises by the Plank Bridge" loading="lazy" decoding="async" style="background:#817f52"></a>
 <figcaption class="label">
 <h3><cite>Irises by the Plank Bridge</cite>, 2026</h3>
 <p>Six-panel folding screen: ink and mineral colour on gold leaf over paper</p>
-<p>After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo; and Irises at Yatsuhashi (Eight Bridges), pair of six-panel screens, c. 1711–14, Metropolitan Museum of Art, New York</p>
+<p class="short">After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo</p>
+<p class="full">After Ogata Kōrin, Irises (Kakitsubata-zu), pair of six-panel screens, c. 1701–05, Nezu Museum, Tokyo; and Irises at Yatsuhashi (Eight Bridges), pair of six-panel screens, c. 1711–14, Metropolitan Museum of Art, New York</p>
 <p class="note">A new screen of Kōrin&#x27;s irises: nine clumps in azurite and malachite rise and fall across six panels of gold leaf, and a bridge of grey planks zigzags up through them.</p>
 <p class="source"><a href="works/yatsuhashi.py">works/yatsuhashi.py</a> · 647 lines</p>
 </figcaption>
@@ -374,11 +390,12 @@
 </div>
 <div class="row right" style="--sum:1.3000">
 <figure class="work" style="--a:1.3000">
-<a class="plate" href="plates/corfu.jpg" data-slug="corfu" data-lines="628" data-w="3120" data-h="2400"><img src="site/thumbs/corfu.jpg" width="1400" height="1077" alt="A Wall in the Sun, Corfu" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/corfu.jpg" data-slug="corfu" data-lines="628" data-w="3120" data-h="2400"><img src="site/thumbs/corfu.jpg" width="1400" height="1077" alt="A Wall in the Sun, Corfu" loading="lazy" decoding="async" style="background:#9fa2ab"></a>
 <figcaption class="label">
 <h3><cite>A Wall in the Sun, Corfu</cite>, 2026</h3>
 <p>Watercolour, with a few touches of body colour, on rough rag paper</p>
-<p>After John Singer Sargent, the late watercolours, 1900–1911: Corfu: Lights and Shadows; Olive Trees, Corfu; Corfu: The Terrace</p>
+<p class="short">After John Singer Sargent, the late watercolours, 1900–1911</p>
+<p class="full">After John Singer Sargent, the late watercolours, 1900–1911: Corfu: Lights and Shadows; Olive Trees, Corfu; Corfu: The Terrace</p>
 <p class="note">A whitewashed garden wall above the sea at noon, with the shade of an olive thrown across it in one wash of cobalt and rose. The wall in the sun is the bare paper.</p>
 <p class="source"><a href="works/corfu.py">works/corfu.py</a> · 628 lines</p>
 </figcaption>
@@ -386,21 +403,23 @@
 </div>
 <div class="row pair" style="--sum:1.7586">
 <figure class="work" style="--a:0.7586">
-<a class="plate" href="plates/baghdad.jpg" data-slug="baghdad" data-lines="1324" data-w="2200" data-h="2900"><img src="site/thumbs/baghdad.jpg" width="1062" height="1400" alt="The Caliph&#x27;s Garden by Moonlight" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/baghdad.jpg" data-slug="baghdad" data-lines="1324" data-w="2200" data-h="2900"><img src="site/thumbs/baghdad.jpg" width="1062" height="1400" alt="The Caliph&#x27;s Garden by Moonlight" loading="lazy" decoding="async" style="background:#68717d"></a>
 <figcaption class="label">
 <h3><cite>The Caliph&#x27;s Garden by Moonlight</cite>, 2026</h3>
 <p>Watercolour and body colour over pen and ink; the colour plate tipped onto a cream page</p>
-<p>After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink: Stories from the Arabian Nights (1907); The Sleeping Beauty and Other Fairy Tales (1910); Stories from Hans Andersen (1911)</p>
+<p class="short">After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink</p>
+<p class="full">After Edmund Dulac, the fairy-tale illustrations of 1907–1916 in watercolour over pen and ink: Stories from the Arabian Nights (1907); The Sleeping Beauty and Other Fairy Tales (1910); Stories from Hans Andersen (1911)</p>
 <p class="note">A palace out of the Arabian Nights across its garden at night, the windows lit, with a fountain on the axis, cypresses, a leaning pine and a rose bush with a brass lantern glowing in it. Every line was drawn freehand with a fine nib; the blue of the sky is four washes, each washed down before the next.</p>
 <p class="source"><a href="works/baghdad.py">works/baghdad.py</a> · 1324 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/kairouan.jpg" data-slug="kairouan" data-lines="513" data-w="2500" data-h="2500"><img src="site/thumbs/kairouan.jpg" width="1400" height="1400" alt="White Domes, Kairouan" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/kairouan.jpg" data-slug="kairouan" data-lines="513" data-w="2500" data-h="2500"><img src="site/thumbs/kairouan.jpg" width="1400" height="1400" alt="White Domes, Kairouan" loading="lazy" decoding="async" style="background:#bbac9a"></a>
 <figcaption class="label">
 <h3><cite>White Domes, Kairouan</cite>, 2026</h3>
 <p>Watercolour over pencil on paper, mounted on card</p>
-<p>After Paul Klee, watercolours after the journey to Tunisia of April 1914: Red and White Domes; In the Style of Kairouan</p>
+<p class="short">After Paul Klee, watercolours after the journey to Tunisia of April 1914</p>
+<p class="full">After Paul Klee, watercolours after the journey to Tunisia of April 1914: Red and White Domes; In the Style of Kairouan</p>
 <p class="note">A white town in the south as a loose chequer of transparent washes, warm at its heart and cooler towards the edge, with two domes left as bare paper.</p>
 <p class="source"><a href="works/kairouan.py">works/kairouan.py</a> · 513 lines</p>
 </figcaption>
@@ -408,11 +427,12 @@
 </div>
 <div class="row left" style="--sum:1.3500">
 <figure class="work" style="--a:1.3500">
-<a class="plate" href="plates/seebull.jpg" data-slug="seebull" data-lines="998" data-w="3240" data-h="2400"><img src="site/thumbs/seebull.jpg" width="1400" height="1037" alt="Poppies and Dahlias, Evening" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/seebull.jpg" data-slug="seebull" data-lines="998" data-w="3240" data-h="2400"><img src="site/thumbs/seebull.jpg" width="1400" height="1037" alt="Poppies and Dahlias, Evening" loading="lazy" decoding="async" style="background:#6d4945"></a>
 <figcaption class="label">
 <h3><cite>Poppies and Dahlias, Evening</cite>, 2026</h3>
 <p>Watercolour on Japan paper</p>
-<p>After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s: Marsh Landscape with Red Clouds (early 1920s); Sunflowers (1925–28); Poppies (c. 1930); and the Unpainted Pictures (Ungemalte Bilder), 1938–45</p>
+<p class="short">After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s</p>
+<p class="full">After Emil Nolde, the flower and marsh watercolours on Japan paper from Utenwarf and Seebüll, 1920s–1940s: Marsh Landscape with Red Clouds (early 1920s); Sunflowers (1925–28); Poppies (c. 1930); and the Unpainted Pictures (Ungemalte Bilder), 1938–45</p>
 <p class="note">Poppies, dahlias and a spike of delphinium against an evening sky, laid wet into wet on damp Japan paper and left to run; the white dahlia is the bare paper.</p>
 <p class="source"><a href="works/seebull.py">works/seebull.py</a> · 998 lines</p>
 </figcaption>
@@ -420,7 +440,7 @@
 </div>
 <div class="row right" style="--sum:1.4286">
 <figure class="work" style="--a:1.4286">
-<a class="plate" href="plates/ghost_gum.jpg" data-slug="ghost_gum" data-lines="763" data-w="3200" data-h="2240"><img src="site/thumbs/ghost_gum.jpg" width="1400" height="980" alt="Ghost Gum, West MacDonnell Ranges" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/ghost_gum.jpg" data-slug="ghost_gum" data-lines="763" data-w="3200" data-h="2240"><img src="site/thumbs/ghost_gum.jpg" width="1400" height="980" alt="Ghost Gum, West MacDonnell Ranges" loading="lazy" decoding="async" style="background:#baad98"></a>
 <figcaption class="label">
 <h3><cite>Ghost Gum, West MacDonnell Ranges</cite>, 2026</h3>
 <p>Watercolour over pencil on rough rag paper</p>
@@ -432,17 +452,18 @@
 </div>
 <div class="row pair" style="--sum:2.5182">
 <figure class="work" style="--a:1.2121">
-<a class="plate" href="plates/burbank.jpg" data-slug="burbank" data-lines="891" data-w="3200" data-h="2640"><img src="site/thumbs/burbank.jpg" width="1400" height="1155" alt="A Hill Town at Dusk" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/burbank.jpg" data-slug="burbank" data-lines="891" data-w="3200" data-h="2640"><img src="site/thumbs/burbank.jpg" width="1400" height="1155" alt="A Hill Town at Dusk" loading="lazy" decoding="async" style="background:#545663"></a>
 <figcaption class="label">
 <h3><cite>A Hill Town at Dusk</cite>, 2026</h3>
 <p>Gouache on illustration board</p>
-<p>After Mary Blair, concept paintings for Walt Disney Studios: Saludos Amigos, 1942; Cinderella, 1950; Alice in Wonderland, 1951; Peter Pan, 1953; and the designs for It&#x27;s a Small World, 1964</p>
+<p class="short">After Mary Blair, concept paintings for Walt Disney Studios</p>
+<p class="full">After Mary Blair, concept paintings for Walt Disney Studios: Saludos Amigos, 1942; Cinderella, 1950; Alice in Wonderland, 1951; Peter Pan, 1953; and the designs for It&#x27;s a Small World, 1964</p>
 <p class="note">A pale castle on a chartreuse hill against a dusk that goes from ultramarine to magenta and orange, the town stacked under it in a few blocks of colour with a window lit here and there. A dark bank, an umbrella pine and a tufted tree, black against the glow, frame the view.</p>
 <p class="source"><a href="works/burbank.py">works/burbank.py</a> · 891 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3061">
-<a class="plate" href="plates/jiangnan.jpg" data-slug="jiangnan" data-lines="753" data-w="2560" data-h="1960"><img src="site/thumbs/jiangnan.jpg" width="1400" height="1072" alt="Water Town in Spring" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/jiangnan.jpg" data-slug="jiangnan" data-lines="753" data-w="2560" data-h="1960"><img src="site/thumbs/jiangnan.jpg" width="1400" height="1072" alt="Water Town in Spring" loading="lazy" decoding="async" style="background:#c1c2b7"></a>
 <figcaption class="label">
 <h3><cite>Water Town in Spring</cite>, 2026</h3>
 <p>Watercolour woodblock print (shuiyin muke), twenty-one impressions from twenty blocks, on dampened xuan paper</p>
@@ -454,11 +475,12 @@
 </div>
 <div class="row left" style="--sum:1.8391">
 <figure class="work" style="--a:1.8391">
-<a class="plate" href="plates/hakone.jpg" data-slug="hakone" data-lines="1187" data-w="3200" data-h="1740"><img src="site/thumbs/hakone.jpg" width="1400" height="761" alt="The Window over Lake Ashi" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/hakone.jpg" data-slug="hakone" data-lines="1187" data-w="3200" data-h="1740"><img src="site/thumbs/hakone.jpg" width="1400" height="761" alt="The Window over Lake Ashi" loading="lazy" decoding="async" style="background:#575240"></a>
 <figcaption class="label">
 <h3><cite>The Window over Lake Ashi</cite>, 2026</h3>
 <p>Mineral colour (iwa-enogu), ink, shell white and gold leaf on hemp paper, mounted on a panel</p>
-<p>After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988: Yamamoto Kyūjin, Hirayama Ikuo, Kayama Matazō, Hori Fumiko; and the still blue-green lakes and mountains of Higashiyama Kaii, such as Green Echoes (Midori hibiku), 1982, Nagano Prefectural Art Museum</p>
+<p class="short">After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988</p>
+<p class="full">After Modern Nihonga as the Narukawa Art Museum, Hakone, has collected it since it opened in 1988: Yamamoto Kyūjin, Hirayama Ikuo, Kayama Matazō, Hori Fumiko; and the still blue-green lakes and mountains of Higashiyama Kaii, such as Green Echoes (Midori hibiku), 1982, Nagano Prefectural Art Museum</p>
 <p class="note">The window of the museum&#x27;s lounge, which frames Fuji over Lake Ashi like a painting, painted as one: the view in mineral colour on gold leaf, the dark room round it in ink. On the water one of the lake&#x27;s sightseeing ships, dressed as a galleon, trails its wake toward the shrine.</p>
 <p class="source"><a href="works/hakone.py">works/hakone.py</a> · 1187 lines</p>
 </figcaption>
@@ -466,11 +488,12 @@
 </div>
 <div class="row right" style="--sum:1.5455">
 <figure class="work" style="--a:1.5455">
-<a class="plate" href="plates/sayama.jpg" data-slug="sayama" data-lines="1222" data-w="3400" data-h="2200"><img src="site/thumbs/sayama.jpg" width="1400" height="906" alt="Cumulus over the Sayama Hills" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/sayama.jpg" data-slug="sayama" data-lines="1222" data-w="3400" data-h="2200"><img src="site/thumbs/sayama.jpg" width="1400" height="906" alt="Cumulus over the Sayama Hills" loading="lazy" decoding="async" style="background:#6e8b7c"></a>
 <figcaption class="label">
 <h3><cite>Cumulus over the Sayama Hills</cite>, 2026</h3>
 <p>Poster colour (gouache) on drawing paper</p>
-<p>After Kazuo Oga, the background paintings for Studio Ghibli: My Neighbor Totoro (1988), Kiki&#x27;s Delivery Service (1989), Only Yesterday (1991), Princess Mononoke (1997)</p>
+<p class="short">After Kazuo Oga, the background paintings for Studio Ghibli</p>
+<p class="full">After Kazuo Oga, the background paintings for Studio Ghibli: My Neighbor Totoro (1988), Kiki&#x27;s Delivery Service (1989), Only Yesterday (1991), Princess Mononoke (1997)</p>
 <p class="note">A summer cumulus over the wooded hills where Totoro is set, the young rice in the paddies holding the sky, and a lane running into the shade of a shrine grove. The trees are built touch upon touch, from the darkest green to the sunlit tops.</p>
 <p class="source"><a href="works/sayama.py">works/sayama.py</a> · 1222 lines</p>
 </figcaption>
@@ -481,11 +504,11 @@
 <header><h2><span class="numeral">IV</span> The Workshop</h2><p>Glass, copper and the woodblock</p></header>
 <div class="row left" style="--sum:1.0000">
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/rose_window.jpg" data-slug="rose_window" data-lines="550" data-w="2600" data-h="2600"><img src="site/thumbs/rose_window.jpg" width="1400" height="1400" alt="North Rose" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/rose_window.jpg" data-slug="rose_window" data-lines="550" data-w="2600" data-h="2600"><img src="site/thumbs/rose_window.jpg" width="1400" height="1400" alt="North Rose" loading="lazy" decoding="async" style="background:#2a1e27"></a>
 <figcaption class="label">
 <h3><cite>North Rose</cite>, 2026</h3>
 <p>Pot-metal and flashed glass, painted and fired, leaded, in plate tracery</p>
-<p>After The north rose of Chartres Cathedral, given by Blanche of Castile, c. 1235</p>
+<p>After the north rose of Chartres Cathedral, given by Blanche of Castile, c. 1235</p>
 <p class="note">A north rose never has the sun on it; this is its light on any grey afternoon. Twelve doves come down to the rose at the centre, among the lilies of France and the castles of Castile: seven thousand pieces of glass, no two of them the same thickness.</p>
 <p class="source"><a href="works/rose_window.py">works/rose_window.py</a> · 550 lines</p>
 </figcaption>
@@ -493,7 +516,7 @@
 </div>
 <div class="row right" style="--sum:0.7692">
 <figure class="work" style="--a:0.7692">
-<a class="plate" href="plates/ten_bamboo.jpg" data-slug="ten_bamboo" data-lines="784" data-w="2000" data-h="2600"><img src="site/thumbs/ten_bamboo.jpg" width="1077" height="1400" alt="Loquats and a White-eye" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/ten_bamboo.jpg" data-slug="ten_bamboo" data-lines="784" data-w="2000" data-h="2600"><img src="site/thumbs/ten_bamboo.jpg" width="1077" height="1400" alt="Loquats and a White-eye" loading="lazy" decoding="async" style="background:#d7d0b8"></a>
 <figcaption class="label">
 <h3><cite>Loquats and a White-eye</cite>, 2026</h3>
 <p>Colour woodblock print from assembled blocks (douban) in 131 impressions, with blind embossing (gonghua), on xuan paper</p>
@@ -505,7 +528,7 @@
 </div>
 <div class="row pair" style="--sum:2.1836">
 <figure class="work" style="--a:1.4947">
-<a class="plate" href="plates/low_country.jpg" data-slug="low_country" data-lines="488" data-w="2840" data-h="1900"><img src="site/thumbs/low_country.jpg" width="1400" height="937" alt="The Low Country" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/low_country.jpg" data-slug="low_country" data-lines="488" data-w="2840" data-h="1900"><img src="site/thumbs/low_country.jpg" width="1400" height="937" alt="The Low Country" loading="lazy" decoding="async" style="background:#c9c1b0"></a>
 <figcaption class="label">
 <h3><cite>The Low Country</cite>, 2026</h3>
 <p>Etching, printed on laid paper</p>
@@ -515,11 +538,12 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.6889">
-<a class="plate" href="plates/malmaison.jpg" data-slug="malmaison" data-lines="757" data-w="2480" data-h="3600"><img src="site/thumbs/malmaison.jpg" width="964" height="1400" alt="A Flamed Tulip" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/malmaison.jpg" data-slug="malmaison" data-lines="757" data-w="2480" data-h="3600"><img src="site/thumbs/malmaison.jpg" width="964" height="1400" alt="A Flamed Tulip" loading="lazy" decoding="async" style="background:#ddd8ca"></a>
 <figcaption class="label">
 <h3><cite>A Flamed Tulip</cite>, 2026</h3>
 <p>Stipple engraving printed in colour from one plate inked à la poupée, finished by hand in watercolour, on wove paper</p>
-<p>After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824: stipple engravings printed in colour and finished by hand in watercolour</p>
+<p class="short">After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824</p>
+<p class="full">After Pierre-Joseph Redouté, Les Liliacées, Paris, 1802–1816, and Les Roses, Paris, 1817–1824: stipple engravings printed in colour and finished by hand in watercolour</p>
 <p class="note">A garden tulip from its bulb to its flower, open and flamed crimson on yellow, with a bud and three leaves turning to show both faces: every form is built of engraved dots of coloured ink, washed over by hand.</p>
 <p class="source"><a href="works/malmaison.py">works/malmaison.py</a> · 757 lines</p>
 </figcaption>
@@ -527,7 +551,7 @@
 </div>
 <div class="row left" style="--sum:1.4545">
 <figure class="work" style="--a:1.4545">
-<a class="plate" href="plates/red_fuji.jpg" data-slug="red_fuji" data-lines="146" data-w="2560" data-h="1760"><img src="site/thumbs/red_fuji.jpg" width="1400" height="963" alt="Red Fuji, Clear Morning" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/red_fuji.jpg" data-slug="red_fuji" data-lines="146" data-w="2560" data-h="1760"><img src="site/thumbs/red_fuji.jpg" width="1400" height="963" alt="Red Fuji, Clear Morning" loading="lazy" decoding="async" style="background:#80695a"></a>
 <figcaption class="label">
 <h3><cite>Red Fuji, Clear Morning</cite>, 2026</h3>
 <p>Colour woodblock print (moku-hanga) from six blocks, on kozo paper</p>
@@ -539,7 +563,7 @@
 </div>
 <div class="row right" style="--sum:1.4128">
 <figure class="work" style="--a:1.4128">
-<a class="plate" href="plates/arashiyama.jpg" data-slug="arashiyama" data-lines="1151" data-w="3080" data-h="2180"><img src="site/thumbs/arashiyama.jpg" width="1400" height="991" alt="Blossom Rafts at Arashiyama" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/arashiyama.jpg" data-slug="arashiyama" data-lines="1151" data-w="3080" data-h="2180"><img src="site/thumbs/arashiyama.jpg" width="1400" height="991" alt="Blossom Rafts at Arashiyama" loading="lazy" decoding="async" style="background:#858e8f"></a>
 <figcaption class="label">
 <h3><cite>Blossom Rafts at Arashiyama</cite>, 2026</h3>
 <p>Colour woodblock print (nishiki-e) in thirty-five impressions, ōban yoko-e, on hōsho paper</p>
@@ -551,7 +575,7 @@
 </div>
 <div class="row pair" style="--sum:1.4032">
 <figure class="work" style="--a:0.6889">
-<a class="plate" href="plates/shower.jpg" data-slug="shower" data-lines="514" data-w="1860" data-h="2700"><img src="site/thumbs/shower.jpg" width="964" height="1400" alt="Shower on the Long Bridge" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/shower.jpg" data-slug="shower" data-lines="514" data-w="1860" data-h="2700"><img src="site/thumbs/shower.jpg" width="964" height="1400" alt="Shower on the Long Bridge" loading="lazy" decoding="async" style="background:#686d69"></a>
 <figcaption class="label">
 <h3><cite>Shower on the Long Bridge</cite>, 2026</h3>
 <p>Colour woodblock print (moku-hanga) from seventeen blocks, on kozo paper</p>
@@ -561,11 +585,12 @@
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.7143">
-<a class="plate" href="plates/laurelton.jpg" data-slug="laurelton" data-lines="974" data-w="2000" data-h="2800"><img src="site/thumbs/laurelton.jpg" width="1000" height="1400" alt="An Evening in May" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/laurelton.jpg" data-slug="laurelton" data-lines="974" data-w="2000" data-h="2800"><img src="site/thumbs/laurelton.jpg" width="1000" height="1400" alt="An Evening in May" loading="lazy" decoding="async" style="background:#63708c"></a>
 <figcaption class="label">
 <h3><cite>An Evening in May</cite>, 2026</h3>
 <p>Opalescent glass, streaky, mottled, drapery, ripple, confetti and streamer, plated in places, in copper foil and lead, with iron bars</p>
-<p>After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925: Magnolias and Irises, c. 1908; Autumn Landscape, 1923–24; the windows for Laurelton Hall</p>
+<p class="short">After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925</p>
+<p class="full">After Louis Comfort Tiffany and Tiffany Studios, the landscape windows in opalescent glass, New York, c. 1900–1925: Magnolias and Irises, c. 1908; Autumn Landscape, 1923–24; the windows for Laurelton Hall</p>
 <p class="note">A magnolia and a wisteria in flower frame a sunset over blue hills, and irises stand at the edge of the river. Nothing is painted: every colour is in the glass, each piece chosen for where its streaks fall.</p>
 <p class="source"><a href="works/laurelton.py">works/laurelton.py</a> · 974 lines</p>
 </figcaption>
@@ -573,7 +598,7 @@
 </div>
 <div class="row left" style="--sum:1.4545">
 <figure class="work" style="--a:1.4545">
-<a class="plate" href="plates/inland_sea.jpg" data-slug="inland_sea" data-lines="406" data-w="2560" data-h="1760"><img src="site/thumbs/inland_sea.jpg" width="1400" height="963" alt="Evening Sails" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/inland_sea.jpg" data-slug="inland_sea" data-lines="406" data-w="2560" data-h="1760"><img src="site/thumbs/inland_sea.jpg" width="1400" height="963" alt="Evening Sails" loading="lazy" decoding="async" style="background:#a08085"></a>
 <figcaption class="label">
 <h3><cite>Evening Sails</cite>, 2026</h3>
 <p>Colour woodblock print (shin-hanga) in twenty-five impressions, on kozo paper</p>
@@ -585,11 +610,12 @@
 </div>
 <div class="row right" style="--sum:0.6452">
 <figure class="work" style="--a:0.6452">
-<a class="plate" href="plates/riviera.jpg" data-slug="riviera" data-lines="881" data-w="2000" data-h="3100"><img src="site/thumbs/riviera.jpg" width="903" height="1400" alt="The Bay through the Pines" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/riviera.jpg" data-slug="riviera" data-lines="881" data-w="2000" data-h="3100"><img src="site/thumbs/riviera.jpg" width="903" height="1400" alt="The Bay through the Pines" loading="lazy" decoding="async" style="background:#878a89"></a>
 <figcaption class="label">
 <h3><cite>The Bay through the Pines</cite>, 2026</h3>
 <p>Colour lithograph poster, printed from seven stones on machine-made paper</p>
-<p>After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s: Menton, c. 1923; Agay, 1928; Antibes, c. 1928; Sainte-Maxime; Villefranche-sur-Mer</p>
+<p class="short">After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s</p>
+<p class="full">After Roger Broders, the travel posters for the Paris–Lyon–Méditerranée railway, 1920s–1930s: Menton, c. 1923; Agay, 1928; Antibes, c. 1928; Sainte-Maxime; Villefranche-sur-Mer</p>
 <p class="note">A new poster for the Côte d&#x27;Azur: an umbrella pine leaning out over a deep blue bay, the sun on the water and a white town on its headland, with agaves and red rocks cut into planes below. Seven stones, drawn in tusche, crayon and spatter and printed a hair out of register.</p>
 <p class="source"><a href="works/riviera.py">works/riviera.py</a> · 881 lines</p>
 </figcaption>
@@ -597,7 +623,7 @@
 </div>
 <div class="row left" style="--sum:0.8381">
 <figure class="work" style="--a:0.8381">
-<a class="plate" href="plates/sydney.jpg" data-slug="sydney" data-lines="877" data-w="2588" data-h="3088"><img src="site/thumbs/sydney.jpg" width="1173" height="1400" alt="The Arch Closing" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/sydney.jpg" data-slug="sydney" data-lines="877" data-w="2588" data-h="3088"><img src="site/thumbs/sydney.jpg" width="1173" height="1400" alt="The Arch Closing" loading="lazy" decoding="async" style="background:#989480"></a>
 <figcaption class="label">
 <h3><cite>The Arch Closing</cite>, 2026</h3>
 <p>Colour linocut from five blocks in oil-based ink, burnished by hand, on thin Japanese paper</p>
@@ -612,7 +638,7 @@
 <header><h2><span class="numeral">V</span> Colour Itself</h2><p>Abstraction</p></header>
 <div class="row left" style="--sum:0.7500">
 <figure class="work" style="--a:0.7500">
-<a class="plate" href="plates/stockholm.jpg" data-slug="stockholm" data-lines="559" data-w="2400" data-h="3200"><img src="site/thumbs/stockholm.jpg" width="1050" height="1400" alt="Youth, with Two Spirals" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/stockholm.jpg" data-slug="stockholm" data-lines="559" data-w="2400" data-h="3200"><img src="site/thumbs/stockholm.jpg" width="1050" height="1400" alt="Youth, with Two Spirals" loading="lazy" decoding="async" style="background:#c58869"></a>
 <figcaption class="label">
 <h3><cite>Youth, with Two Spirals</cite>, 2026</h3>
 <p>Tempera on paper, the sheets joined and mounted on canvas</p>
@@ -624,11 +650,12 @@
 </div>
 <div class="row right" style="--sum:1.3333">
 <figure class="work" style="--a:1.3333">
-<a class="plate" href="plates/louveciennes.jpg" data-slug="louveciennes" data-lines="462" data-w="3200" data-h="2400"><img src="site/thumbs/louveciennes.jpg" width="1400" height="1050" alt="Sun and Moon" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/louveciennes.jpg" data-slug="louveciennes" data-lines="462" data-w="3200" data-h="2400"><img src="site/thumbs/louveciennes.jpg" width="1400" height="1050" alt="Sun and Moon" loading="lazy" decoding="async" style="background:#bdaea1"></a>
 <figcaption class="label">
 <h3><cite>Sun and Moon</cite>, 2026</h3>
 <p>Oil on canvas, thinned in places and loaded in others</p>
-<p>After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13; Sonia Delaunay, Electric Prisms (Prismes électriques), 1914</p>
+<p class="short">After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13</p>
+<p class="full">After Robert Delaunay, Circular Forms (Formes circulaires), Louveciennes, 1912–13; Sonia Delaunay, Electric Prisms (Prismes électriques), 1914</p>
 <p class="note">Discs of unmixed colour, ringed and quartered so that orange meets blue, red meets green and yellow meets violet. A warm sun and a smaller, cool moon hold the two ends, and one great arc crosses everything.</p>
 <p class="source"><a href="works/louveciennes.py">works/louveciennes.py</a> · 462 lines</p>
 </figcaption>
@@ -636,21 +663,23 @@
 </div>
 <div class="row pair" style="--sum:2.3462">
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/nice.jpg" data-slug="nice" data-lines="571" data-w="2600" data-h="2600"><img src="site/thumbs/nice.jpg" width="1400" height="1400" alt="The Sea Garden" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/nice.jpg" data-slug="nice" data-lines="571" data-w="2600" data-h="2600"><img src="site/thumbs/nice.jpg" width="1400" height="1400" alt="The Sea Garden" loading="lazy" decoding="async" style="background:#8b7e8b"></a>
 <figcaption class="label">
 <h3><cite>The Sea Garden</cite>, 2026</h3>
 <p>Gouache on paper, cut and pasted on white paper, mounted on canvas</p>
-<p>After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954: Beasts of the Sea, 1950; Memory of Oceania, 1952–53; The Snail, 1953; The Sheaf, 1953</p>
+<p class="short">After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954</p>
+<p class="full">After Henri Matisse, the cut-outs (gouaches découpées) of his last years at the Hôtel Régina, Nice, 1950–1954: Beasts of the Sea, 1950; Memory of Oceania, 1952–53; The Snail, 1953; The Sheaf, 1953</p>
 <p class="note">Slabs of pure colour pasted turning round a violet one set askew, and over them three sea weeds and four stars cut freehand from sheets brushed with other colours, crossing from one ground into the next.</p>
 <p class="source"><a href="works/nice.py">works/nice.py</a> · 571 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:1.3462">
-<a class="plate" href="plates/agrigento.jpg" data-slug="agrigento" data-lines="403" data-w="2800" data-h="2080"><img src="site/thumbs/agrigento.jpg" width="1400" height="1040" alt="The Temple above the Sea" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/agrigento.jpg" data-slug="agrigento" data-lines="403" data-w="2800" data-h="2080"><img src="site/thumbs/agrigento.jpg" width="1400" height="1040" alt="The Temple above the Sea" loading="lazy" decoding="async" style="background:#d26d42"></a>
 <figcaption class="label">
 <h3><cite>The Temple above the Sea</cite>, 2026</h3>
 <p>Oil on canvas, laid on with palette knives and a broad spatula</p>
-<p>After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953: Agrigente (1953–54), Sicile (1954), Paysage de Sicile (1954)</p>
+<p class="short">After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953</p>
+<p class="full">After Nicolas de Staël, the Sicilian landscapes painted after his journey of 1953: Agrigente (1953–54), Sicile (1954), Paysage de Sicile (1954)</p>
 <p class="note">A temple on a dark hill under a vermilion sky, the sea on either side and a white road climbing to it through hot planes of yellow and magenta, each plane built of knife passes dragged over a lay-in of another colour, which shows at their edges.</p>
 <p class="source"><a href="works/agrigento.py">works/agrigento.py</a> · 403 lines</p>
 </figcaption>
@@ -658,11 +687,12 @@
 </div>
 <div class="row left" style="--sum:1.6000">
 <figure class="work" style="--a:1.6000">
-<a class="plate" href="plates/around_blue.jpg" data-slug="around_blue" data-lines="359" data-w="3600" data-h="2250"><img src="site/thumbs/around_blue.jpg" width="1400" height="875" alt="The White Between" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/around_blue.jpg" data-slug="around_blue" data-lines="359" data-w="3600" data-h="2250"><img src="site/thumbs/around_blue.jpg" width="1400" height="875" alt="The White Between" loading="lazy" decoding="async" style="background:#ced1d9"></a>
 <figcaption class="label">
 <h3><cite>The White Between</cite>, 2026</h3>
 <p>Oil thinned with turpentine on white-primed cotton duck</p>
-<p>After Sam Francis, the paintings of 1953–65: Big Red (1953), the Basel Mural (1956–58), Around the Blues (1957, 1962–63), the Blue Balls series (1960–63) and the first Edge paintings (1964–65)</p>
+<p class="short">After Sam Francis, the paintings of 1953–65</p>
+<p class="full">After Sam Francis, the paintings of 1953–65: Big Red (1953), the Basel Mural (1956–58), Around the Blues (1957, 1962–63), the Blue Balls series (1960–63) and the first Edge paintings (1964–65)</p>
 <p class="note">Cells of cerulean, cobalt and ultramarine, with touches of yellow, orange, red and green, crowd down the left of a white canvas, drift along the top and gather in the corners on the right; the thin oil dried with dark edges round paler middles and ran down in drips.</p>
 <p class="source"><a href="works/around_blue.py">works/around_blue.py</a> · 359 lines</p>
 </figcaption>
@@ -670,7 +700,7 @@
 </div>
 <div class="row right" style="--sum:1.2500">
 <figure class="work" style="--a:1.2500">
-<a class="plate" href="plates/provincetown.jpg" data-slug="provincetown" data-lines="311" data-w="3000" data-h="2400"><img src="site/thumbs/provincetown.jpg" width="1400" height="1120" alt="Harbor, August" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/provincetown.jpg" data-slug="provincetown" data-lines="311" data-w="3000" data-h="2400"><img src="site/thumbs/provincetown.jpg" width="1400" height="1120" alt="Harbor, August" loading="lazy" decoding="async" style="background:#b3b9b1"></a>
 <figcaption class="label">
 <h3><cite>Harbor, August</cite>, 2026</h3>
 <p>Acrylic thinned with water, poured and stained into unprimed cotton duck, over charcoal</p>
@@ -682,21 +712,23 @@
 </div>
 <div class="row pair" style="--sum:1.5586">
 <figure class="work" style="--a:0.8000">
-<a class="plate" href="plates/washington.jpg" data-slug="washington" data-lines="290" data-w="2400" data-h="3000"><img src="site/thumbs/washington.jpg" width="1120" height="1400" alt="Morning Sun in the Garden" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/washington.jpg" data-slug="washington" data-lines="290" data-w="2400" data-h="3000"><img src="site/thumbs/washington.jpg" width="1120" height="1400" alt="Morning Sun in the Garden" loading="lazy" decoding="async" style="background:#cb7867"></a>
 <figcaption class="label">
 <h3><cite>Morning Sun in the Garden</cite>, 2026</h3>
 <p>Acrylic and pencil on canvas: columns of touches of a flat brush over loosely brushed bands of blue and green</p>
-<p>After Alma Thomas, the paintings she made in Washington, 1966–76: Resurrection (1966), Starry Night and the Astronauts (1972), Red Roses Sonata (1972), Elysian Fields (1973), Wind and Crepe Myrtle Concerto (1973)</p>
+<p class="short">After Alma Thomas, the paintings she made in Washington, 1966–76</p>
+<p class="full">After Alma Thomas, the paintings she made in Washington, 1966–76: Resurrection (1966), Starry Night and the Astronauts (1972), Red Roses Sonata (1972), Elysian Fields (1973), Wind and Crepe Myrtle Concerto (1973)</p>
 <p class="note">Columns of short strokes of a flat brush, crimson, red, orange, yellow and pink, change across the canvas in bands. Where a leaning band of yellow falls the white canvas opens between them; elsewhere flecks of blue and green show from beneath.</p>
 <p class="source"><a href="works/washington.py">works/washington.py</a> · 290 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.7586">
-<a class="plate" href="plates/ocean_park.jpg" data-slug="ocean_park" data-lines="622" data-w="2200" data-h="2900"><img src="site/thumbs/ocean_park.jpg" width="1062" height="1400" alt="The Window at Ocean Park" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/ocean_park.jpg" data-slug="ocean_park" data-lines="622" data-w="2200" data-h="2900"><img src="site/thumbs/ocean_park.jpg" width="1062" height="1400" alt="The Window at Ocean Park" loading="lazy" decoding="async" style="background:#c6d5db"></a>
 <figcaption class="label">
 <h3><cite>The Window at Ocean Park</cite>, 2026</h3>
 <p>Oil and charcoal on canvas, laid in thin and painted over in three sittings, scraped back and redrawn</p>
-<p>After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88 (among them Ocean Park No. 54, 1972; No. 79, 1975; No. 129, 1984)</p>
+<p class="short">After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88</p>
+<p class="full">After Richard Diebenkorn, the Ocean Park paintings, Santa Monica, 1967–88 (among them Ocean Park No. 54, 1972; No. 79, 1975; No. 129, 1984)</p>
 <p class="note">A scaffold of bands across the top and down the right, a diagonal across the corner where they meet, and a large pale field of sea light, painted over three times so that the earlier lines and colours still show through.</p>
 <p class="source"><a href="works/ocean_park.py">works/ocean_park.py</a> · 622 lines</p>
 </figcaption>
@@ -704,11 +736,12 @@
 </div>
 <div class="row left" style="--sum:1.0000">
 <figure class="work" style="--a:1.0000">
-<a class="plate" href="plates/rajasthan.jpg" data-slug="rajasthan" data-lines="631" data-w="2700" data-h="2700"><img src="site/thumbs/rajasthan.jpg" width="1400" height="1400" alt="The Black Sun" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/rajasthan.jpg" data-slug="rajasthan" data-lines="631" data-w="2700" data-h="2700"><img src="site/thumbs/rajasthan.jpg" width="1400" height="1400" alt="The Black Sun" loading="lazy" decoding="async" style="background:#b65926"></a>
 <figcaption class="label">
 <h3><cite>The Black Sun</cite>, 2026</h3>
 <p>Acrylic on canvas, laid on with the knife and the brush in layers, scumbled, run and scratched</p>
-<p>After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s: Rajasthan (1975), Rajasthan (1983), Saurashtra (1983), La Terre (1985)</p>
+<p class="short">After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s</p>
+<p class="full">After S. H. Raza, the paintings of Rajasthan and Saurashtra made in Paris from the mid 1970s: Rajasthan (1975), Rajasthan (1983), Saurashtra (1983), La Terre (1985)</p>
 <p class="note">Two triangles stand in a banded sky as planes of colour, crossed by the bands and making a third colour where they overlap, under a black sun; below, a saffron room and a carmine one, each crossed by broad strokes of its own colour deepened. Acrylic spread with the knife zone by zone, scumbled, and scratched down to the yellow ground.</p>
 <p class="source"><a href="works/rajasthan.py">works/rajasthan.py</a> · 631 lines</p>
 </figcaption>
@@ -716,7 +749,7 @@
 </div>
 <div class="row right" style="--sum:2.0000">
 <figure class="work" style="--a:2.0000">
-<a class="plate" href="plates/rue_jonquoy.jpg" data-slug="rue_jonquoy" data-lines="578" data-w="3900" data-h="1950"><img src="site/thumbs/rue_jonquoy.jpg" width="1400" height="700" alt="Light Rising over Water" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/rue_jonquoy.jpg" data-slug="rue_jonquoy" data-lines="578" data-w="3900" data-h="1950"><img src="site/thumbs/rue_jonquoy.jpg" width="1400" height="700" alt="Light Rising over Water" loading="lazy" decoding="async" style="background:#8e909a"></a>
 <figcaption class="label">
 <h3><cite>Light Rising over Water</cite>, 2026</h3>
 <p>Oil on canvas, thinned almost to a wash and laid in many veils with broad brushes and a rag, wiped back and left to run; drawn into with a smaller brush, a few touches laid thick with a loaded brush</p>
@@ -728,17 +761,18 @@
 </div>
 <div class="row pair" style="--sum:2.0317">
 <figure class="work" style="--a:1.1429">
-<a class="plate" href="plates/monsoon.jpg" data-slug="monsoon" data-lines="627" data-w="2880" data-h="2520"><img src="site/thumbs/monsoon.jpg" width="1400" height="1225" alt="The Monsoon Breaking" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/monsoon.jpg" data-slug="monsoon" data-lines="627" data-w="2880" data-h="2520"><img src="site/thumbs/monsoon.jpg" width="1400" height="1225" alt="The Monsoon Breaking" loading="lazy" decoding="async" style="background:#513938"></a>
 <figcaption class="label">
 <h3><cite>The Monsoon Breaking</cite>, 2026</h3>
 <p>Oil on a mahogany panel in a pine frame, the frame painted as part of the picture</p>
-<p>After Howard Hodgkin, the paintings on wood of the 1980s: Venice Evening (1984–85), Rain (1984–89), Love Letter (1984–88), In Tangier (1987–90), Indian Sky (1988–89)</p>
+<p class="short">After Howard Hodgkin, the paintings on wood of the 1980s</p>
+<p class="full">After Howard Hodgkin, the paintings on wood of the 1980s: Venice Evening (1984–85), Rain (1984–89), Love Letter (1984–88), In Tangier (1987–90), Indian Sky (1988–89)</p>
 <p class="note">The monsoon breaking over a garden, remembered. Inside a deep green frame and a red one, one sweep of ultramarine curls over a crimson dark with the light glowing hot beneath it, and the rain is dragged across in a pale, dry veil that lets the colour show through.</p>
 <p class="source"><a href="works/monsoon.py">works/monsoon.py</a> · 627 lines</p>
 </figcaption>
 </figure>
 <figure class="work" style="--a:0.8889">
-<a class="plate" href="plates/cologne.jpg" data-slug="cologne" data-lines="431" data-w="2400" data-h="2700"><img src="site/thumbs/cologne.jpg" width="1244" height="1400" alt="Abstract Picture" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/cologne.jpg" data-slug="cologne" data-lines="431" data-w="2400" data-h="2700"><img src="site/thumbs/cologne.jpg" width="1244" height="1400" alt="Abstract Picture" loading="lazy" decoding="async" style="background:#886542"></a>
 <figcaption class="label">
 <h3><cite>Abstract Picture</cite>, 2026</h3>
 <p>Oil on canvas: loose passages of colour brushed on, then dragged and scraped with a squeegee, wet into wet and over half-dry paint, with fresh colour between the pulls</p>
@@ -750,7 +784,7 @@
 </div>
 <div class="row left" style="--sum:0.8000">
 <figure class="work" style="--a:0.8000">
-<a class="plate" href="plates/vetheuil.jpg" data-slug="vetheuil" data-lines="400" data-w="2400" data-h="3000"><img src="site/thumbs/vetheuil.jpg" width="1120" height="1400" alt="Sunflowers, Late Summer" loading="lazy" decoding="async"></a>
+<a class="plate" href="plates/vetheuil.jpg" data-slug="vetheuil" data-lines="400" data-w="2400" data-h="3000"><img src="site/thumbs/vetheuil.jpg" width="1120" height="1400" alt="Sunflowers, Late Summer" loading="lazy" decoding="async" style="background:#c6c7ba"></a>
 <figcaption class="label">
 <h3><cite>Sunflowers, Late Summer</cite>, 2026</h3>
 <p>Oil on canvas: thin washes that run, broad loaded strokes and fast dry ones of unmixed colour, white painted back over them</p>
@@ -762,13 +796,13 @@
 </div>
 </section>
 </main>
-<footer class="colophon" data-wall="#242321" data-ink="#ece6d8" data-dim="#a19b8e">
+<footer class="colophon" data-wall="#f6f3ec" data-ink="#29251f" data-dim="#6e675c">
 <h2>Colophon</h2>
 <p>Every plate in this museum can be made again from its source, on any computer, in a minute or two.</p>
 <pre><code>git clone https://github.com/Chaoqi31/claude-glass &amp;&amp; cd claude-glass
 uv run render.py giverny     # paint one work into plates/
 uv run render.py             # paint them all
-uv run site.py               # hang them: the wall, this README and the website
+uv run site.py               # hang them: the wall, the README and the website
 uv run timeline.py           # the film and its score (needs ffmpeg)</code></pre>
 <p>A work is one Python file in <code>works/</code>. It carries its wall label (title, medium, the painter or tradition it follows, the year, the place) and a function, <code>paint(seed)</code>, that returns the picture in linear light. Each picture is built the way its medium is: a stroke is a path that carries a load of paint, a block is cut, inked and pressed, glass is cut and leaded, and what you see is whatever the bristles, the pigment and the ground leave behind.</p>
 <p>The materials are in <code>atelier/</code>, each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint (<a href="atelier/impasto.py"><code>impasto.py</code></a>), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. The film's music is made the same way: <a href="score.py"><code>score.py</code></a> writes it to the film's bars, and <a href="atelier/music.py"><code>music.py</code></a> sings it, with a voice and a choir built from the resonances of a throat and mouth, a low hum, a drum and a hall. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.</p>
@@ -780,7 +814,7 @@ uv run timeline.py           # the film and its score (needs ffmpeg)</code></pre
 <div class="stage"></div>
 <div class="back"><div class="linen" tabindex="0"><p class="file"></p><pre><code></code></pre></div></div>
 <div class="controls">
-<button type="button" class="turn" aria-label="Turn it over" title="Turn it over (T)">&#8635;</button>
+<button type="button" class="turn" title="Turn it over (T)">Turn over</button>
 <button type="button" class="prev" aria-label="Previous work">&larr;</button>
 <button type="button" class="next" aria-label="Next work">&rarr;</button>
 <button type="button" class="close" aria-label="Close" autofocus>&times;</button>

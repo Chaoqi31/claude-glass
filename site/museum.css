@@ -12,7 +12,8 @@
   color-scheme: dark;
   background: var(--wall);
   color: var(--ink);
-  font: 1.0625rem/1.6 var(--serif);
+  font: 106.25%/1.6 var(--serif);  /* not 1.0625rem: while the walls change colour, Safari reads a rem here against
+                                      this very size, frame after frame, and the type swells */
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   transition: --wall 1.6s ease, --ink 1.6s ease, --dim 1.6s ease;
@@ -24,7 +25,8 @@ a { color: inherit; text-decoration-color: var(--rule); text-decoration-thicknes
 a:hover { text-decoration-color: currentColor; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 code, pre { font-family: var(--mono); font-size: .85em; }
-pre { padding: 1rem 1.25rem; overflow-x: auto; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; }
+pre { padding: 1rem 1.25rem; background: color-mix(in srgb, var(--ink) 4%, transparent); line-height: 1.6; white-space: pre-wrap;
+  overflow-wrap: anywhere; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 .numeral { letter-spacing: .08em; }
@@ -51,28 +53,50 @@ p { text-wrap: pretty; }
 .ways a:hover { border-color: var(--accent); }
 .words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
-.intro { padding: clamp(3rem, 10vh, 6rem) 1.25rem 0; }
+.intro { padding: clamp(4rem, 12vh, 7rem) 1.25rem 0; }
 .text { max-width: 33em; margin: 0 auto; }
 .text p { margin: 0 0 1.1em; }
 .text p:first-child::first-letter { float: left; margin: .06em .1em 0 0; color: var(--accent); font-size: 3.55em; line-height: .82; }
-.film { display: block; width: min(100%, 60rem); height: auto; margin: clamp(3rem, 9vh, 5rem) auto 0; background: #090807;
-  box-shadow: 0 2rem 3rem -1rem rgb(0 0 0 / .5); }
+.screen { position: relative; width: min(100%, 60rem); margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
+.film { display: block; width: 100%; height: auto; background: #090807; box-shadow: 0 1.2rem 2.2rem -1.2rem rgb(0 0 0 / .45); }
+.play { position: absolute; inset: 0 0 auto; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: none; cursor: pointer; }
+.play::before { content: ""; position: absolute; left: clamp(.8rem, 2.5%, 1.6rem); bottom: clamp(.8rem, 4%, 1.6rem); width: 3.6rem;
+  height: 3.6rem; border-radius: 50%; background: rgb(246 243 236 / .92); transition: scale .4s cubic-bezier(.2, .7, .3, 1); }
+.play::after { content: ""; position: absolute; left: calc(clamp(.8rem, 2.5%, 1.6rem) + 1.42rem); bottom: calc(clamp(.8rem, 4%, 1.6rem) + 1.2rem);
+  border: solid transparent; border-width: .6rem 0 .6rem 1rem; border-left-color: #29251f; }
+.play:hover::before { scale: 1.08; }
+.screen figcaption { margin-top: .9rem; color: var(--dim); font-size: .85rem; font-style: italic; text-align: center; }
 .plan { max-width: 54rem; margin: clamp(5rem, 14vh, 8rem) auto 0; }
-.plan ol { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.75rem, 1fr)); gap: 2rem clamp(.75rem, 2vw, 1.25rem); margin: 0; padding: 0; list-style: none; }
-.plan a { display: grid; justify-items: center; gap: .15rem; text-align: center; text-decoration: none; }
-.door { display: grid; place-items: center; width: min(100%, 10rem); aspect-ratio: 3 / 4.2; margin-bottom: .9rem; border-radius: 50% 50% 0 0 / 32% 32% 0 0;
-  background: var(--door); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .09), inset 0 -3rem 3rem -2.5rem rgb(0 0 0 / .35);
-  transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
-.door img { width: 48%; height: auto; box-shadow: 0 .5rem .9rem -.35rem rgb(0 0 0 / .55); }
-.plan a:hover .door { transform: translateY(-5px); }
-.plan .numeral { color: var(--accent); font-size: .95rem; }
-.plan .name { font-variant-caps: all-small-caps; letter-spacing: .12em; }
-.plan .count { color: var(--dim); font-size: .8rem; font-style: italic; }
-.sign { position: fixed; top: 50%; left: .85rem; z-index: 5; writing-mode: vertical-rl; rotate: 180deg; translate: 0 -50%;
-  color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .2em; text-decoration: none;
+.plan ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+.plan a { display: grid; grid-template: "num name strip" auto "num about strip" auto "num count strip" 1fr / 2.4rem minmax(0, 14rem) minmax(0, 1fr);
+  column-gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
+.plan .numeral { grid-area: num; color: var(--accent); font-size: 1.1rem; line-height: 1.6; }
+.plan .name { grid-area: name; font-size: 1.1rem; font-variant-caps: all-small-caps; letter-spacing: .14em; line-height: 1.6; }
+.plan a:hover .name { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: .3em; }
+.plan .about { grid-area: about; color: var(--dim); font-size: .9rem; font-style: italic; line-height: 1.4; }
+.plan .count { grid-area: count; margin-top: .5rem; color: var(--dim); font-size: .8rem; }
+.strip { grid-area: strip; align-self: center; display: flex; gap: .6rem; align-items: center; padding: 1rem 1.1rem; background: var(--door);
+  box-shadow: inset 0 0 0 1px var(--rule); }
+.strip img { flex: var(--a) 1 0; min-width: 0; height: auto; aspect-ratio: var(--a); box-shadow: 0 .35rem .6rem -.25rem rgb(0 0 0 / .45);
+  transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+.plan a:hover .strip img { translate: 0 -3px; }
+@media (max-width: 40rem) {
+  .plan a { grid-template: "num name" auto "num about" auto "num count" auto "strip strip" auto / 2rem minmax(0, 1fr); column-gap: .6rem; }
+  .strip { margin-top: 1rem; padding: .8rem; gap: .45rem; }
+}
+.marker { position: fixed; top: .7rem; left: .7rem; z-index: 5; font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .16em;
   opacity: 0; pointer-events: none; transition: opacity .6s ease; }
-.sign.on { opacity: 1; pointer-events: auto; }
-@media (max-width: 64rem) { .sign { display: none; } }
+.marker.on { opacity: 1; pointer-events: auto; }
+.marker summary { padding: .3rem .85rem; border-radius: 1rem; background: color-mix(in srgb, var(--wall) 88%, transparent);
+  box-shadow: inset 0 0 0 1px var(--rule); color: var(--ink); cursor: pointer; list-style: none; }
+.marker summary::-webkit-details-marker { display: none; }
+.marker summary::after { content: "  \25BE"; color: var(--dim); }
+.marker[open] summary::after { content: "  \25B4"; }
+.marker ol { margin: .4rem 0 0; padding: .5rem .9rem; list-style: none; background: var(--wall);
+  box-shadow: inset 0 0 0 1px var(--rule), 0 .8rem 1.6rem -.8rem rgb(0 0 0 / .5); }
+.marker a { display: block; padding: .3rem 0; color: var(--ink); text-decoration: none; }
+.marker a:hover { color: var(--accent); }
+.marker .numeral { display: inline-block; min-width: 2.4em; color: var(--accent); }
 @media (max-width: 52rem) { .bar nav { display: none; } }
 
 main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
@@ -107,6 +131,8 @@ figcaption.label { max-width: 32rem; }
 .label p { margin: 0; }
 .label .note { margin-top: 1rem; color: var(--ink); }
 .label .source { margin-top: 1rem; font-size: .8rem; }
+.label .full, .viewer .label .short { display: none; }
+.viewer .label .full { display: block; }
 .source a { font-family: var(--mono); }
 
 .colophon { max-width: 33em; margin: 0 auto; padding: clamp(8rem, 24vh, 14rem) 1.25rem 6rem; color: var(--dim); }
@@ -129,6 +155,8 @@ figcaption.label { max-width: 32rem; }
 .controls button { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--wall) 60%, transparent);
   color: var(--ink); font: 1.35rem/1 var(--serif); cursor: pointer; }
 .controls button:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.controls .turn { width: auto; padding: 0 1.1rem; border-radius: 1.4rem; font: .85rem/1 var(--serif); font-variant-caps: all-small-caps;
+  letter-spacing: .12em; }
 .viewer.scroll[open] { display: flex; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--dim) transparent; }
 .viewer.scroll .caption { flex: 0 0 min(24rem, 80vw); max-height: none; padding: 2rem 2.5rem; }
 .viewer.scroll .stage { flex: none; height: 100%; touch-action: pan-x; }
@@ -154,11 +182,14 @@ figcaption.label { max-width: 32rem; }
   .words .sub { margin-top: .9rem; }
   .words .ways { margin-top: 1.6rem; }
   .words .credit { margin-top: 1.8rem; }
+  .room > header { padding: clamp(5rem, 14vh, 8rem) 0 clamp(2.5rem, 6vh, 4rem); }
+  .row { margin-bottom: clamp(4rem, 11vh, 6rem); }
   .row.left .work, .row.right .work { grid-template-columns: minmax(0, 1fr); }
   .row.right .label { order: 0; }
   .row.right .plate { justify-self: start; }
   .row.pair { flex-direction: column; max-width: none; }
   .row.pair .work { flex: none; }
+  .viewer[open] { padding-top: 3.6rem; }  /* the controls above the work, not over it */
   .viewer[open]:not(.scroll), .viewer.turned[open] { grid-template: "stage" minmax(0, 1fr) "caption" auto / minmax(0, 1fr); }
   .viewer:not(.scroll) .caption, .viewer.turned .caption { max-height: 40vh; padding: 1rem 1.25rem 1.5rem; }
 }
