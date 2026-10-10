@@ -23,7 +23,7 @@ ROOMS = {  # the order a visitor walks them in: what hangs in each, and the colo
     "The Workshop": ("Glass, copper and the woodblock", "#33201d"),
     "Colour Itself": ("Abstraction", "#f1eee8"),
 }
-FRONT = "attersee"  # the work beside the museum's name on its first page: the website's first screen, the film's last
+FRONT = "attersee"  # the work beside the museum's name on its first page: the website's first screen, and its card
 PAPER = "#f6f3ec"  # the paper of that page
 
 

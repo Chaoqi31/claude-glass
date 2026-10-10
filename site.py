@@ -7,16 +7,18 @@ shows the site's thumbnails, each linked to its full plate, so that GitHub can o
 every room has walls of its own colour, and the page takes it on as a visitor walks in.
 """
 
+import base64
 import hashlib
 import html
 import importlib
+import io
 import itertools
 import re
 import shutil
 import subprocess
 from string import Template
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from atelier import plate
 from atelier.plate import BACKDROP
@@ -27,6 +29,7 @@ URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it
 REPO = "https://github.com/Chaoqi31/claude-glass"
 ACCENT = "#c8402e"  # vermilion: the museum's one accent
 ICON = "rose_window"  # a round window, cut out for the browser tab
+POSTER = 22.6  # seconds into the film: The Starry Night as its own program, the painting and the code both legible
 NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
 REGIONS = ["Africa", "West Asia", "South Asia", "East Asia", "Southeast Asia", "Europe", "Americas", "Oceania"]
 e = html.escape
@@ -76,11 +79,15 @@ def wall(slugs, path, ground=BACKDROP, width=3200, gap=28, aspect=0.75):
     print(path.relative_to(ROOT), out.size)
 
 
+def who(m):
+    """Whom a work is after, in a name: 'Gustav Klimt'."""
+    return re.split(r",| in | and | as ", after(m)[0], maxsplit=1)[0]
+
+
 def label(slug, m):
     """A work's line in the README, under its room's wall: its title, linked to the plate, whom it is after, and
     its program."""
-    who = re.split(r",| in | and | as ", after(m)[0], maxsplit=1)[0]
-    return f"- [**{m.TITLE}**](plates/{slug}.jpg), after {who} · [`{slug}.py`](works/{slug}.py)"
+    return f"- [**{m.TITLE}**](plates/{slug}.jpg), after {who(m)} · [`{slug}.py`](works/{slug}.py)"
 
 
 def readme(slugs):
@@ -104,16 +111,22 @@ def readme(slugs):
 
 
 def tone(im):
-    """A picture's colour on the whole, to stand in for it until it has loaded."""
-    return "#{:02x}{:02x}{:02x}".format(*im.convert("RGB").resize((1, 1), Image.BOX).getpixel((0, 0)))
+    """A picture in a few hundred bytes, as a CSS background: a tiny copy, blurred already so that a browser
+    drawing it large shows a soft picture rather than squares, to stand in until the picture has loaded."""
+    small = im.convert("RGB")
+    small.thumbnail((64, 64), Image.BOX)
+    buf = io.BytesIO()
+    small.filter(ImageFilter.GaussianBlur(2.4)).save(buf, "WEBP", quality=75)
+    return f"url(data:image/webp;base64,{base64.b64encode(buf.getvalue()).decode()})"
 
 
 def thumb(name):
-    """Write site/thumbs/<name>.jpg; return the plate's size, the thumbnail's, and its tone."""
+    """Write site/thumbs/<name>.avif, about a third of the bytes of a JPEG that looks the same; return the
+    plate's size, the thumbnail's, and its stand-in."""
     with Image.open(ROOT / "plates" / f"{name}.jpg") as im:
         size = im.size
         im.thumbnail((1400, 1400), Image.LANCZOS)
-        im.save(SITE / "thumbs" / f"{name}.jpg", quality=85, subsampling=0, optimize=True, progressive=True)
+        im.save(SITE / "thumbs" / f"{name}.avif", quality=60)
         return size, im.size, tone(im)
 
 
@@ -131,10 +144,10 @@ def icon():
 
 def hero():
     """The work at the door, large enough for half a sharp screen (smaller screens take its thumbnail); return
-    its size and tone."""
+    its size and stand-in."""
     with Image.open(ROOT / "plates" / f"{FRONT}.jpg") as im:
         im.thumbnail((2000, 2000), Image.LANCZOS)
-        im.save(SITE / "hero.jpg", quality=82, subsampling=0, optimize=True, progressive=True)
+        im.save(SITE / "hero.avif", quality=60)
         return im.size, tone(im)
 
 
@@ -184,7 +197,7 @@ def figure(slug, m, size):
     source = f"<p>After {e(full)}</p>" if short == full else \
         f'<p class="short">After {e(short)}</p>\n<p class="full">After {e(full)}</p>'
     return f"""<figure class="work{' long' if w / h > SCROLL else ''}" style="--a:{w / h:.4f}">
-<a class="plate" href="plates/{slug}.jpg" data-slug="{slug}" data-lines="{lines}" data-w="{w}" data-h="{h}"><img src="site/thumbs/{slug}.jpg" width="{tw}" height="{th}" alt="{e(m.TITLE)}" loading="lazy" decoding="async" style="background:{shade}"></a>
+<a class="plate" href="plates/{slug}.jpg" data-slug="{slug}" data-lines="{lines}" data-w="{w}" data-h="{h}"><img src="site/thumbs/{slug}.avif" width="{tw}" height="{th}" alt="{e(m.TITLE)}" loading="lazy" decoding="async" style="background-image:{shade}"></a>
 <figcaption class="label">
 <h3><cite>{e(m.TITLE)}</cite>, {e(m.DATE)}</h3>
 <p>{e(m.MEDIUM)}</p>
@@ -227,7 +240,7 @@ def mini(slug):
     """A small copy of a work, for the plan of the rooms; return its aspect."""
     with Image.open(ROOT / "plates" / f"{slug}.jpg") as im:
         im.thumbnail((640, 180), Image.LANCZOS)
-        im.save(SITE / "mini" / f"{slug}.jpg", quality=84, optimize=True, progressive=True)
+        im.save(SITE / "mini" / f"{slug}.avif", quality=60)
         return im.width / im.height
 
 
@@ -237,8 +250,8 @@ def door(n, name, hung, size):
     here = sorted((s for s, m in hung.items() if m.ROOM == name), key=lambda s: hung[s].YEAR)
     across = list(itertools.accumulate(size[s][0][0] / size[s][0][1] for s in here))
     shown = here[:1 + min(range(len(here)), key=lambda i: abs(across[i] - 5))]
-    hang = "".join(f'<img src="site/mini/{s}.jpg" alt="" loading="lazy" decoding="async" style="--a:{mini(s):.4f};'
-                   f'background:{size[s][2]}">' for s in shown)
+    hang = "".join(f'<img src="site/mini/{s}.avif" alt="" loading="lazy" decoding="async" style="--a:{mini(s):.4f};'
+                   f'background-image:{size[s][2]}">' for s in shown)
     return (f'<li><a href="#{anchor(name)}"><span class="numeral">{n}</span><span class="name">{e(name)}</span>'
             f'<span class="about">{e(ROOMS[name][0])}</span><span class="count">{len(here)} '
             f'work{"s" * (len(here) != 1)}</span><span class="strip" style="--door:{ROOMS[name][1]}">{hang}</span>'
@@ -246,24 +259,54 @@ def door(n, name, hung, size):
 
 
 def film():
-    """The film, if it has been made, behind its poster: its title over the sun of its first painting; and from
-    its last page, the card a link to the museum shows when shared. -> HTML"""
+    """The film, if it has been made, behind its poster: a painting seen as its own program, the moment the
+    film is most itself. -> HTML"""
     path = ROOT / "plates" / "_timeline.mp4"
     if not path.exists():
         return ""
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "4", "-i", str(path), "-frames:v", "1", "-q:v", "3",
-                    str(SITE / "thumbs" / "_timeline.jpg")], check=True)
+    frame = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(POSTER), "-i", str(path), "-frames:v", "1",
+                            "-f", "image2pipe", "-vcodec", "png", "-"], capture_output=True, check=True).stdout
+    Image.open(io.BytesIO(frame)).save(SITE / "thumbs" / "_timeline.avif", quality=60)
     took = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
                                  str(path)], capture_output=True, text=True, check=True).stdout)
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{took - 3:.2f}", "-i", str(path), "-frames:v", "1",
-                    "-vf", "crop=1920:960:0:60,scale=1280:640", "-q:v", "2", str(SITE / "card.jpg")], check=True)
     mins, secs = divmod(round(took), 60)
     length = f"{mins} min {secs} s" if secs else f"{mins} min"
     return f"""<figure class="screen">
-<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.jpg" width="1920" height="1080" preload="none" playsinline></video>
+<video class="film" id="film" src="plates/_timeline.mp4" poster="site/thumbs/_timeline.avif" width="1920" height="1080" preload="none" playsinline></video>
 <button type="button" class="play" aria-label="Play the film"></button>
-<figcaption>The film: a walk through the five rooms · {length}, with sound</figcaption>
+<figcaption>The film: Claude Opus 5.5 paints in Python · {length}, with sound</figcaption>
 </figure>"""
+
+
+def card(hung):
+    """The card a link to the museum shows when it is shared: its first page as the website opens on it, the work
+    at the door to the left and the name on paper to its right. Set at 1920 x 1080 and cut to 1280 x 640."""
+    page = Image.new("RGB", (1920, 1080), PAPER)
+    with Image.open(ROOT / "plates" / f"{FRONT}.jpg") as im:              # the work filling its half, as the
+        k = max(960 / im.width, 1080 / im.height)                        # website fills it (cover, 50% 40%)
+        cw, ch = 960 / k, 1080 / k
+        x0, y0 = (im.width - cw) / 2, (im.height - ch) * 0.4
+        page.paste(im.convert("RGB").resize((960, 1080), Image.LANCZOS, box=(x0, y0, x0 + cw, y0 + ch)))
+    d, ink, dim = ImageDraw.Draw(page), (41, 37, 31), (110, 103, 92)
+    serif = "/System/Library/Fonts/Supplemental/Iowan Old Style.ttc"
+
+    def line(x, base, text, size, colour, face=0, track=0.0):
+        f = ImageFont.truetype(serif, size, index=face)
+        for ch in text:                                                  # tracked, a letter at a time
+            d.text((x, base), ch, font=f, fill=colour, anchor="ls")
+            x += f.getlength(ch) + track * size
+        return x
+    left = 1079                                                          # where the website sets the words
+    line(left, 330, "A MUSEUM OF ONE PAINTER", 19, dim, track=0.2)
+    line(left, 428, "THE CLAUDE", 82, ink, track=0.08)
+    line(left, 518, "GLASS", 82, ink, track=0.08)
+    line(left, 588, strapline(hung), 28, ink, face=2)
+    line(left, 664, URL.removeprefix("https://").rstrip("/"), 21, dim, track=0.06)
+    m = hung[FRONT]
+    x = line(left, 760, "In the picture · ", 18, dim)
+    x = line(x, 760, m.TITLE, 18, dim, face=2)
+    line(x, 760, f", after {who(m)}", 18, dim)
+    page.crop((0, 60, 1920, 1020)).resize((1280, 640), Image.LANCZOS).save(SITE / "card.jpg", quality=92)
 
 
 def entrance(title, hung, walk, reel):
@@ -273,16 +316,15 @@ def entrance(title, hung, walk, reel):
     name = e(html.unescape(re.sub("<.*?>", "", title)))
     nav = "".join(f'<a href="#{anchor(r)}">{e(r)}</a>' for r in walk)
     ways = '<a href="#intro">Walk in &rarr;</a>' + ('<a href="#film">Watch the film &rarr;</a>' if reel else "")
-    who = re.split(r",|:", m.AFTER, maxsplit=1)[0]
     return f"""<header class="hero" {walls(PAPER)}>
 <div class="bar"><a class="mark" href="#">{name}</a><nav aria-label="Rooms">{nav}</nav><a class="repo" href="{REPO}">GitHub</a></div>
-<a class="picture" href="plates/{FRONT}.jpg"><img src="site/hero.jpg" srcset="site/thumbs/{FRONT}.jpg 1400w, site/hero.jpg {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high" style="background:{shade}"></a>
+<a class="picture" href="plates/{FRONT}.jpg"><img src="site/hero.avif" srcset="site/thumbs/{FRONT}.avif 1400w, site/hero.avif {w}w" sizes="(max-width: 52rem) 100vw, (orientation: portrait) 100vw, 60vw" width="{w}" height="{h}" alt="{e(m.TITLE)}" fetchpriority="high" style="background-image:{shade}"></a>
 <div class="words">
 <p class="kicker">A museum of one painter</p>
 {title}
 <p class="sub">{strapline(hung)}</p>
 <p class="ways">{ways}</p>
-<p class="credit">In the picture · <cite>{e(m.TITLE)}</cite>, after {e(who)}</p>
+<p class="credit">In the picture · <cite>{e(m.TITLE)}</cite>, after {e(who(m))}</p>
 </div>
 </header>"""
 
@@ -294,7 +336,9 @@ def build(slugs):
     (ROOT / ".nojekyll").touch()  # Jekyll would drop files whose names start with "_", like the wall
     hung = {s: importlib.import_module(f"works.{s}") for s in slugs}
     size = {s: thumb(s) for s in slugs}
-    thumb("_wall")  # for the top of the README
+    with Image.open(ROOT / "plates" / "_wall.jpg") as im:     # the top of the README, which GitHub shows as JPEG
+        im.thumbnail((1400, 1400), Image.LANCZOS)
+        im.save(SITE / "thumbs" / "_wall.jpg", quality=85, subsampling=0, optimize=True, progressive=True)
     walk = rooms(hung)
 
     css = Template(CSS).substitute(dict(zip(("wall", "ink", "dim"), colours(PAPER))), accent=ACCENT)
@@ -308,6 +352,7 @@ def build(slugs):
     halls = "\n".join(room(n, r, {s: m for s, m in hung.items() if m.ROOM == r}, size) for n, r in zip(NUMERALS, walk))
     marks = "".join(f'<li><a href="#{anchor(r)}"><span class="numeral">{n}</span> {e(r)}</a></li>' for n, r in zip(NUMERALS, walk))
     reel = film()
+    card(hung)
     plain = lambda h: e(html.unescape(re.sub("<.*?>", "", h)))
     nl = "\n"
     (ROOT / "index.html").write_text(f"""<!doctype html>
@@ -322,7 +367,7 @@ def build(slugs):
 <meta property="og:url" content="{URL}">
 <meta property="og:title" content="{plain(title)}">
 <meta property="og:description" content="{plain(subtitle)}">
-<meta property="og:image" content="{URL}{'site/card.jpg' if reel else 'site/thumbs/_wall.jpg'}">
+<meta property="og:image" content="{URL}site/card.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.png">
 <link rel="apple-touch-icon" href="site/icon.png">
@@ -410,7 +455,8 @@ p { text-wrap: pretty; }
 .bar nav { display: flex; gap: 1.5rem; margin-left: auto; }
 .repo::after { content: "\\2009\\2197"; }
 .picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
-.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%;
+  background: 50% 40% / cover; }
 .words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }
 .words p { margin: 0; }
 .kicker { color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .18em; }
@@ -448,7 +494,7 @@ p { text-wrap: pretty; }
 .strip { grid-area: strip; align-self: center; display: flex; gap: .6rem; align-items: center; padding: 1rem 1.1rem; background: var(--door);
   box-shadow: inset 0 0 0 1px var(--rule); }
 .strip img { flex: var(--a) 1 0; min-width: 0; height: auto; aspect-ratio: var(--a); box-shadow: 0 .35rem .6rem -.25rem rgb(0 0 0 / .45);
-  transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+  background-size: 100% 100%; transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
 .plan a:hover .strip img { translate: 0 -3px; }
 @media (max-width: 40rem) {
   .plan a { grid-template: "num name" auto "num about" auto "num count" auto "strip strip" auto / 2rem minmax(0, 1fr); column-gap: .6rem; }
@@ -478,7 +524,7 @@ main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .work { margin: 0; }
 .plate { display: block; }
 .plate img { display: block; width: 100%; height: auto; box-shadow: 0 .9rem 1.6rem -.6rem rgb(0 0 0 / .45);
-  transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
+  background-size: 100% 100%; transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
 .plate:hover img { transform: translateY(-3px); }
 .row.left .work, .row.right .work { display: grid; gap: 1.75rem 3.5rem; align-items: end; }
 .row.left .work { grid-template-columns: minmax(0, 1fr) 15rem; }

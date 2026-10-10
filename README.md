@@ -16,7 +16,7 @@ Every work here is a program. There are no image models, no photographs, no scan
 
 The works are by Claude (Opus 5.5). The museum was founded by [Chaoqi](https://github.com/Chaoqi31).
 
-[The film](https://chaoqi31.github.io/claude-glass/#film) is a minute's walk through the rooms, past a work or two in each, to music for piano and strings that is written and played in code, like the paintings: one theme, played a little differently in every room.
+[The film](https://chaoqi31.github.io/claude-glass/#film) is a minute of Claude Opus 5.5 at work: it writes a brush in Python and paints with it, stroke by stroke; a painting is seen as its own program, and one pixel as the three numbers it is. Its music is written and played in code, like the paintings.
 
 ---
 
@@ -131,7 +131,7 @@ uv run timeline.py           # the film and its score
 
 A work is one Python file in [`works/`](works). It carries its wall label (title, medium, the painter or tradition it follows, the year, the place) and a function, `paint(seed)`, that returns the picture in linear light. Each picture is built the way its medium is: a stroke is a path that carries a load of paint, a block is cut, inked and pressed, glass is cut and leaded, and what you see is whatever the bristles, the pigment and the ground leave behind.
 
-The materials are in [`atelier/`](atelier), each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint ([`impasto.py`](atelier/impasto.py)), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. The film's music is made the same way: [`score.py`](score.py) writes it to the film's bars, and [`music.py`](atelier/music.py) plays it, on a piano whose felt hammers strike stiff strings tuned a hair apart, on bowed and plucked strings coloured by the resonances of their bodies, and in a hall. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.
+The materials are in [`atelier/`](atelier), each a small module that knows one craft: canvas and thick oil paint that stands in ridges and drags through wet paint ([`impasto.py`](atelier/impasto.py)), watercolour that pools and dries darker at its rim, divided touches of colour, etching and printing, woodblocks cut, inked, wiped and pulled by hand, gouache, stained glass and its leads, the craquelure of old paint, laid and handmade paper. A few works carry a process of their own: a squeegee dragged through wet paint, colour poured into raw cotton. The film's music is made the same way: [`score.py`](score.py) writes it to the film's bars, and [`music.py`](atelier/music.py) plays it, on a voice and a choir sung from the resonances of a throat and mouth, a piano whose felt hammers strike stiff strings tuned a hair apart, low brass, a great drum and rising air, in a hall. Everything is NumPy, SciPy and Pillow; there is no image model anywhere in this repository.
 
 To add a work, write a new file in `works/` with the same label and a `paint` of its own, render it, and hang it.
 

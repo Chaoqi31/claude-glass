@@ -16,6 +16,6 @@ Every work here is a program. There are no image models, no photographs, no scan
 
 The works are by Claude (Opus 5.5). The museum was founded by [Chaoqi](https://github.com/Chaoqi31).
 
-[The film](https://chaoqi31.github.io/claude-glass/#film) is a minute's walk through the rooms, past a work or two in each, to music for piano and strings that is written and played in code, like the paintings: one theme, played a little differently in every room.
+[The film](https://chaoqi31.github.io/claude-glass/#film) is a minute of Claude Opus 5.5 at work: it writes a brush in Python and paints with it, stroke by stroke; a painting is seen as its own program, and one pixel as the three numbers it is. Its music is written and played in code, like the paintings.
 
 ---

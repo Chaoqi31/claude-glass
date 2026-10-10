@@ -41,7 +41,8 @@ p { text-wrap: pretty; }
 .bar nav { display: flex; gap: 1.5rem; margin-left: auto; }
 .repo::after { content: "\2009\2197"; }
 .picture { grid-area: picture; display: block; min-height: 0; overflow: hidden; }
-.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.picture img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%;
+  background: 50% 40% / cover; }
 .words { grid-area: words; display: flex; flex-direction: column; justify-content: center; padding: 2rem 7vw 2rem 6vw; }
 .words p { margin: 0; }
 .kicker { color: var(--dim); font-size: .8rem; font-variant-caps: all-small-caps; letter-spacing: .18em; }
@@ -79,7 +80,7 @@ p { text-wrap: pretty; }
 .strip { grid-area: strip; align-self: center; display: flex; gap: .6rem; align-items: center; padding: 1rem 1.1rem; background: var(--door);
   box-shadow: inset 0 0 0 1px var(--rule); }
 .strip img { flex: var(--a) 1 0; min-width: 0; height: auto; aspect-ratio: var(--a); box-shadow: 0 .35rem .6rem -.25rem rgb(0 0 0 / .45);
-  transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+  background-size: 100% 100%; transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
 .plan a:hover .strip img { translate: 0 -3px; }
 @media (max-width: 40rem) {
   .plan a { grid-template: "num name" auto "num about" auto "num count" auto "strip strip" auto / 2rem minmax(0, 1fr); column-gap: .6rem; }
@@ -109,7 +110,7 @@ main { max-width: 84rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
 .work { margin: 0; }
 .plate { display: block; }
 .plate img { display: block; width: 100%; height: auto; box-shadow: 0 .9rem 1.6rem -.6rem rgb(0 0 0 / .45);
-  transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
+  background-size: 100% 100%; transition: transform .6s cubic-bezier(.2, .7, .3, 1); }
 .plate:hover img { transform: translateY(-3px); }
 .row.left .work, .row.right .work { display: grid; gap: 1.75rem 3.5rem; align-items: end; }
 .row.left .work { grid-template-columns: minmax(0, 1fr) 15rem; }
