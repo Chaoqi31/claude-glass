@@ -2,13 +2,13 @@
 
     uv run timeline.py      writes plates/_timeline.mp4 (1920 x 1080, 30 fps, H.264 with AAC)
 
-The museum is one long wall. The works hang along it in the order a visitor meets them, room by room, each room
-in the colour of its walls, with its name on the wall where it begins and a label beside every work. The film
-opens close on the sun of one painting. Then each room slides in over the last on the first note of its music,
-and the camera walks the wall slowly, never quite stopping. In a room it may cut close to a passage of paint and
-draw back from it to the whole work; in the first it waits in front of a bare canvas while the painting is
-painted, stroke by stroke. At the end it draws back from a last passage of paint until the whole museum is in
-sight, the wall set in lines like a page, and the glass goes dark for the title.
+The museum is one long wall. A few works of each room hang along it in the order a visitor meets them, room by
+room, each room in the colour of its walls, with its name on the wall where it begins and a label beside every
+work. The film opens close on the sun of one painting. Then each room slides in over the last on the first note
+of its music, and the camera walks the wall slowly, never quite stopping. In a room it may cut close to a passage
+of paint and draw back from it to the whole work; in the first it waits in front of a bare canvas while the
+painting is painted, stroke by stroke. At the end it draws back from a last passage of paint until the whole wall
+is in sight, set in lines like a page, and the glass goes dark for the title.
 
 The plates are shown as they are, in their own colours. numpy and PIL draw each frame and ffmpeg encodes the
 frames with the music. The type is Iowan Old Style, from macOS.
@@ -76,6 +76,13 @@ DETAILS = {   # where the camera cuts close: the passage it cuts to and the one 
     "vetheuil": ((0.36, 0.40), (0.45, 0.44), 3.8),
 }
 LEANS = {"starry": ((0.70, 0.28), 1.45)}  # where the camera leans in on its way past, and how near
+SHOWN = {   # the works the film's wall holds, five or six of each room's; the website hangs them all
+    "turner", "impression", "saint_remy", "starry", "javea",
+    "irises", "attersee", "jardin", "giverny", "hollywood",
+    "yatsuhashi", "baghdad", "burbank", "hakone", "sayama",
+    "rose_window", "malmaison", "red_fuji", "arashiyama", "riviera", "sydney",
+    "louveciennes", "nice", "washington", "rue_jonquoy", "vetheuil",
+}
 
 LIGHT = ((np.arange(256) / 255) ** 2.2).astype(np.float32)   # a byte of the frame as light, near enough
 DARKEN = np.round(255 * np.linspace(0, 1, 4096) ** (1 / 2.2)).astype(np.float32)
@@ -261,10 +268,15 @@ class Work:
 
 
 class Wall:
-    """The museum as one long wall: its rooms, each with its colour, its span along the wall and its name
-    written at its start; the works on it; and the words beside the painting that is painted."""
+    """The museum as one long wall, with the works the film shows on it: its rooms, each with its colour, its span
+    along the wall and its name written at its start; the works on it; and the words beside the painting that is
+    painted."""
 
     def __init__(self, mods):
+        missing = SHOWN - set(mods)
+        assert not missing, f"the film shows works that do not hang: {missing}"
+        assert {OPENING[0], PAINTED, *DETAILS, *LEANS} <= SHOWN, "the film shows every work it opens on, paints or looks close at"
+        mods = {s: m for s, m in mods.items() if s in SHOWN}
         self.rooms, self.works, x = [], {}, 0.0
         for n, room in zip(NUMERALS, rooms(mods)):
             colour = ROOMS[room][1]
@@ -596,7 +608,7 @@ def film(out=ROOT / "plates" / "_timeline.mp4"):
                 print(f"bar {f // BAR:3d} {time.time() - t0:6.0f}s", flush=True)
         enc.stdin.close()
         enc.wait()
-    print(f"{out.name}: {len(mods)} works, {out.stat().st_size / 1e6:.1f} MB, {time.time() - t0:.0f}s")
+    print(f"{out.name}: {len(it.wall.works)} of {len(mods)} works, {out.stat().st_size / 1e6:.1f} MB, {time.time() - t0:.0f}s")
 
 
 if __name__ == "__main__":
