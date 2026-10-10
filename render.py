@@ -10,6 +10,7 @@ take the catalogue from here: which works hang, in which rooms, and what they co
 import importlib
 import sys
 import time
+from itertools import accumulate
 from pathlib import Path
 
 from atelier import plate
@@ -57,6 +58,21 @@ def rooms(mods):
     lost = {m.ROOM for m in mods.values()} - set(ROOMS)
     assert not lost, f"no such room: {lost}"
     return [r for r in ROOMS if any(m.ROOM == r for m in mods.values())]
+
+
+def even_rows(aspects, k):
+    """Pictures in a line, by their aspects (width / height), split into k rows whose widths at one height come out
+    as even as possible: a wall hung in rows of even height. -> [(first, end)] of each row"""
+    target = sum(aspects) / k
+    run = [0, *accumulate(aspects)]                         # run[j] - run[i]: the width of pictures i to j at one height
+    best = {(0, 0): (0.0, [])}
+    for j in range(1, len(aspects) + 1):
+        for r in range(1, k + 1):
+            cands = [(best[(i, r - 1)][0] + (run[j] - run[i] - target) ** 2, best[(i, r - 1)][1] + [(i, j)])
+                     for i in range(j) if (i, r - 1) in best]
+            if cands:
+                best[(j, r)] = min(cands)
+    return best[(len(aspects), k)][1]
 
 
 def tally(slugs):

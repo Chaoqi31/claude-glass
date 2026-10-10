@@ -55,11 +55,11 @@ p { text-wrap: pretty; }
 .ways a:hover { border-color: var(--accent); }
 .words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
-.intro { padding: clamp(4rem, 12vh, 7rem) 1.25rem 0; }
-.text { max-width: 33em; margin: 0 auto; }
+.intro { padding: clamp(3rem, 9vh, 5.5rem) 1.25rem 0; }
+.text { max-width: 33em; margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
 .text p { margin: 0 0 1.1em; }
 .text p:first-child::first-letter { float: left; margin: .06em .1em 0 0; color: var(--accent); font-size: 3.55em; line-height: .82; }
-.screen { position: relative; width: min(100%, 60rem); margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
+.screen { position: relative; width: min(100%, 60rem); margin: 0 auto; }
 .film { display: block; width: 100%; height: auto; background: #090807; box-shadow: 0 1.2rem 2.2rem -1.2rem rgb(0 0 0 / .45); }
 .play { position: absolute; inset: 0 0 auto; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: none; cursor: pointer; }
 .play::before { content: ""; position: absolute; left: clamp(.8rem, 2.5%, 1.6rem); bottom: clamp(.8rem, 4%, 1.6rem); width: 3.6rem;

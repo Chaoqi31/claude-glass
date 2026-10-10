@@ -9,8 +9,9 @@ thousands, until the olive grove stands finished. Another painting is seen as it
 and each letter tinted with the colour of the painting where it falls, draws back until the painting is there, and
 the code gives way to it. The camera goes into a third, nearer and nearer, until one pixel fills the screen with
 its value. Four things the paintings were not made with come up on four blows of brass; then the paintings go by
-on the notes of the figure, each coming out of its program, faster and faster, until the music breaks off and the
-title falls with the drum.
+on the notes of the figure, and every work in the museum comes onto one wall, each out of its program in its own
+place, faster and faster, until the music breaks off. The wall stands whole in the silence, and the title falls
+with the drum.
 
 The plates are shown as they are, in their own colours. numpy and PIL draw each frame and ffmpeg encodes the frames
 with the music. The type is Iowan Old Style and SF Mono, from macOS.
@@ -30,7 +31,7 @@ from PIL import Image, ImageDraw, ImageFont
 import score
 from atelier import impasto, music, noise
 from atelier.color import to_srgb
-from render import ROOT, hanging
+from render import ROOT, even_rows, hanging, words
 
 W, H, FPS = 1920, 1080, 30
 STEP = round(score.STEP * FPS)            # frames in a sixteenth of the score
@@ -59,17 +60,17 @@ FIRST = 4.0                               # how much nearer than the whole canva
 WOVEN = "starry"                          # seen as its own program
 CLOSE = ("red_fuji", (791, 824))          # gone into until one pixel fills the screen, and which pixel
 NOT = ("No image model.", "No photograph.", "No tracing.", "Only Python.")   # one on each blow of brass
-WORDS = (("Sixty paintings.", 32), ("Sixty programs.", 88))   # over the montage, each until a sixteenth of it
+# the montage, in sixteenths from its start: four works held half a bar, each coming out of its program; twelve on
+# the notes of the figure, shown as they are, each a little lighter than the last, so that no cut leaps from dark
+# to bright; then from WALL every work comes onto one wall, each out of its program in its own place, faster and
+# faster over WALL_FOR sixteenths, and the wall stays whole through the silence before the title
 MONTAGE = ("hakone", "nice", "impression", "rose_window",
-           "javea", "arashiyama", "around_blue", "attersee", "burbank", "louveciennes",
-           "turner", "sydney", "washington", "yatsuhashi", "almond", "monsoon",
-           "etretat", "baghdad", "cologne", "collioure", "riviera", "hollywood", "magpie", "laurelton",
-           "agrigento", "inland_sea", "giverny", "jardin", "rajasthan", "sayama", "ten_bamboo", "stockholm",
-           "haystacks", "naggar", "malmaison", "seebull", "footbridge", "ocean_park", "port_marly", "vetheuil")
-# where each of them comes in, in sixteenths from the start of the montage: two a bar, then on the notes of the
-# figure, then on every sixteenth; and where the last goes out, into the silence before the title
-CUTS = [0, 8, 16, 24] + [32 + s for s in score.RHYTHM] + [48 + s for s in score.RHYTHM] + list(range(64, 88))
-GONE = 88
+           "burbank", "attersee", "yatsuhashi", "haystacks", "sayama", "washington",
+           "almond", "javea", "sydney", "collioure", "louveciennes", "turner")
+CUTS = [0, 8, 16, 24] + [32 + s for s in score.RHYTHM] + [48 + s for s in score.RHYTHM]
+SLOW = 8                                  # sixteenths a work is held for it to come out of its program; quicker cuts
+                                          # between program and painting would flicker
+WALL, WALL_FOR = 64, 20
 assert len(CUTS) == len(MONTAGE), "a painting for every cut"
 
 
@@ -126,6 +127,16 @@ def place(canvas, pic, x0, y0, x1, y1, alpha=1.0, clip=None):
         m = m * np.asarray(mask.resize((X1 - X0, Y1 - Y0), Image.LANCZOS, box=box), np.float32) / 255
     region = canvas[Y0:Y1, X0:X1]
     region += (patch - region) * m[..., None]
+
+
+def emerge(canvas, box, pic, code, into, hold=8, sweep=6, soft=40):
+    """A painting coming out of its program in `box`, `into` frames after it came: the program alone for `hold`
+    frames, then the painting coming down over it from the top in `sweep`, its edge `soft` px deep."""
+    if into < hold + sweep:
+        place(canvas, code, *box)
+    if into >= hold:
+        edge = box[1] + (box[3] - box[1] + soft) * min(1.0, (into - hold + 1) / sweep)
+        place(canvas, pic, *box, lambda ys: np.clip((edge - ys) / soft, 0, 1))
 
 
 class Type:
@@ -251,17 +262,50 @@ class Film:
         self.near = np.asarray(self.close)
         self.whole = Picture(self.near)
         self.not_ = [Type(t, 64) for t in NOT]
-        self.words = [Type(t, 40, track=0.01) for t, _ in WORDS]
+        n = words(len(mods)).capitalize()
+        self.words = [Type(f"{n} paintings.", 40, track=0.01), Type(f"{n} programs.", 40, track=0.01)]
         self.cuts = []
-        for slug in MONTAGE:                                  # each at the size it is shown, and as its program
-            im = plate(slug)
+        for slug, held in zip(MONTAGE, np.diff(CUTS + [WALL])):   # each at the size it is shown, and the slow
+            im = plate(slug)                                        # ones as their programs too
             box = fit(*im.size)
             size = (round(box[2] - box[0]), round(box[3] - box[1]))
-            self.cuts.append((box, Picture(np.asarray(im.resize(size, Image.LANCZOS))), woven(slug, size[0], 9, ground=0.3)[0]))
+            code = woven(slug, size[0], 9, ground=0.3)[0] if held >= SLOW else None
+            self.cuts.append((box, Picture(np.asarray(im.resize(size, Image.LANCZOS))), code))
+        self.wall = self.hang(mods)
         self.title = [(Type("THE CLAUDE GLASS", 104, track=0.1), 452, 0),
                       (Type(OPENING[0], 34, DIM, track=0.04), 372, 2 * STEP * 4),
-                      (Type("Sixty paintings. Every pixel written in Python.", 34, face=ITALIC), 610, BAR),
+                      (Type(f"{n} paintings. Every pixel written in Python.", 34, face=ITALIC), 610, BAR),
                       (Type("chaoqi31.github.io/claude-glass", 24, DIM, font=MONO), 690, 2 * BAR)]
+
+    def hang(self, mods):
+        """Every work on one wall, whole, oldest first, in rows of even height as large as BOX holds them; each
+        with its program at its size, and the frame of the montage it comes in on: scattered over the wall, one
+        on each sixteenth at first and more and more of them to a sixteenth. -> [(box, painting, program, frame)]"""
+        slugs = sorted(mods, key=lambda s: mods[s].YEAR)
+        ims = [plate(s) for s in slugs]
+        asp = [im.width / im.height for im in ims]
+        bw, bh, gap = BOX[2] - BOX[0], BOX[3] - BOX[1], 10
+
+        def lay(k):                                           # k rows: (first, end, height) each, and the height of all
+            lines = [(i, j, (bw - gap * (j - i - 1)) / sum(asp[i:j])) for i, j in even_rows(asp, k)]
+            return lines, sum(h for *_, h in lines) + gap * (k - 1)
+        lines, tall = max((lay(k) for k in range(2, 13)), key=lambda lt: lt[1] * min(1.0, bh / lt[1]) ** 2)
+        s = min(1.0, bh / tall)                               # the scale that fits them in
+        boxes, y = [], BOX[1] + (bh - s * tall) / 2
+        for i, j, h in lines:
+            x = BOX[0] + bw * (1 - s) / 2
+            for k in range(i, j):
+                boxes.append((round(x), round(y), round(x + asp[k] * h * s), round(y + h * s)))
+                x += (asp[k] * h + gap) * s
+            y += (h + gap) * s
+        order = noise.rng(60).permutation(len(slugs))
+        out = []
+        for rank, k in enumerate(order):
+            x0, y0, x1, y1 = boxes[k]
+            painting = Picture(np.asarray(ims[k].resize((x1 - x0, y1 - y0), Image.LANCZOS)))
+            frame = (WALL + int(WALL_FOR * (rank / len(slugs)) ** 0.5)) * STEP
+            out.append((boxes[k], painting, woven(slugs[k], x1 - x0, 9, ground=0.3)[0], frame))
+        return out
 
     def code(self):
         """The program written on the screen: its lines as type, each token's place, and when it is written."""
@@ -484,29 +528,21 @@ class Film:
         self.cut(canvas, f, u + PART["breath"][0] - PART["montage"][0])
 
     def cut(self, canvas, f, u):
-        """The montage at u frames from its start: the painting of the moment coming out of its program."""
+        """The montage at u frames from its start: the painting of the moment, or the wall as far as it has come."""
         s = u / STEP
-        if s >= GONE:
-            return
-        k = max(i for i, c in enumerate(CUTS) if s >= c)
-        end = CUTS[k + 1] if k + 1 < len(CUTS) else GONE
-        length = (end - CUTS[k]) * STEP
-        into = u - CUTS[k] * STEP
-        box, pic, code = self.cuts[k]
-        woven_for = min(8, max(1, round(0.3 * length)))
-        sweep = min(6, max(0, round(0.2 * length)))
-        if into < woven_for + sweep:
-            place(canvas, code, *box)
-        if into >= woven_for:
-            if sweep:
-                edge = box[1] + (box[3] - box[1] + 40) * min(1.0, (into - woven_for + 1) / sweep)
-                place(canvas, pic, *box, lambda ys: np.clip((edge - ys) / 40, 0, 1))
-            else:
+        if s < WALL:
+            k = max(i for i, c in enumerate(CUTS) if s >= c)
+            box, pic, code = self.cuts[k]
+            if code is None:
                 place(canvas, pic, *box)
-        w = next(i for i, (_, until) in enumerate(WORDS) if s < until)
-        t = self.words[w]
-        start = PART["montage"][0] + (0 if w == 0 else WORDS[w - 1][1] * STEP)
-        said(canvas, f, t, 62, start, frames=14)
+            else:
+                emerge(canvas, box, pic, code, u - CUTS[k] * STEP)
+        else:
+            for box, pic, code, at in self.wall:
+                if u >= at:
+                    emerge(canvas, box, pic, code, u - at, hold=4, sweep=4, soft=12)
+        w = int(s >= WALL)
+        said(canvas, f, self.words[w], 62, PART["montage"][0] + w * WALL * STEP, frames=14)
 
     def draw_title(self, canvas, f, u):
         a = PART["title"][0]

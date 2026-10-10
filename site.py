@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from atelier import plate
 from atelier.plate import BACKDROP
-from render import FRONT, PAPER, ROOMS, ROOT, SCROLL, hanging, rooms, strapline, tally
+from render import FRONT, PAPER, ROOMS, ROOT, SCROLL, hanging, rooms, even_rows, strapline, tally
 
 SITE = ROOT / "site"
 URL = "https://chaoqi31.github.io/claude-glass/"  # where GitHub Pages serves it; social cards need absolute links
@@ -54,17 +54,7 @@ def wall(slugs, path, ground=BACKDROP, width=3200, gap=28, aspect=0.75):
     ims = [Image.open(ROOT / "plates" / f"{s}.jpg") for s in sorted(mods, key=lambda s: mods[s].YEAR)]
     asp = [i.width / i.height for i in ims]
     k = max(1, round((sum(asp) * aspect) ** 0.5))
-    # split the sequence into k rows whose widths come out as even as possible
-    target = sum(asp) / k
-    best = {(0, 0): (0.0, [])}
-    for j in range(1, len(ims) + 1):
-        for rows in range(1, k + 1):
-            cands = [(best[(i, rows - 1)][0] + (sum(asp[i:j]) - target) ** 2, best[(i, rows - 1)][1] + [(i, j)])
-                     for i in range(j) if (i, rows - 1) in best]
-            if cands:
-                best[(j, rows)] = min(cands)
-    split = best[(len(ims), k)][1]
-    lines = [(ims[i:j], int((width - gap * (j - i + 1)) / sum(asp[i:j]))) for i, j in split]
+    lines = [(ims[i:j], int((width - gap * (j - i + 1)) / sum(asp[i:j]))) for i, j in even_rows(asp, k)]
     H = sum(h for _, h in lines) + gap * (len(lines) + 1)
     out = Image.new("RGB", (width, H), plate.to_srgb_255(ground))
     y = gap
@@ -378,10 +368,10 @@ def build(slugs):
 <details class="marker"><summary></summary><ol>{marks}<li><a href="#">The first page</a></li></ol></details>
 {entrance(title, hung, walk, reel)}
 <section class="intro" id="intro" {walls(PAPER)}>
+{reel}
 <div class="text">
 {nl.join(text)}
 </div>
-{reel}
 <nav class="plan" id="plan" aria-label="Plan of the rooms">
 <ol>
 {plan}
@@ -469,11 +459,11 @@ p { text-wrap: pretty; }
 .ways a:hover { border-color: var(--accent); }
 .words .credit { margin-top: 3.2rem; color: var(--dim); font-size: .8rem; }
 
-.intro { padding: clamp(4rem, 12vh, 7rem) 1.25rem 0; }
-.text { max-width: 33em; margin: 0 auto; }
+.intro { padding: clamp(3rem, 9vh, 5.5rem) 1.25rem 0; }
+.text { max-width: 33em; margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
 .text p { margin: 0 0 1.1em; }
 .text p:first-child::first-letter { float: left; margin: .06em .1em 0 0; color: var(--accent); font-size: 3.55em; line-height: .82; }
-.screen { position: relative; width: min(100%, 60rem); margin: clamp(3.5rem, 10vh, 6rem) auto 0; }
+.screen { position: relative; width: min(100%, 60rem); margin: 0 auto; }
 .film { display: block; width: 100%; height: auto; background: #090807; box-shadow: 0 1.2rem 2.2rem -1.2rem rgb(0 0 0 / .45); }
 .play { position: absolute; inset: 0 0 auto; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: none; cursor: pointer; }
 .play::before { content: ""; position: absolute; left: clamp(.8rem, 2.5%, 1.6rem); bottom: clamp(.8rem, 4%, 1.6rem); width: 3.6rem;
